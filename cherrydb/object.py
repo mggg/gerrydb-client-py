@@ -1,0 +1,1 @@
+"""Generic CherryDB API object."""
