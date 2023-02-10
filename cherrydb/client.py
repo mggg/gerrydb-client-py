@@ -107,4 +107,6 @@ class CherryDB:
     @property
     def base_url(self) -> str:
         """Base URL of the CherryDB API."""
+        if self.host.startswith("localhost"):
+            return f"http://{self.host}/api/v1"
         return f"https://{self.host}/api/v1"

@@ -74,3 +74,10 @@ def test_cherrydb_base_url():
     assert (
         CherryDB(key="key", host="example.com").base_url == "https://example.com/api/v1"
     )
+
+
+def test_cherrydb_base_url_localhost():
+    assert (
+        CherryDB(key="key", host="localhost:8080").base_url
+        == "http://localhost:8080/api/v1"
+    )
