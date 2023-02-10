@@ -9,6 +9,9 @@ python = "^3.10"
 tomlkit = "^0.11.6"
 msgpack = "^1.0.4"
 httpx = "^0.23.3"
+pydantic = "^1.10.4"
+orjson = "^3.8.6"
+shapely = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"

@@ -9,7 +9,7 @@ from cherrydb.cache import CherryCache
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
 
 
-class CherryConfigError(Exception):
+class ConfigError(Exception):
     """Raised when a CherryDB session configuration is invalid."""
 
 
@@ -49,7 +49,7 @@ class CherryDB:
         for a scientific paper.
 
         Raises:
-            CherryConfigError:
+            ConfigError:
                 If the configuration is invalid--for instance, if only
                 one of `host` and `key` are specified, or a CherryDB
                 directory cannot be found.
@@ -58,9 +58,9 @@ class CherryDB:
         self.offline = offline
 
         if host is not None and key is None:
-            raise CherryConfigError('No API key specified for host "{host}".')
+            raise ConfigError('No API key specified for host "{host}".')
         if host is None and key is not None:
-            raise CherryConfigError("No host specified for API key.")
+            raise ConfigError("No host specified for API key.")
 
         if host is not None and key is not None:
             self.host = host
@@ -73,7 +73,7 @@ class CherryDB:
             with open(cherry_root / "config", encoding="utf-8") as config_fp:
                 cherry_config_raw = config_fp.read()
         except IOError as ex:
-            raise CherryConfigError(
+            raise ConfigError(
                 f"Failed to read CherryDB configuration at {cherry_root.resolve()}. "
                 "Does a CherryDB configuration directory exist?"
             ) from ex
@@ -81,27 +81,32 @@ class CherryDB:
         try:
             configs = tomlkit.parse(cherry_config_raw)
         except tomlkit.exceptions.TOMLKitError as ex:
-            raise CherryConfigError(
+            raise ConfigError(
                 f"Failed to parse CherryDB configuration at {cherry_root.resolve()}."
             ) from ex
 
         try:
             config = configs[profile]
         except KeyError:
-            raise CherryConfigError(
+            raise ConfigError(
                 f'Profile "{profile}" not found in configuration '
                 f"at {cherry_root.resolve()}."
             )
 
         for field in ("host", "key"):
             if field not in config:
-                raise CherryConfigError(
+                raise ConfigError(
                     f'Field "{field}" not in profile "{profile}" '
                     f"in configuration at {cherry_root.resolve()}."
                 )
 
         self.host = config["host"]
         self.key = config["key"]
+
+        try:
+            Path(cherry_root / "caches").mkdir(exist_ok=True)
+        except IOError as ex:
+            raise ConfigError("Failed to create cache directory.") from ex
         self.cache = CherryCache(cherry_root / "caches" / f"{profile}.db")
 
     @property

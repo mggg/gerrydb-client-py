@@ -3,16 +3,16 @@ import os
 import pytest
 
 from unittest import mock
-from cherrydb.client import CherryDB, CherryConfigError
+from cherrydb.client import CherryDB, ConfigError
 
 
 def test_cherrydb_init_no_api_key():
-    with pytest.raises(CherryConfigError, match="No API key"):
+    with pytest.raises(ConfigError, match="No API key"):
         CherryDB(host="example.com")
 
 
 def test_cherrydb_init_no_host():
-    with pytest.raises(CherryConfigError, match="No host"):
+    with pytest.raises(ConfigError, match="No host"):
         CherryDB(key="key")
 
 
@@ -22,7 +22,7 @@ def test_cherrydb_init_host_key():
 
 def test_cherrydb_init_missing_config(tmp_path):
     with mock.patch.dict(os.environ, {"CHERRY_ROOT": str(tmp_path)}):
-        with pytest.raises(CherryConfigError, match="Failed to read"):
+        with pytest.raises(ConfigError, match="Failed to read"):
             CherryDB()
 
 
@@ -30,14 +30,14 @@ def test_cherrydb_init_invalid_config(tmp_path):
     with mock.patch.dict(os.environ, {"CHERRY_ROOT": str(tmp_path)}):
         with open(tmp_path / "config", "w") as config_fp:
             config_fp.write("bad")
-        with pytest.raises(CherryConfigError, match="Failed to parse"):
+        with pytest.raises(ConfigError, match="Failed to parse"):
             CherryDB()
 
 
 def test_cherrydb_init_missing_profile(tmp_path):
     with mock.patch.dict(os.environ, {"CHERRY_ROOT": str(tmp_path)}):
         open(tmp_path / "config", "w").close()
-        with pytest.raises(CherryConfigError, match="Profile"):
+        with pytest.raises(ConfigError, match="Profile"):
             CherryDB()
 
 
@@ -48,7 +48,7 @@ def test_cherrydb_init_missing_field(tmp_path, field):
         with open(tmp_path / "config", "w") as config_fp:
             print("[default]", file=config_fp)
             print(f'{other_field} = "test"', file=config_fp)
-        with pytest.raises(CherryConfigError, match=f'Field "{field}"'):
+        with pytest.raises(ConfigError, match=f'Field "{field}"'):
             CherryDB()
 
 
