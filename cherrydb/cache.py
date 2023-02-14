@@ -10,7 +10,7 @@ from uuid import UUID
 from dateutil.parser import parse as ts_parse
 from cherrydb.schemas import BaseModel, ObjectCachePolicy
 
-_REQUIRED_TABLES = {"cache_meta", "etag", "object", "object_meta"}
+_REQUIRED_TABLES = {"cache_meta", "collection", "object", "object_meta"}
 _CACHE_SCHEMA_VERSION = "0"
 
 
@@ -61,14 +61,12 @@ class CacheResult:
     Attributes:
         result: The cached object or objects.
         cached_at: Local system time the object(s) were fetched from the API.
-        stale: Is there any risk that the object is stale wrt the API?
         valid_from: Start of version time range for timestamp-versioned objects.
         etag: ETag for collection results or ETag-versioned objects.
     """
 
-    result: BaseModel | list[BaseModel]
+    result: BaseModel
     cached_at: datetime
-    stale: bool
     valid_from: Optional[datetime] = None
     etag: Optional[bytes] = None
 
@@ -105,7 +103,7 @@ class CherryCache:
         path: str,
         namespace: Optional[str] = None,
         *,
-        valid_from: Optional[datetime] = None,
+        at: Optional[datetime] = None,
         etag: Optional[bytes] = None,
     ) -> Optional[CacheResult]:
         name = cache_name(obj)
@@ -115,7 +113,7 @@ class CherryCache:
             "type": name,
             "path": path,
             "namespace": namespace,
-            "valid_from": valid_from,
+            "at": at,
             "etag": etag,
         }
         where_clauses = [
@@ -126,18 +124,19 @@ class CherryCache:
         order_by_col = "cached_at"
         if policy == ObjectCachePolicy.ETAG and etag is not None:
             where_clauses.append("etag=:etag")
-        elif policy == ObjectCachePolicy.TIMESTAMP and valid_from is not None:
-            where_clauses += ["valid_from <= :valid_from"]
-        elif policy == ObjectCachePolicy.TIMESTAMP and valid_from is None:
+        elif policy == ObjectCachePolicy.TIMESTAMP and at is not None:
+            where_clauses += ["valid_from <= :at"]
+        elif policy == ObjectCachePolicy.TIMESTAMP and at is None:
             order_by_col = "valid_from"
 
-        query = f""""
-            SELECT object.data, meta.data AS metadata,
+        query = f"""
+            SELECT object.data, object_meta.data AS metadata,
                    object.cached_at, object.valid_from, object.etag
             FROM object 
-            WHERE {' AND '.join(where_clauses)} ORDER BY {order_by_col} LIMIT 1
-            LEFT JOIN meta
-            ON object.meta_id = meta.meta_id
+            LEFT JOIN object_meta
+            ON object.meta_id = object_meta.meta_id
+            WHERE {' AND '.join(where_clauses)} 
+            ORDER BY {order_by_col} DESC LIMIT 1
         """
         cur = self._conn.execute(query, params)
         result_row = cur.fetchone()
@@ -151,36 +150,32 @@ class CherryCache:
         return CacheResult(
             result=obj(**result_data),
             cached_at=ts_parse(result_row[2]),
-            stale=True,  # TODO
             valid_from=None if result_row[3] is None else ts_parse(result_row[3]),
             etag=result_row[4],
         )
 
     def insert(
         self,
-        obj: BaseModel | list[BaseModel],
+        obj: BaseModel,
         path: str,
         namespace: Optional[str] = None,
         *,
         valid_from: Optional[datetime] = None,
         etag: Optional[bytes] = None,
         autocommit: bool = True,
-    ) -> Optional[Any]:
+    ) -> None:
         self._assert_write_policy(obj, valid_from, etag)
         name = cache_name(obj)
-        policy = cache_policy(obj)
 
-        obj_data = json.dumps(obj.dict())
+        obj_data = obj.dict()
         meta_id = None
         if "meta" in obj_data:
             obj_meta = obj_data["meta"]
             meta_id = UUID(obj_meta["uuid"]).bytes
             del obj_data["meta"]
             self._conn.execute(
-                "INSERT INTO object_meta(meta_id, data) VALUES (?, ?) "
-                "ON CONFLICT IGNORE",
-                meta_id,
-                json.dumps(obj_meta),
+                "INSERT OR IGNORE INTO object_meta(meta_id, data) VALUES (?, ?)",
+                (meta_id, json.dumps(obj_meta).decode("utf-8")),
             )
 
         obj_stmt = """
@@ -196,10 +191,10 @@ class CherryCache:
             "type": name,
             "path": path,
             "namespace": namespace,
-            "data": json.dumps(obj_data),
+            "data": json.dumps(obj_data).decode("utf-8"),
             "meta_id": meta_id,
             "etag": etag,
-            "valid_from": valid_from.isoformat(),
+            "valid_from": None if valid_from is None else valid_from.isoformat(),
             "cached_at": datetime.now(tz=timezone.utc).isoformat(),
         }
         self._conn.execute(obj_stmt, obj_params)
@@ -208,12 +203,16 @@ class CherryCache:
             self.commit()
 
     def commit(self) -> bool:
-        """Flushes the cache state."""
-        self._conn.commit()
+        """Commits the cache transaction."""
+        self._conn.execute("COMMIT")
+
+    def rollback(self) -> bool:
+        """Rolls back the cache transaction."""
+        self._conn.execute("ROLLBACK")
 
     def all(
         self, obj: type, namespace: Optional[str] = None, etag: Optional[bytes] = None
-    ) -> CacheResult:
+    ) -> list[CacheResult]:
         """Gets the latest versions of all objects of type `obj` in `namespace`."""
         name = cache_name(obj)
         policy = cache_policy(obj)
@@ -230,23 +229,22 @@ class CherryCache:
             raise CacheInitError(f"Invalid cache: missing tables {missing_tables}.")
 
         schema_version = self._conn.execute(
-            "SELECT value FROM cache_meta WHERE key='cache_version'"
+            "SELECT value FROM cache_meta WHERE key='schema_version'"
         ).fetchone()
         if schema_version is None:
             raise CacheInitError("Invalid cache: no schema version in cache metadata.")
         if schema_version[0] != _CACHE_SCHEMA_VERSION:
             raise CacheInitError(
                 f"Invalid cache: expected schema version {_CACHE_SCHEMA_VERSION}, "
-                f"but got schema version {schema_version}."
+                f"but got schema version {schema_version[0]}."
             )
 
     def _assert_write_policy(
-        self, obj: str, valid_from: Optional[datetime], etag: Optional[bytes]
+        self, obj: type, valid_from: Optional[datetime], etag: Optional[bytes]
     ) -> None:
         """Checks that an object type is registered and properly referenced on write.
 
         Raises:
-            CacheObjectError: If `obj` is unknown.
             CachePolicyError:
                 If `obj` is improperly referenced.
                 An object is properly referenced when
@@ -254,10 +252,7 @@ class CherryCache:
                     * Only a timestamp is provided for an timestamp-versioned object type.
                     * No version information is provided for an unversioned object type.
         """
-        try:
-            _, policy = self._schemas[obj]
-        except KeyError:
-            raise CacheObjectError(f'Object type "{obj}" not registered with cache.')
+        policy = cache_policy(obj)
 
         if policy == ObjectCachePolicy.ETAG and (
             etag is None or valid_from is not None
@@ -313,19 +308,17 @@ class CherryCache:
                 meta_id    BLOB,
                 etag       BLOB,
                 valid_from TEXT,
-                cached_at TEXT NOT NULL,
+                cached_at  TEXT NOT NULL,
                 FOREIGN KEY(meta_id) REFERENCES object_meta(meta_id),
-                UNIQUE(type, path, namespace, version)
+                UNIQUE(type, path, namespace, etag),
+                UNIQUE(type, path, namespace, valid_from)
             )"""
-        )
-        self._conn.execute(
-            "CREATE UNIQUE INDEX idx_object ON object(type, path, namespace)"
         )
         self._conn.execute(
             """CREATE TABLE collection(
                 type      TEXT NOT NULL,
                 namespace TEXT,
-                etag      BLOB
+                etag      BLOB,
                 UNIQUE(type, namespace)
             )"""
         )
