@@ -16,6 +16,14 @@ CherryPath = constr(regex=r"[a-z0-9][a-z0-9-_/]*")
 NamespacedCherryPath = constr(regex=r"[a-z0-9/][a-z0-9-_/]*")
 
 
+class ObjectCachePolicy(str, Enum):
+    """A schema's single-object caching policy."""
+
+    ETAG = "etag"
+    TIMESTAMP = "timestamp"
+    NONE = "none"
+
+
 class ColumnType(str, Enum):
     """Data type of a column."""
 
@@ -106,6 +114,9 @@ class LocalityPatch(BaseModel):
 class Locality(LocalityBase):
     """A locality returned by the database."""
 
+    __cache_name__ = "locality"
+    __cache_policy__ = ObjectCachePolicy.ETAG
+
     aliases: list[CherryPath]
     meta: ObjectMeta
 
@@ -124,6 +135,9 @@ class NamespaceCreate(NamespaceBase):
 
 class Namespace(NamespaceBase):
     """A namespace returned by the database."""
+
+    __cache_name__ = "namespace"
+    __cache_policy__ = ObjectCachePolicy.ETAG
 
     meta: ObjectMeta
 
@@ -154,7 +168,10 @@ class ColumnPatch(BaseModel):
 
 
 class Column(ColumnBase):
-    """A locality returned by the database."""
+    """A column returned by the database."""
+
+    __cache_name__ = "column"
+    __cache_policy__ = ObjectCachePolicy.ETAG
 
     aliases: list[CherryPath]
     meta: ObjectMeta
@@ -175,6 +192,8 @@ class GeoLayerCreate(GeoLayerBase):
 class GeoLayer(GeoLayerBase):
     """Geographic layer metadata returned by the database."""
 
+    __cache_name__ = "geo_layer"
+
     meta: ObjectMeta
     namespace: str
 
@@ -185,6 +204,8 @@ class GeoImportBase(BaseModel):
 
 class GeoImport(GeoImportBase):
     """Geographic unit import metadata returned by the database."""
+
+    __cache_name__ = "geo_import"
 
     uuid: str
     namespace: str
@@ -225,6 +246,8 @@ class GeographyPatch(BaseModel):
 class Geography(GeographyBase):
     """Geographic unit data returned by the database."""
 
+    __cache_name__ = "geography"
+
     meta: ObjectMeta
     namespace: str
     modified_at: datetime
@@ -245,6 +268,9 @@ class ColumnSetCreate(ColumnSetBase):
 
 class ColumnSet(ColumnSetBase):
     """Logical column grouping returned by the database."""
+
+    __cache_name__ = "column_set"
+    __cache_policy__ = ObjectCachePolicy.TIMESTAMP
 
     meta: ObjectMeta
     namespace: str
