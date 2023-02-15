@@ -153,13 +153,7 @@ def test_cherry_cache_insert_get__etag(cache, etag_obj):
     assert result_no_etag.valid_from is None
     assert result_no_etag.etag == etag_newer
 
-    result_etag = cache.get(ETagObject, "test", "namespace", etag=etag_older)
-    assert result_etag.result == etag_obj_older
-    assert_close_to_now(result_no_etag.cached_at)
-    assert result_etag.valid_from is None
-    assert result_etag.etag == etag_older
-
-    assert result_no_etag.cached_at >= result_etag.cached_at
+    assert cache.get(ETagObject, "test", "namespace", etag=etag_older) is None
 
 
 def test_cherry_cache_insert_get__timestamp(cache, timestamp_obj):

@@ -56,18 +56,35 @@ def cache_policy(obj: BaseModel | type) -> ObjectCachePolicy:
 
 @dataclass(frozen=True)
 class CacheResult:
-    """Result of a successful cache retrieval operation.
+    """Result of a successful single-object cache retrieval operation.
 
     Attributes:
         result: The cached object or objects.
         cached_at: Local system time the object(s) were fetched from the API.
         valid_from: Start of version time range for timestamp-versioned objects.
-        etag: ETag for collection results or ETag-versioned objects.
+        etag: ETag for ETag-versioned objects.
     """
 
     result: BaseModel
     cached_at: datetime
     valid_from: Optional[datetime] = None
+    etag: Optional[bytes] = None
+
+
+@dataclass(frozen=True)
+class CacheCollectionResult:
+    """Result of a successful cache collection retrieval operation.
+
+    Attributes:
+        result: The cached objects by path.
+        cached_at: Local system time the object(s) were fetched from the API.
+        valid_at: collection snapshot time for timestamp-versioned objects.
+        etag: collection ETag for ETag-versioned objects.
+    """
+
+    result: dict[str, BaseModel]
+    cached_at: datetime
+    valid_at: Optional[datetime] = None
     etag: Optional[bytes] = None
 
 
@@ -96,6 +113,14 @@ class CherryCache:
             self._init_db()
         else:
             self._assert_clean()
+
+    def commit(self) -> bool:
+        """Commits the cache transaction."""
+        self._conn.execute("COMMIT")
+
+    def rollback(self) -> bool:
+        """Rolls back the cache transaction."""
+        self._conn.execute("ROLLBACK")
 
     def get(
         self,
@@ -166,6 +191,7 @@ class CherryCache:
     ) -> None:
         self._assert_write_policy(obj, valid_from, etag)
         name = cache_name(obj)
+        policy = cache_policy(obj)
 
         obj_data = obj.dict()
         meta_id = None
@@ -176,6 +202,13 @@ class CherryCache:
             self._conn.execute(
                 "INSERT OR IGNORE INTO object_meta(meta_id, data) VALUES (?, ?)",
                 (meta_id, json.dumps(obj_meta).decode("utf-8")),
+            )
+
+        if policy == ObjectCachePolicy.ETAG:
+            # For ETag-versioned objects, we always prefer the newest version.
+            self._conn.execute(
+                "DELETE FROM object WHERE type = ? AND path = ? AND namespace = ?",
+                (name, path, namespace),
             )
 
         obj_stmt = """
@@ -202,20 +235,153 @@ class CherryCache:
         if autocommit:
             self.commit()
 
-    def commit(self) -> bool:
-        """Commits the cache transaction."""
-        self._conn.execute("COMMIT")
+    def collect(
+        self,
+        obj: type,
+        namespace: Optional[str] = None,
+        *,
+        valid_at: Optional[datetime] = None,
+        etag: Optional[bytes] = None,
+        autocommit: bool = True,
+    ) -> None:
+        """Inserts a complete namespaced-scoped collection at an ETag or point in time."""
+        name = cache_name(obj)
+        policy = cache_policy(obj)
 
-    def rollback(self) -> bool:
-        """Rolls back the cache transaction."""
-        self._conn.execute("ROLLBACK")
+        if policy == ObjectCachePolicy.ETAG and (etag is None or valid_at is not None):
+            raise CachePolicyError(f'Object type "{obj}" is ETag-versioned.')
+        if policy == ObjectCachePolicy.TIMESTAMP and (etag is None or valid_at is None):
+            raise CachePolicyError(
+                f'Object type "{obj}" is timestamp-versioned: for collections, '
+                "specify a collection ETag and a snapshot timestamp."
+            )
+
+        if policy == ObjectCachePolicy.ETAG:
+            # For ETag-versioned objects, we always prefer the newest version.
+            self._conn.execute(
+                "DELETE FROM collection WHERE type = ? AND namespace = ?",
+                (name, namespace),
+            )
+
+        valid_at_iso = None if valid_at is None else valid_at.isoformat()
+        cached_at_iso = datetime.now(tz=timezone.utc).isoformat()
+        self._conn.execute(
+            "INSERT INTO collection(type, namespace, etag, valid_at, cached_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (name, namespace, etag, valid_at_iso, cached_at_iso),
+        )
+
+        if autocommit:
+            self.commit()
 
     def all(
-        self, obj: type, namespace: Optional[str] = None, etag: Optional[bytes] = None
-    ) -> list[CacheResult]:
+        self,
+        obj: type,
+        namespace: Optional[str] = None,
+        *,
+        at: Optional[datetime] = None,
+    ) -> Optional[CacheCollectionResult]:
         """Gets the latest versions of all objects of type `obj` in `namespace`."""
         name = cache_name(obj)
         policy = cache_policy(obj)
+        if policy == ObjectCachePolicy.ETAG and at is not None:
+            raise CachePolicyError(f'Object type "{obj}" is ETag-versioned.')
+        if policy == ObjectCachePolicy.NONE:
+            raise CachePolicyError(
+                f'Object type "{obj}" does not support collection-level caching.'
+            )
+
+        if policy == ObjectCachePolicy.ETAG:
+            collection_meta = self._conn.execute(
+                "SELECT etag, cached_at, valid_at FROM collection "
+                "WHERE type = ? AND namespace = ?",
+                (name, namespace),
+            ).fetchone()
+            if collection_meta is None:
+                return None
+            etag, cached_at, valid_at = collection_meta
+
+            members_query = """
+            SELECT object.data, object_meta.data AS metadata
+            FROM object 
+            LEFT JOIN object_meta
+            ON object.meta_id = object_meta.meta_id
+            WHERE object.type = ? AND object.namespace = ?
+            """
+            collection_raw = self._conn.execute(
+                members_query, (name, namespace)
+            ).fetchall()
+        else:
+            base_collection_query = """
+            SELECT etag, cached_at, valid_at FROM collection
+            WHERE type = ? AND namespace = ?
+            """
+
+            if at is None:
+                # If `at` is unspecified, get the latest snapshot available.
+                collection_meta_before = self._conn.execute(
+                    base_collection_query + " ORDER BY valid_at DESC LIMIT 1",
+                    (name, namespace),
+                ).fetchone()
+                if collection_meta_before is None:
+                    return None
+            else:
+                # Attempt inclusive timestamp-based matching on `at`.
+                collection_meta_before = self._conn.execute(
+                    base_collection_query
+                    + " AND valid_at <= ?"
+                    + " ORDER BY valid_at DESC LIMIT 1",
+                    (name, namespace, at.isoformat()),
+                ).fetchone()
+                collection_meta_after = self._conn.execute(
+                    base_collection_query
+                    + " AND valid_at >= ?"
+                    + " ORDER BY valid_at ASC LIMIT 1",
+                    (name, namespace, at.isoformat()),
+                ).fetchone()
+
+                # We look for either a collection snapshot exactly at `at`
+                # or two snapshots sandwiching `at` with the same ETag.
+                exact_match = (
+                    collection_meta_before is not None
+                    and collection_meta_before[2] == at.isoformat()
+                )
+                sandwich_match = (
+                    collection_meta_before is not None
+                    and collection_meta_after is not None
+                    and collection_meta_before[0] == collection_meta_after[0]
+                )
+                if not (exact_match or sandwich_match):
+                    return None
+
+            etag, cached_at, valid_at = collection_meta_before
+            members_query = """
+            SELECT object.path, object.data, object_meta.data AS metadata
+            FROM object 
+            LEFT JOIN object_meta
+            ON object.meta_id = object_meta.meta_id
+            WHERE object.type = ? AND object.namespace = ? AND object.valid_at <= ?
+            GROUP BY object.path
+            HAVING MAX(object.valid_at)
+            """
+            collection_raw = self._conn.execute(
+                members_query, (name, namespace, valid_at)
+            ).fetchall()
+
+        collection = {}
+        for row in collection_raw:
+            path = row[0]
+            data = json.loads(row[1])
+            if row[2] is not None:
+                data["meta"] = json.loads(row[1])
+            collection[path] = obj(**data)
+
+        return CacheCollectionResult(
+            result=collection,
+            cached_at=ts_parse(cached_at),
+            valid_at=ts_parse(valid_at),
+            etag=etag,
+        )
 
     def _assert_clean(self) -> None:
         """Asserts that the cache's schema matches the current schema version.
@@ -319,11 +485,11 @@ class CherryCache:
                 type      TEXT NOT NULL,
                 namespace TEXT,
                 etag      BLOB,
-                UNIQUE(type, namespace)
+                valid_at  TEXT,
+                cached_at TEXT NOT NULL,
+                UNIQUE(type, namespace, etag),
+                UNIQUE(type, namespace, valid_at)
             )"""
-        )
-        self._conn.execute(
-            "CREATE UNIQUE INDEX idx_collection ON collection(type, namespace)"
         )
         self._conn.execute(
             "INSERT INTO cache_meta (key, value) VALUES ('schema_version', ?)",
