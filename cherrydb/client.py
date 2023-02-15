@@ -1,10 +1,9 @@
 """CherryDB session management."""
 import os
-from pathlib import Path
-from typing import Optional
-
 import httpx
 import tomlkit
+from pathlib import Path
+from typing import Optional
 
 from cherrydb.cache import CherryCache
 
@@ -22,6 +21,8 @@ class CherryDB:
     cache: CherryCache
     namespace: Optional[str]
     offline: bool
+    _base_url: str
+    timeout: int
 
     def __init__(
         self,
@@ -29,7 +30,8 @@ class CherryDB:
         host: Optional[str] = None,
         key: Optional[str] = None,
         namespace: Optional[str] = None,
-        offline: bool = False
+        offline: bool = False,
+        timeout: int = 60,
     ):
         """Creates a CherryDB session.
 
@@ -57,6 +59,7 @@ class CherryDB:
         """
         self.namespace = namespace
         self.offline = offline
+        self.timeout = timeout
 
         if host is not None and key is None:
             raise ConfigError('No API key specified for host "{host}".')
@@ -101,18 +104,23 @@ class CherryDB:
                     f"in configuration at {cherry_root.resolve()}."
                 )
 
-        self.host = config["host"]
-        self.key = config["key"]
-
         try:
             Path(cherry_root / "caches").mkdir(exist_ok=True)
         except IOError as ex:
             raise ConfigError("Failed to create cache directory.") from ex
         self.cache = CherryCache(cherry_root / "caches" / f"{profile}.db")
 
-    @property
-    def base_url(self) -> str:
-        """Base URL of the CherryDB API."""
-        if self.host.startswith("localhost"):
-            return f"http://{self.host}/api/v1"
-        return f"https://{self.host}/api/v1"
+        host = config["host"]
+        key = config["key"]
+        self._base_url = (
+            f"http://{self.host}/api/v1"
+            if host.startswith("localhost")
+            else f"https://{self.host}/api/v1"
+        )
+        self._base_headers = {"User-Agent": "cherrydb-client-py", "X-API-Key": key}
+        self.client = httpx.Client(
+            base_url=self._base_url,
+            headers=self._base_headers,
+            timeout=timeout,
+            transport=httpx.HTTPTransport(retries=1),
+        )
