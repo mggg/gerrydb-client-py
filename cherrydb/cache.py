@@ -4,7 +4,7 @@ import orjson as json
 from dataclasses import dataclass
 from os import PathLike
 from datetime import datetime, timezone
-from typing import Any, Optional, Union
+from typing import Optional, Union
 from uuid import UUID
 
 from dateutil.parser import parse as ts_parse
@@ -131,6 +131,22 @@ class CherryCache:
         at: Optional[datetime] = None,
         etag: Optional[bytes] = None,
     ) -> Optional[CacheResult]:
+        """Retrieves an object from the cache.
+
+        Args:
+            obj: The object's Pydantic schema.
+            path: The object's namespace-relative path.
+            namespace: The object's namespace.
+            at: (For timestamp-versioned objects.)
+                An upper bound on the object's `valid_from` tag.
+                If not provided, the latest version by `valid_from` is retrieved.
+            etag: (For ETag-versioned objects.)
+                The object's exact ETag. If not provided, any version is retrieved.
+
+        Returns:
+            The cached object wrapped in a `CacheResult`, if available.
+        """
+
         name = cache_name(obj)
         policy = cache_policy(obj)
 
@@ -189,6 +205,23 @@ class CherryCache:
         etag: Optional[bytes] = None,
         autocommit: bool = True,
     ) -> None:
+        """Caches an object.
+
+        Args:
+            obj: A version of the object to cache.
+            path: The object's namespace-relative path.
+            namespace: The object's namespace.
+            valid_from: (For timestamp-versioned objects.)
+                The beginning of the object version's lifetime.
+            etag: (For ETag-versioned objects.) The object's ETag.
+            autocommit: Determines if the transaction with the SQLite backend
+                must be explicitly closed with `commit()`. Set this
+                to `False` for bulk insertions.
+
+        Raises:
+            CachePolicyError: If the `valid_from` and `etag` parameters do
+                not match the caching policy of `obj`.
+        """
         self._assert_write_policy(obj, valid_from, etag)
         name = cache_name(obj)
         policy = cache_policy(obj)
@@ -244,7 +277,22 @@ class CherryCache:
         etag: Optional[bytes] = None,
         autocommit: bool = True,
     ) -> None:
-        """Inserts a complete namespaced-scoped collection at an ETag or point in time."""
+        """Inserts a complete namespaced-scoped collection at an ETag or point in time.
+
+        Args:
+            obj: The object collection's schema.
+            namespace: The object collection's namespace.
+            valid_at: (For timestamp-versioned objects.)
+                The point in time at which the collection is complete.
+            etag: (For ETag-versioned objects.) The collection's ETag.
+            autocommit: Determines if the transaction with the SQLite backend
+                must be explicitly closed with `commit()`.
+
+        Raises:
+            CachePolicyError: If the `valid_at` and `etag` parameters do not match
+                the caching policy of `obj`, or if `obj` cannot be cached at the
+                collection level.
+        """
         name = cache_name(obj)
         policy = cache_policy(obj)
 
@@ -287,7 +335,22 @@ class CherryCache:
         *,
         at: Optional[datetime] = None,
     ) -> Optional[CacheCollectionResult]:
-        """Gets the latest versions of all objects of type `obj` in `namespace`."""
+        """Gets the latest versions of all objects of type `obj` in `namespace`.
+
+        Args:
+            obj: The object collection's schema.
+            namespace: The object collection's namespace.
+            at: (For timestamp-versioned objects.) The point in time to retrieve
+                the collection at.
+
+        Returns:
+            The cached object collection wrapped in a `CacheCollectionResult`,
+            if available.
+
+        Raises:
+            CachePolicyError: If the `at` parameter does not match the caching policy
+                of `obj`, or if `obj` cannot be cached at the collection level.
+        """
         name = cache_name(obj)
         policy = cache_policy(obj)
         if policy == ObjectCachePolicy.ETAG and at is not None:
