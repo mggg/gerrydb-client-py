@@ -250,10 +250,16 @@ class CherryCache:
 
         if policy == ObjectCachePolicy.ETAG and (etag is None or valid_at is not None):
             raise CachePolicyError(f'Object type "{obj}" is ETag-versioned.')
-        if policy == ObjectCachePolicy.TIMESTAMP and (etag is None or valid_at is None):
+        elif policy == ObjectCachePolicy.TIMESTAMP and (
+            etag is None or valid_at is None
+        ):
             raise CachePolicyError(
                 f'Object type "{obj}" is timestamp-versioned: for collections, '
                 "specify a collection ETag and a snapshot timestamp."
+            )
+        elif policy == ObjectCachePolicy.NONE:
+            raise CachePolicyError(
+                f'Object type "{obj}" does not support collection-level caching.'
             )
 
         if policy == ObjectCachePolicy.ETAG:
@@ -302,7 +308,7 @@ class CherryCache:
             etag, cached_at, valid_at = collection_meta
 
             members_query = """
-            SELECT object.data, object_meta.data AS metadata
+            SELECT object.path, object.data, object_meta.data AS metadata
             FROM object 
             LEFT JOIN object_meta
             ON object.meta_id = object_meta.meta_id
@@ -360,9 +366,9 @@ class CherryCache:
             FROM object 
             LEFT JOIN object_meta
             ON object.meta_id = object_meta.meta_id
-            WHERE object.type = ? AND object.namespace = ? AND object.valid_at <= ?
+            WHERE object.type = ? AND object.namespace = ? AND object.valid_from <= ?
             GROUP BY object.path
-            HAVING MAX(object.valid_at)
+            HAVING MAX(object.valid_from)
             """
             collection_raw = self._conn.execute(
                 members_query, (name, namespace, valid_at)
@@ -373,13 +379,13 @@ class CherryCache:
             path = row[0]
             data = json.loads(row[1])
             if row[2] is not None:
-                data["meta"] = json.loads(row[1])
+                data["meta"] = json.loads(row[2])
             collection[path] = obj(**data)
 
         return CacheCollectionResult(
             result=collection,
             cached_at=ts_parse(cached_at),
-            valid_at=ts_parse(valid_at),
+            valid_at=None if valid_at is None else ts_parse(valid_at),
             etag=etag,
         )
 
@@ -487,8 +493,7 @@ class CherryCache:
                 etag      BLOB,
                 valid_at  TEXT,
                 cached_at TEXT NOT NULL,
-                UNIQUE(type, namespace, etag),
-                UNIQUE(type, namespace, valid_at)
+                UNIQUE(type, namespace, etag, valid_at)
             )"""
         )
         self._conn.execute(

@@ -224,3 +224,100 @@ def test_cherry_cache_insert__timestamp_with_no_timestamp(cache, timestamp_obj):
 def test_cherry_cache_insert__timestamp_with_etag(cache, timestamp_obj):
     with pytest.raises(CachePolicyError, match="is timestamp-versioned"):
         cache.insert(timestamp_obj, "test", "namespace", etag="123".encode("utf-8"))
+
+
+def test_cherry_cache_insert_collect_all__etag(cache, etag_obj):
+    etag_obj2 = etag_obj.copy(update={"bar": "baz"})
+    cache.insert(etag_obj, "test1", "namespace", etag=b"1-1")
+    cache.insert(etag_obj2, "test2", "namespace", etag=b"2-1")
+    cache.collect(ETagObject, "namespace", etag=b"collection1")
+
+    # Take the first snapshot.
+    result1 = cache.all(ETagObject, "namespace")
+    assert result1.result == {"test1": etag_obj, "test2": etag_obj2}
+    assert_close_to_now(result1.cached_at)
+    assert result1.valid_at is None
+    assert result1.etag == b"collection1"
+
+    # Update and add some objects.
+    etag_obj2_v2 = etag_obj.copy(update={"bar": "baz2"})
+    etag_obj3 = etag_obj.copy(update={"bar": "none"})
+    cache.insert(etag_obj2_v2, "test2", "namespace", etag=b"2-2")
+    cache.insert(etag_obj3, "test3", "namespace", etag=b"3-1")
+    cache.collect(ETagObject, "namespace", etag=b"collection2")
+
+    # Take another snapshot.
+    result2 = cache.all(ETagObject, "namespace")
+    assert result2.result == {
+        "test1": etag_obj,
+        "test2": etag_obj2_v2,
+        "test3": etag_obj3,
+    }
+    assert_close_to_now(result2.cached_at)
+    assert result2.valid_at is None
+    assert result2.etag == b"collection2"
+
+
+def test_cherry_cache_insert_collect_all__timestamp(cache, timestamp_obj):
+    timestamp_obj2 = timestamp_obj.copy(update={"baz": [2, 3]})
+    cache.insert(timestamp_obj, "test1", "namespace", valid_from=datetime(2023, 1, 1))
+    cache.insert(timestamp_obj2, "test2", "namespace", valid_from=datetime(2023, 1, 1))
+
+    # Take two content-identical snapshots (same ETag, different points in time).
+    cache.collect(
+        TimestampObject,
+        "namespace",
+        etag=b"collection1",
+        valid_at=datetime(2023, 1, 1),
+    )
+    cache.collect(
+        TimestampObject,
+        "namespace",
+        etag=b"collection1",
+        valid_at=datetime(2023, 1, 3),
+    )
+
+    # Retrieve the snapshot using a specified timestamp.
+    result1 = cache.all(TimestampObject, "namespace", at=datetime(2023, 1, 2))
+    assert result1.result == {"test1": timestamp_obj, "test2": timestamp_obj2}
+    assert_close_to_now(result1.cached_at)
+    assert result1.valid_at == datetime(2023, 1, 1)
+    assert result1.etag == b"collection1"
+
+    # Retrieve the snapshot without specifying a timestamp (gets the latest).
+    result_latest = cache.all(TimestampObject, "namespace")
+    assert result_latest.result == result1.result
+    assert_close_to_now(result_latest.cached_at)
+    assert result_latest.valid_at == datetime(2023, 1, 3)
+    assert result_latest.etag == b"collection1"
+
+    # Update and add some objects.
+    timestamp_obj2_v2 = timestamp_obj.copy(update={"baz": [2, 3, 4]})
+    timestamp_obj3 = timestamp_obj.copy(update={"baz": []})
+    cache.insert(
+        timestamp_obj2_v2, "test2", "namespace", valid_from=datetime(2023, 1, 4)
+    )
+    cache.insert(timestamp_obj3, "test3", "namespace", valid_from=datetime(2023, 1, 4))
+
+    # Take another snapshot.
+    cache.collect(
+        TimestampObject,
+        "namespace",
+        etag=b"collection2",
+        valid_at=datetime(2023, 1, 5),
+    )
+
+    # Retrieve the new snapshot.
+    result2 = cache.all(TimestampObject, "namespace", at=datetime(2023, 1, 5))
+    assert result2.result == {
+        "test1": timestamp_obj,
+        "test2": timestamp_obj2_v2,
+        "test3": timestamp_obj3,
+    }
+    assert_close_to_now(result2.cached_at)
+    assert result2.valid_at == datetime(2023, 1, 5)
+    assert result2.etag == b"collection2"
+
+    # It's unknown what happened between 2023-01-03 and 2023-01-05, so we shouldn't
+    # be able to get a snapshot in that range (exclusive).
+    assert cache.all(TimestampObject, "namespace", at=datetime(2023, 1, 4)) is None
