@@ -1,8 +1,10 @@
 """CherryDB session management."""
 import os
-import tomlkit
 from pathlib import Path
 from typing import Optional
+
+import httpx
+import tomlkit
 
 from cherrydb.cache import CherryCache
 
@@ -16,8 +18,7 @@ class ConfigError(Exception):
 class CherryDB:
     """CherryDB session."""
 
-    host: str
-    key: str
+    client: Optional[httpx.Client]
     cache: CherryCache
     namespace: Optional[str]
     offline: bool
@@ -28,7 +29,7 @@ class CherryDB:
         host: Optional[str] = None,
         key: Optional[str] = None,
         namespace: Optional[str] = None,
-        offline: bool = False,
+        offline: bool = False
     ):
         """Creates a CherryDB session.
 

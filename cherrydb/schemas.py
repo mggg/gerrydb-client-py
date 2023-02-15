@@ -5,10 +5,10 @@ This file should be kept in sync with the server-side version.
 from datetime import datetime
 from enum import Enum
 
-from pydantic import AnyUrl, constr
+from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
+from pydantic import constr
 from shapely.geometry.base import BaseGeometry
-
 
 UserEmail = constr(max_length=254)
 

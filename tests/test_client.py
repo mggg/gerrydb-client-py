@@ -1,8 +1,9 @@
 """Tests for CherryDB session management."""
 import os
+from unittest import mock
+
 import pytest
 
-from unittest import mock
 from cherrydb.client import CherryDB, ConfigError
 
 

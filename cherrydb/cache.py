@@ -1,13 +1,14 @@
 """Internal cache operations for CherryDB."""
 import sqlite3
-import orjson as json
 from dataclasses import dataclass
-from os import PathLike
 from datetime import datetime, timezone
+from os import PathLike
 from typing import Optional, Union
 from uuid import UUID
 
+import orjson as json
 from dateutil.parser import parse as ts_parse
+
 from cherrydb.schemas import BaseModel, ObjectCachePolicy
 
 _REQUIRED_TABLES = {"cache_meta", "collection", "object", "object_meta"}
