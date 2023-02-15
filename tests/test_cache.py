@@ -321,3 +321,33 @@ def test_cherry_cache_insert_collect_all__timestamp(cache, timestamp_obj):
     # It's unknown what happened between 2023-01-03 and 2023-01-05, so we shouldn't
     # be able to get a snapshot in that range (exclusive).
     assert cache.all(TimestampObject, "namespace", at=datetime(2023, 1, 4)) is None
+
+
+def test_cherry_cache_collect__etag_no_etag(cache):
+    with pytest.raises(CachePolicyError, match="ETag-versioned"):
+        cache.collect(ETagObject)
+
+
+def test_cherry_cache_collect__timestamp_no_etag(cache):
+    with pytest.raises(CachePolicyError, match="timestamp-versioned"):
+        cache.collect(TimestampObject, valid_at=datetime(2023, 1, 1))
+
+
+def test_cherry_cache_collect__timestamp_no_valid_at(cache):
+    with pytest.raises(CachePolicyError, match="timestamp-versioned"):
+        cache.collect(TimestampObject, etag=b"123")
+
+
+def test_cherry_cache_collect__unversioned(cache):
+    with pytest.raises(CachePolicyError, match="does not support collection"):
+        cache.collect(UnversionedObject)
+
+
+def test_cherry_cache_all__etag_at(cache):
+    with pytest.raises(CachePolicyError, match="ETag-versioned"):
+        cache.all(ETagObject, at=datetime(2023, 1, 1))
+
+
+def test_cherry_cache_alll__unversioned(cache):
+    with pytest.raises(CachePolicyError, match="does not support collection"):
+        cache.all(UnversionedObject)
