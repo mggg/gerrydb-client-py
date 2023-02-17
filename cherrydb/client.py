@@ -1,11 +1,11 @@
 """CherryDB session management."""
 import os
-import httpx
-import tomlkit
-
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
+
+import httpx
+import tomlkit
 
 from cherrydb.cache import CherryCache
 from cherrydb.exceptions import ConfigError

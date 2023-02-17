@@ -127,7 +127,7 @@ class CherryCache:
         self,
         obj: type,
         path: str,
-        namespace: Optional[str] = None,
+        namespace: str,
         *,
         at: Optional[datetime] = None,
         etag: Optional[bytes] = None,
@@ -161,7 +161,7 @@ class CherryCache:
         where_clauses = [
             "type=:type",
             "path=:path",
-            "namespace IS NULL" if namespace is None else "namespace=:namespace",
+            "namespace=:namespace",
         ]
         order_by_col = "cached_at"
         if policy == ObjectCachePolicy.ETAG and etag is not None:
@@ -200,7 +200,7 @@ class CherryCache:
         self,
         obj: BaseModel,
         path: str,
-        namespace: Optional[str] = None,
+        namespace: str,
         *,
         valid_from: Optional[datetime] = None,
         etag: Optional[bytes] = None,
@@ -272,7 +272,7 @@ class CherryCache:
     def collect(
         self,
         obj: type,
-        namespace: Optional[str] = None,
+        namespace: str,
         *,
         valid_at: Optional[datetime] = None,
         etag: Optional[bytes] = None,
@@ -332,7 +332,7 @@ class CherryCache:
     def all(
         self,
         obj: type,
-        namespace: Optional[str] = None,
+        namespace: str,
         *,
         at: Optional[datetime] = None,
     ) -> Optional[CacheCollectionResult]:
@@ -476,7 +476,10 @@ class CherryCache:
             )
 
     def _assert_write_policy(
-        self, obj: type, valid_from: Optional[datetime], etag: Optional[bytes]
+        self,
+        obj: Union[type, BaseModel],
+        valid_from: Optional[datetime],
+        etag: Optional[bytes],
     ) -> None:
         """Checks that an object type is registered and properly referenced on write.
 
@@ -489,21 +492,22 @@ class CherryCache:
                     * No version information is provided for an unversioned object type.
         """
         policy = cache_policy(obj)
+        obj_type = type(obj) if isinstance(obj, BaseModel) else obj
 
         if policy == ObjectCachePolicy.ETAG and (
             etag is None or valid_from is not None
         ):
-            raise CachePolicyError(f'Object type "{obj}" is ETag-versioned.')
+            raise CachePolicyError(f'Object type "{obj_type}" is ETag-versioned.')
 
         if policy == ObjectCachePolicy.TIMESTAMP and (
             etag is not None or valid_from is None
         ):
-            raise CachePolicyError(f'Object type "{obj}" is timestamp-versioned.')
+            raise CachePolicyError(f'Object type "{obj_type}" is timestamp-versioned.')
 
         if policy == ObjectCachePolicy.NONE and (
             etag is not None or valid_from is not None
         ):
-            raise CachePolicyError(f'Object type "{obj}" is not versioned.')
+            raise CachePolicyError(f'Object type "{obj_type}" is not versioned.')
 
     def _tables(self) -> set[str]:
         """Fetches a list of user-defined tables in the cache database."""
