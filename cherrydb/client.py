@@ -45,7 +45,7 @@ class CherryDB:
         If `namespace` is specified, object references without a namespace
         will implicitly refer to `namespace`.
 
-        If `offline` is true, cached results from the API are accessible
+        If `offline` is `True`, cached results from the API are accessible
         in a limited read-only mode; CherryDB will not attempt to fetch
         the latest versions of versioned objects. This mode is suitable
         for isolated use cases where a CherryDB server is not necessarily

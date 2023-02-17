@@ -1,4 +1,4 @@
-"""Bsae objects and utilities for CherryDb API object repositories."""
+"""Base objects and utilities for CherryDB API object repositories."""
 import uuid
 from abc import ABC
 from functools import wraps
@@ -11,9 +11,8 @@ from cherrydb.cache import CacheCollectionResult, CacheResult
 from cherrydb.exceptions import OnlineError, ResultError, WriteContextError
 
 
-def normalize_path(path: str) -> str:
-    """Normalizes a path (removes leading, trailing, and duplicate slashes)."""
-    return "/".join(seg for seg in path.lower().split("/") if seg)
+class ObjectRepo(ABC):
+    """A repository for a generic CherryDB object."""
 
 
 def err(message: str) -> Callable:
@@ -58,18 +57,17 @@ def write_context(func: Callable) -> Callable:
     return write_context_wrapper
 
 
-class ObjectRepo(ABC):
-    """A repository for a generic CherryDB object."""
-
-
-def match(
+def match_etag(
     result: Optional[Union[CacheResult, CacheCollectionResult]]
 ) -> dict[str, str]:
     """Generates an `If-None-Match` header from a cache result."""
-    return None if result is None else {"If-None-Match": f'"{result.etag}"'}
+    if result is None or result.etag is None:
+        return None
+    etag_uuid = uuid.UUID(bytes=result.etag)
+    return {"If-None-Match": f'"{etag_uuid}"'}
 
 
-def etag(response: httpx.Response) -> Optional[bytes]:
+def parse_etag(response: httpx.Response) -> Optional[bytes]:
     """Parses the `ETag` header from a response, if available."""
     return (
         uuid.UUID(response.headers["ETag"].strip('"')).bytes

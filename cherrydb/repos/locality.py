@@ -3,8 +3,8 @@ from dataclasses import dataclass
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Optional
 
-from cherrydb.repos.base import (ObjectRepo, err, etag, match, online,
-                                 write_context)
+from cherrydb.repos.base import (ObjectRepo, err, match_etag, online,
+                                 parse_etag, write_context)
 from cherrydb.schemas import Locality, LocalityCreate, LocalityPatch
 
 if TYPE_CHECKING:
@@ -24,13 +24,13 @@ class LocalityRepo(ObjectRepo):
         if self.session.offline:
             return [] if cached is None else list(cached.result.values())
 
-        response = self.session.client.get("/localities/", headers=match(cached))
+        response = self.session.client.get("/localities/", headers=match_etag(cached))
         if response.status_code == HTTPStatus.NOT_MODIFIED:
             return list(cached.result.values())
         response.raise_for_status()
 
         locs = [Locality(**loc) for loc in response.json()]
-        loc_etag = etag(response)
+        loc_etag = parse_etag(response)
         for loc in locs:
             for path in [loc.canonical_path] + loc.aliases:
                 self.session.cache.insert(
@@ -59,14 +59,14 @@ class LocalityRepo(ObjectRepo):
             return None if cached is None else cached.result
 
         response = self.session.client.get(
-            f"/localities/{path}", headers=match(cached), follow_redirects=True
+            f"/localities/{path}", headers=match_etag(cached), follow_redirects=True
         )
         if response.status_code == HTTPStatus.NOT_MODIFIED:
             return cached.result
         response.raise_for_status()
 
         loc = Locality(**response.json)
-        loc_etag = etag(response)
+        loc_etag = parse_etag(response)
         for path in [loc.canonical_path] + loc.aliases:
             self.session.cache.insert(
                 obj=loc, path=path, namespace="", etag=loc_etag, autocommit=False
@@ -119,7 +119,7 @@ class LocalityRepo(ObjectRepo):
         response.raise_for_status()
 
         loc = Locality(**response.json())
-        loc_etag = etag(response)
+        loc_etag = parse_etag(response)
         for path in [loc.canonical_path] + loc.aliases:
             self.session.cache.insert(
                 obj=loc, path=path, namespace="", etag=loc_etag, autocommit=False
@@ -152,7 +152,7 @@ class LocalityRepo(ObjectRepo):
         response.raise_for_status()
 
         loc = Locality(**response.json())
-        loc_etag = etag(response)
+        loc_etag = parse_etag(response)
         for path in [loc.canonical_path] + loc.aliases:
             self.session.cache.insert(
                 obj=loc, path=path, namespace="", etag=loc_etag, autocommit=False
