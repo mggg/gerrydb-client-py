@@ -24,6 +24,15 @@ class ObjectCachePolicy(str, Enum):
     NONE = "none"
 
 
+class ColumnKind(str, Enum):
+    """Meaning of a column."""
+
+    COUNT = "count"
+    PERCENT = "percent"
+    CATEGORICAL = "categorical"
+    OTHER = "other"
+
+
 class ColumnType(str, Enum):
     """Data type of a column."""
 
@@ -120,6 +129,11 @@ class Locality(LocalityBase):
     aliases: list[CherryPath]
     meta: ObjectMeta
 
+    def __repr__(self):
+        if self.parent_path is None:
+            return f"Locality: {self.name} ({self.canonical_path})"
+        return f"Locality: {self.name} ({self.canonical_path} → {self.parent_path})"
+
 
 class NamespaceBase(BaseModel):
     """Base model for namespace metadata."""
@@ -152,6 +166,7 @@ class ColumnBase(BaseModel):
     namespace: str
     description: str
     source_url: AnyUrl | None
+    kind: ColumnKind
     type: ColumnType
 
 

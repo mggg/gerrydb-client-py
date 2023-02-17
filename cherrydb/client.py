@@ -2,16 +2,17 @@
 import os
 import httpx
 import tomlkit
+
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
 from cherrydb.cache import CherryCache
+from cherrydb.exceptions import ConfigError
+from cherrydb.repos import LocalityRepo
+from cherrydb.schemas import ObjectMeta, ObjectMetaCreate
 
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
-
-
-class ConfigError(Exception):
-    """Raised when a CherryDB session configuration is invalid."""
 
 
 class CherryDB:
@@ -113,14 +114,66 @@ class CherryDB:
         host = config["host"]
         key = config["key"]
         self._base_url = (
-            f"http://{self.host}/api/v1"
+            f"http://{host}/api/v1"
             if host.startswith("localhost")
-            else f"https://{self.host}/api/v1"
+            else f"https://{host}/api/v1"
         )
         self._base_headers = {"User-Agent": "cherrydb-client-py", "X-API-Key": key}
+        self._transport = httpx.HTTPTransport(retries=1)
+
         self.client = httpx.Client(
             base_url=self._base_url,
             headers=self._base_headers,
             timeout=timeout,
-            transport=httpx.HTTPTransport(retries=1),
+            transport=self._transport,
         )
+
+    def context(self, notes: str = "") -> "WriteContext":
+        """Creates a write context with session-level metadata.
+
+        Args:
+            notes: Freeform notes to associate with the write session.
+
+        Returns:
+            A context manager for CherryDB writes.
+        """
+        return WriteContext(db=self, notes=notes)
+
+    @property
+    def localities(self):
+        """Localities."""
+        return LocalityRepo(session=self)
+
+
+@dataclass
+class WriteContext:
+    """Context for a CherryDB transaction."""
+
+    db: CherryDB
+    notes: str
+    meta: ObjectMeta | None = None
+    client: httpx.Client | None = None
+
+    def __enter__(self) -> "WriteContext":
+        """Creates a write context with metadata."""
+        response = self.db.client.post(
+            "/meta/", json=ObjectMetaCreate(notes=self.notes).dict()
+        )
+        response.raise_for_status()  # TODO: refine?
+
+        self.meta = ObjectMeta(**response.json())
+        self.client = httpx.Client(
+            base_url=self.db._base_url,
+            headers={**self.db._base_headers, "X-Cherry-Meta-ID": str(self.meta.uuid)},
+            timeout=self.db.timeout,
+            transport=self.db._transport,
+        )
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.client.close()
+
+    @property
+    def localities(self):
+        """Localities."""
+        return LocalityRepo(session=self.db, ctx=self)
