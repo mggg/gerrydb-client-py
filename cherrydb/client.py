@@ -68,51 +68,51 @@ class CherryDB:
             raise ConfigError("No host specified for API key.")
 
         if host is not None and key is not None:
-            self.host = host
-            self.key = key
             self.cache = CherryCache(":memory:")
-            return
-
-        cherry_root = Path(os.getenv("CHERRY_ROOT", DEFAULT_CHERRY_ROOT))
-        try:
-            with open(cherry_root / "config", encoding="utf-8") as config_fp:
-                cherry_config_raw = config_fp.read()
-        except IOError as ex:
-            raise ConfigError(
-                f"Failed to read CherryDB configuration at {cherry_root.resolve()}. "
-                "Does a CherryDB configuration directory exist?"
-            ) from ex
-
-        try:
-            configs = tomlkit.parse(cherry_config_raw)
-        except tomlkit.exceptions.TOMLKitError as ex:
-            raise ConfigError(
-                f"Failed to parse CherryDB configuration at {cherry_root.resolve()}."
-            ) from ex
-
-        try:
-            config = configs[profile]
-        except KeyError:
-            raise ConfigError(
-                f'Profile "{profile}" not found in configuration '
-                f"at {cherry_root.resolve()}."
-            )
-
-        for field in ("host", "key"):
-            if field not in config:
+        else:
+            cherry_root = Path(os.getenv("CHERRY_ROOT", DEFAULT_CHERRY_ROOT))
+            try:
+                with open(cherry_root / "config", encoding="utf-8") as config_fp:
+                    cherry_config_raw = config_fp.read()
+            except IOError as ex:
                 raise ConfigError(
-                    f'Field "{field}" not in profile "{profile}" '
-                    f"in configuration at {cherry_root.resolve()}."
+                    "Failed to read CherryDB configuration at "
+                    f"{cherry_root.resolve()}. "
+                    "Does a CherryDB configuration directory exist?"
+                ) from ex
+
+            try:
+                configs = tomlkit.parse(cherry_config_raw)
+            except tomlkit.exceptions.TOMLKitError as ex:
+                raise ConfigError(
+                    "Failed to parse CherryDB configuration at "
+                    f"{cherry_root.resolve()}."
+                ) from ex
+
+            try:
+                config = configs[profile]
+            except KeyError:
+                raise ConfigError(
+                    f'Profile "{profile}" not found in configuration '
+                    f"at {cherry_root.resolve()}."
                 )
 
-        try:
-            Path(cherry_root / "caches").mkdir(exist_ok=True)
-        except IOError as ex:
-            raise ConfigError("Failed to create cache directory.") from ex
-        self.cache = CherryCache(cherry_root / "caches" / f"{profile}.db")
+            for field in ("host", "key"):
+                if field not in config:
+                    raise ConfigError(
+                        f'Field "{field}" not in profile "{profile}" '
+                        f"in configuration at {cherry_root.resolve()}."
+                    )
 
-        host = config["host"]
-        key = config["key"]
+            try:
+                Path(cherry_root / "caches").mkdir(exist_ok=True)
+            except IOError as ex:
+                raise ConfigError("Failed to create cache directory.") from ex
+            self.cache = CherryCache(cherry_root / "caches" / f"{profile}.db")
+
+            host = config["host"]
+            key = config["key"]
+
         self._base_url = (
             f"http://{host}/api/v1"
             if host.startswith("localhost")

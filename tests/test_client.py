@@ -73,12 +73,13 @@ def test_cherrydb_init_alt_profile(tmp_path):
 
 def test_cherrydb_base_url():
     assert (
-        CherryDB(key="key", host="example.com").base_url == "https://example.com/api/v1"
+        CherryDB(key="key", host="example.com")._base_url
+        == "https://example.com/api/v1"
     )
 
 
 def test_cherrydb_base_url_localhost():
     assert (
-        CherryDB(key="key", host="localhost:8080").base_url
+        CherryDB(key="key", host="localhost:8080")._base_url
         == "http://localhost:8080/api/v1"
     )

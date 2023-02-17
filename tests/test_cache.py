@@ -5,12 +5,8 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from cherrydb.cache import (
-    CacheInitError,
-    CacheObjectError,
-    CachePolicyError,
-    CherryCache,
-)
+from cherrydb.cache import (CacheInitError, CacheObjectError, CachePolicyError,
+                            CherryCache)
 from cherrydb.schemas import BaseModel, ObjectCachePolicy, ObjectMeta
 
 
@@ -326,29 +322,29 @@ def test_cherry_cache_insert_collect_all__timestamp(cache, timestamp_obj):
 
 def test_cherry_cache_collect__etag_no_etag(cache):
     with pytest.raises(CachePolicyError, match="ETag-versioned"):
-        cache.collect(ETagObject)
+        cache.collect(ETagObject, namespace="")
 
 
 def test_cherry_cache_collect__timestamp_no_etag(cache):
     with pytest.raises(CachePolicyError, match="timestamp-versioned"):
-        cache.collect(TimestampObject, valid_at=datetime(2023, 1, 1))
+        cache.collect(TimestampObject, namespace="", valid_at=datetime(2023, 1, 1))
 
 
 def test_cherry_cache_collect__timestamp_no_valid_at(cache):
     with pytest.raises(CachePolicyError, match="timestamp-versioned"):
-        cache.collect(TimestampObject, etag=b"123")
+        cache.collect(TimestampObject, namespace="", etag=b"123")
 
 
 def test_cherry_cache_collect__unversioned(cache):
     with pytest.raises(CachePolicyError, match="does not support collection"):
-        cache.collect(UnversionedObject)
+        cache.collect(UnversionedObject, namespace="")
 
 
 def test_cherry_cache_all__etag_at(cache):
     with pytest.raises(CachePolicyError, match="ETag-versioned"):
-        cache.all(ETagObject, at=datetime(2023, 1, 1))
+        cache.all(ETagObject, namespace="", at=datetime(2023, 1, 1))
 
 
 def test_cherry_cache_alll__unversioned(cache):
     with pytest.raises(CachePolicyError, match="does not support collection"):
-        cache.all(UnversionedObject)
+        cache.all(UnversionedObject, namespace="")

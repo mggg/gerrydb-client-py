@@ -9,26 +9,12 @@ from uuid import UUID
 import orjson as json
 from dateutil.parser import parse as ts_parse
 
+from cherrydb.exceptions import (CacheInitError, CacheObjectError,
+                                 CachePolicyError)
 from cherrydb.schemas import BaseModel, ObjectCachePolicy
 
 _REQUIRED_TABLES = {"cache_meta", "collection", "object", "object_meta"}
 _CACHE_SCHEMA_VERSION = "0"
-
-
-class CacheError(Exception):
-    """Raised for generic caching errors."""
-
-
-class CacheInitError(CacheError):
-    """Raised when a CherryDB cache cannot be initialized."""
-
-
-class CacheObjectError(CacheError):
-    """Raised when a schema has not been registered with the cache."""
-
-
-class CachePolicyError(CacheError):
-    """Raised when an cache operation does not match an object's cache policy."""
 
 
 def cache_name(obj: BaseModel | type) -> str:
