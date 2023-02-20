@@ -63,7 +63,7 @@ class CherryDB:
         self.timeout = timeout
 
         if host is not None and key is None:
-            raise ConfigError('No API key specified for host "{host}".')
+            raise ConfigError(f'No API key specified for host "{host}".')
         if host is None and key is not None:
             raise ConfigError("No host specified for API key.")
 

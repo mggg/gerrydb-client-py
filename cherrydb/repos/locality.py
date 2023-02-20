@@ -65,7 +65,7 @@ class LocalityRepo(ObjectRepo):
             return cached.result
         response.raise_for_status()
 
-        loc = Locality(**response.json)
+        loc = Locality(**response.json())
         loc_etag = parse_etag(response)
         for path in [loc.canonical_path] + loc.aliases:
             self.session.cache.insert(
@@ -80,8 +80,8 @@ class LocalityRepo(ObjectRepo):
     @online
     def create(
         self,
-        *,
         canonical_path: str,
+        *,
         name: str,
         parent_path: str | None = None,
         default_proj: str | None = None,
@@ -130,7 +130,7 @@ class LocalityRepo(ObjectRepo):
     @err("Failed to update locality")
     @write_context
     @online
-    def update(self, *, path: str, aliases: list[str]) -> Locality:
+    def update(self, path: str, *, aliases: list[str]) -> Locality:
         """Updates a locality.
 
         Currently, only adding aliases is supported.
