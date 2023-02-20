@@ -3,8 +3,15 @@ from dataclasses import dataclass
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Optional
 
-from cherrydb.repos.base import (ObjectRepo, err, match_etag, online,
-                                 parse_etag, write_context)
+from cherrydb.repos.base import (
+    ObjectRepo,
+    err,
+    match_etag,
+    normalize_path,
+    online,
+    parse_etag,
+    write_context,
+)
 from cherrydb.schemas import Locality, LocalityCreate, LocalityPatch
 
 if TYPE_CHECKING:
@@ -20,6 +27,7 @@ class LocalityRepo(ObjectRepo):
 
     @err("Failed to load localities")
     def all(self) -> list[Locality]:
+        """Gets all localities."""
         cached = self.session.cache.all(obj=Locality, namespace="")
         if self.session.offline:
             return [] if cached is None else list(cached.result.values())
@@ -32,10 +40,10 @@ class LocalityRepo(ObjectRepo):
         locs = [Locality(**loc) for loc in response.json()]
         loc_etag = parse_etag(response)
         for loc in locs:
-            for path in [loc.canonical_path] + loc.aliases:
+            for alias_path in [loc.canonical_path] + loc.aliases:
                 self.session.cache.insert(
                     obj=loc,
-                    path=path,
+                    path=alias_path,
                     namespace="",
                     autocommit=False,
                     etag=loc_etag,
@@ -51,9 +59,9 @@ class LocalityRepo(ObjectRepo):
         """Gets a locality by path.
 
         Raises:
-            RequestError: If the locality cannot be created on the server side,
-                or if the parameters fail validation.
+            RequestError: If the locality cannot be read on the server side.
         """
+        path = normalize_path(path)
         cached = self.session.cache.get(obj=Locality, path=path, namespace="")
         if self.session.offline:
             return None if cached is None else cached.result
@@ -67,9 +75,9 @@ class LocalityRepo(ObjectRepo):
 
         loc = Locality(**response.json())
         loc_etag = parse_etag(response)
-        for path in [loc.canonical_path] + loc.aliases:
+        for alias_path in [loc.canonical_path] + loc.aliases:
             self.session.cache.insert(
-                obj=loc, path=path, namespace="", etag=loc_etag, autocommit=False
+                obj=loc, path=alias_path, namespace="", etag=loc_etag, autocommit=False
             )
         self.session.cache.commit()
 
@@ -120,9 +128,9 @@ class LocalityRepo(ObjectRepo):
 
         loc = Locality(**response.json())
         loc_etag = parse_etag(response)
-        for path in [loc.canonical_path] + loc.aliases:
+        for alias_path in [loc.canonical_path] + loc.aliases:
             self.session.cache.insert(
-                obj=loc, path=path, namespace="", etag=loc_etag, autocommit=False
+                obj=loc, path=alias_path, namespace="", etag=loc_etag, autocommit=False
             )
         self.session.cache.commit()
         return loc
@@ -153,9 +161,9 @@ class LocalityRepo(ObjectRepo):
 
         loc = Locality(**response.json())
         loc_etag = parse_etag(response)
-        for path in [loc.canonical_path] + loc.aliases:
+        for alias_path in [loc.canonical_path] + loc.aliases:
             self.session.cache.insert(
-                obj=loc, path=path, namespace="", etag=loc_etag, autocommit=False
+                obj=loc, path=alias_path, namespace="", etag=loc_etag, autocommit=False
             )
         self.session.cache.commit()
         return loc

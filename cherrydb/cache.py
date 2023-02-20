@@ -9,8 +9,7 @@ from uuid import UUID
 import orjson as json
 from dateutil.parser import parse as ts_parse
 
-from cherrydb.exceptions import (CacheInitError, CacheObjectError,
-                                 CachePolicyError)
+from cherrydb.exceptions import CacheInitError, CacheObjectError, CachePolicyError
 from cherrydb.schemas import BaseModel, ObjectCachePolicy
 
 _REQUIRED_TABLES = {"cache_meta", "collection", "object", "object_meta"}

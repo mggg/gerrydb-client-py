@@ -3,7 +3,7 @@ import pytest
 
 
 @pytest.mark.vcr
-def test_localities_repo_create_get__online(client):
+def test_locality_repo_create_get__online(client):
     name = "Commonwealth of Massachusetts"
     with client.context(notes="adding a locality") as ctx:
         loc = ctx.localities.create(name=name, canonical_path="ma")
@@ -14,31 +14,37 @@ def test_localities_repo_create_get__online(client):
 
 
 @pytest.mark.vcr
-def test_localities_repo_create_get__offline(client):
+def test_locality_repo_create_get__offline(client):
     name = "State of California"
     with client.context(notes="adding a locality") as ctx:
         loc = ctx.localities.create(name=name, canonical_path="ca")
-    assert loc.name == name
-    assert loc.canonical_path == "ca"
 
     client.offline = True
     assert client.localities["ca"] == loc
 
 
 @pytest.mark.vcr
-def test_localities_repo_create_all__online_offline(client):
+def test_locality_repo_create_all__online(client):
     name = "State of Vermont"
     with client.context(notes="adding a locality") as ctx:
         ctx.localities.create(name=name, canonical_path="vt")
 
     assert name in [loc.name for loc in client.localities.all()]
 
+
+@pytest.mark.vcr
+def test_locality_repo_create_all__online_offline(client):
+    name = "State of New Hampshire"
+    with client.context(notes="adding a locality") as ctx:
+        ctx.localities.create(name=name, canonical_path="nh")
+    client.localities.all()  # Populate cache.
+
     client.offline = True
     assert name in [loc.name for loc in client.localities.all()]
 
 
 @pytest.mark.vcr
-def test_localities_repo_create_update_get__online_offline(client):
+def test_locality_repo_create_update_get__online_offline(client):
     name = "State of Maryland"
     aliases = ["maryland"]
 

@@ -9,8 +9,8 @@ import tomlkit
 
 from cherrydb.cache import CherryCache
 from cherrydb.exceptions import ConfigError
-from cherrydb.repos import LocalityRepo
-from cherrydb.schemas import ObjectMeta, ObjectMetaCreate
+from cherrydb.repos import GeoLayerRepo, LocalityRepo, NamespaceRepo
+from cherrydb.schemas import ObjectMeta, ObjectMetaCreate, GeoLayer
 
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
 
@@ -140,9 +140,19 @@ class CherryDB:
         return WriteContext(db=self, notes=notes)
 
     @property
+    def geo_layers(self):
+        """Geographic layers."""
+        return GeoLayerRepo(schema=GeoLayer, base_url="/layers", session=self)
+
+    @property
     def localities(self):
         """Localities."""
         return LocalityRepo(session=self)
+
+    @property
+    def namespaces(self):
+        """Namespaces."""
+        return NamespaceRepo(session=self)
 
 
 @dataclass
@@ -174,6 +184,18 @@ class WriteContext:
         self.client.close()
 
     @property
+    def geo_layers(self):
+        """Geographic layers."""
+        return GeoLayerRepo(
+            schema=GeoLayer, base_url="/layers", session=self.db, ctx=self
+        )
+
+    @property
     def localities(self):
         """Localities."""
         return LocalityRepo(session=self.db, ctx=self)
+
+    @property
+    def namespaces(self):
+        """Namespaces."""
+        return NamespaceRepo(session=self.db, ctx=self)

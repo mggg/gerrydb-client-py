@@ -208,6 +208,7 @@ class GeoLayer(GeoLayerBase):
     """Geographic layer metadata returned by the database."""
 
     __cache_name__ = "geo_layer"
+    __cache_policy__ = ObjectCachePolicy.ETAG
 
     meta: ObjectMeta
     namespace: str

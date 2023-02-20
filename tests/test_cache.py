@@ -5,8 +5,12 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from cherrydb.cache import (CacheInitError, CacheObjectError, CachePolicyError,
-                            CherryCache)
+from cherrydb.cache import (
+    CacheInitError,
+    CacheObjectError,
+    CachePolicyError,
+    CherryCache,
+)
 from cherrydb.schemas import BaseModel, ObjectCachePolicy, ObjectMeta
 
 

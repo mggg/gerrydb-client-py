@@ -11,8 +11,7 @@ import pytest
 from cherrydb.cache import CacheResult
 from cherrydb.client import CherryDB, WriteContext
 from cherrydb.exceptions import OnlineError, ResultError, WriteContextError
-from cherrydb.repos.base import (err, match_etag, online, parse_etag,
-                                 write_context)
+from cherrydb.repos.base import err, match_etag, online, parse_etag, write_context
 from cherrydb.schemas import BaseModel
 
 
