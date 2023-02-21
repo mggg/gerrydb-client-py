@@ -10,7 +10,7 @@ import tomlkit
 from cherrydb.cache import CherryCache
 from cherrydb.exceptions import ConfigError
 from cherrydb.repos import GeoLayerRepo, LocalityRepo, NamespaceRepo
-from cherrydb.schemas import ObjectMeta, ObjectMetaCreate, GeoLayer
+from cherrydb.schemas import GeoLayer, ObjectMeta, ObjectMetaCreate
 
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
 

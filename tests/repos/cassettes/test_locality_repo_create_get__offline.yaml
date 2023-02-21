@@ -2687,4 +2687,78 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"8304c2d3-3867-4f95-87f7-f00f9e7afa8e","created_at":"2023-02-21T02:31:25.272833+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 02:31:24 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ca", "parent_path": null, "default_proj": null, "name":
+      "State of California", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '115'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 8304c2d3-3867-4f95-87f7-f00f9e7afa8e
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"8304c2d3-3867-4f95-87f7-f00f9e7afa8e","created_at":"2023-02-21T02:31:25.272833+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '264'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 02:31:24 GMT
+      etag:
+      - '"30eae1a2-c496-482c-b871-ffea23aaaf0d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
 version: 1

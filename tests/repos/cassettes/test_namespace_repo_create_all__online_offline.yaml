@@ -2651,4 +2651,77 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"d78d5f93-96b1-425e-aa26-9c4cfbecc92f","created_at":"2023-02-21T02:31:26.352026+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 02:31:25 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "all_offline", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '73'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - d78d5f93-96b1-425e-aa26-9c4cfbecc92f
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"all_offline","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"d78d5f93-96b1-425e-aa26-9c4cfbecc92f","created_at":"2023-02-21T02:31:26.352026+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 02:31:25 GMT
+      etag:
+      - '"6726a750-bbc3-4d5a-b780-7912b79a3bdf"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
 version: 1

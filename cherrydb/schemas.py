@@ -125,6 +125,7 @@ class Locality(LocalityBase):
 
     __cache_name__ = "locality"
     __cache_policy__ = ObjectCachePolicy.ETAG
+    __cache_aliased__ = True
 
     aliases: list[CherryPath]
     meta: ObjectMeta
@@ -187,6 +188,7 @@ class Column(ColumnBase):
 
     __cache_name__ = "column"
     __cache_policy__ = ObjectCachePolicy.ETAG
+    __cache_aliased__ = True
 
     aliases: list[CherryPath]
     meta: ObjectMeta

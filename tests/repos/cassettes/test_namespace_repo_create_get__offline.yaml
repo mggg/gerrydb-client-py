@@ -2651,4 +2651,77 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"159503f1-54c6-4e38-a9e9-6c161d84796a","created_at":"2023-02-21T02:31:26.093822+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 02:31:25 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "offline", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '69'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 159503f1-54c6-4e38-a9e9-6c161d84796a
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"offline","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"159503f1-54c6-4e38-a9e9-6c161d84796a","created_at":"2023-02-21T02:31:26.093822+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '225'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 02:31:25 GMT
+      etag:
+      - '"6e9dad66-b57b-4cd2-b4cb-2ba6fcff4bef"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
 version: 1

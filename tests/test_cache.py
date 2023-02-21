@@ -1,5 +1,4 @@
 """Tests for CherryDB's local caching layer."""
-import sqlite3
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -32,6 +31,18 @@ class ETagObject(BaseModel):
 
     bar: str
     meta: ObjectMeta
+
+
+class AliasedETagObject(BaseModel):
+    """A ETag-versioned object with metadata and aliasing."""
+
+    __cache_name__ = "by_etag"
+    __cache_policy__ = ObjectCachePolicy.ETAG
+    __cache_aliased__ = True
+
+    bar: str
+    meta: ObjectMeta
+    aliases: list[str] | None
 
 
 class TimestampObject(BaseModel):
@@ -322,6 +333,28 @@ def test_cherry_cache_insert_collect_all__timestamp(cache, timestamp_obj):
     # It's unknown what happened between 2023-01-03 and 2023-01-05, so we shouldn't
     # be able to get a snapshot in that range (exclusive).
     assert cache.all(TimestampObject, "namespace", at=datetime(2023, 1, 4)) is None
+
+
+def test_cherry_cache_insert_get_update__aliased_etag__with_aliases(cache, meta):
+    obj = AliasedETagObject(bar="none", meta=meta, aliases=["alias1", "alias2"])
+    cache.insert(obj, "test", "namespace", etag=b"v1")
+
+    assert cache.get(AliasedETagObject, "test", "namespace").result == obj
+    assert cache.get(AliasedETagObject, "alias1", "namespace").result == obj
+    assert cache.get(AliasedETagObject, "alias2", "namespace").result == obj
+
+    obj_new_aliases = obj.copy(update={"aliases": ["alias3"]})
+    cache.insert(obj_new_aliases, "test", "namespace", etag=b"v2")
+
+    assert cache.get(AliasedETagObject, "alias1", "namespace") is None
+    assert cache.get(AliasedETagObject, "alias2", "namespace") is None
+    assert cache.get(AliasedETagObject, "alias3", "namespace").result == obj_new_aliases
+
+
+def test_cherry_cache_insert_get__aliased_etag___no_aliases(cache, meta):
+    obj = AliasedETagObject(bar="none", meta=meta, aliases=None)
+    cache.insert(obj, "test", "namespace", etag=b"v1")
+    assert cache.get(AliasedETagObject, "test", "namespace").result == obj
 
 
 def test_cherry_cache_collect__etag_no_etag(cache):

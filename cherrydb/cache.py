@@ -12,7 +12,7 @@ from dateutil.parser import parse as ts_parse
 from cherrydb.exceptions import CacheInitError, CacheObjectError, CachePolicyError
 from cherrydb.schemas import BaseModel, ObjectCachePolicy
 
-_REQUIRED_TABLES = {"cache_meta", "collection", "object", "object_meta"}
+_REQUIRED_TABLES = {"cache_meta", "collection", "object", "object_alias", "object_meta"}
 _CACHE_SCHEMA_VERSION = "0"
 
 
@@ -136,6 +136,16 @@ class CherryCache:
         name = cache_name(obj)
         policy = cache_policy(obj)
 
+        # If necessary, replace `path` with the canonical path of the object.
+        if getattr(obj, "__cache_aliased__", False):
+            canonical_path = self._conn.execute(
+                "SELECT canonical_path FROM object_alias "
+                "WHERE type = ? AND namespace = ? AND alias_path = ?",
+                (name, namespace, path),
+            ).fetchone()
+            if canonical_path is not None:
+                path = canonical_path[0]
+
         params = {
             "type": name,
             "path": path,
@@ -250,6 +260,26 @@ class CherryCache:
             "cached_at": datetime.now(tz=timezone.utc).isoformat(),
         }
         self._conn.execute(obj_stmt, obj_params)
+
+        # Update the object's aliases if necessary.
+        # TODO: come up with a reasonable way to track change in aliases over time
+        # for timestamp-versioned objects, should this be something we ever want
+        # to do....
+        if (
+            getattr(obj, "__cache_aliased__", False)
+            and policy == ObjectCachePolicy.ETAG
+            and getattr(obj, "aliases", None) is not None
+        ):
+            self._conn.execute(
+                "DELETE FROM object_alias "
+                "WHERE type = ? AND namespace = ? AND canonical_path = ?",
+                (name, namespace, path),
+            )
+            self._conn.executemany(
+                "INSERT INTO object_alias (type, namespace, canonical_path, alias_path) "
+                "VALUES (?, ?, ?, ?)",
+                ((name, namespace, path, alias) for alias in obj.aliases),
+            )
 
         if autocommit:
             self.commit()
@@ -537,6 +567,16 @@ class CherryCache:
                 FOREIGN KEY(meta_id) REFERENCES object_meta(meta_id),
                 UNIQUE(type, path, namespace, etag),
                 UNIQUE(type, path, namespace, valid_from)
+            )"""
+        )
+        self._conn.execute(
+            """CREATE TABLE object_alias(
+                type            TEXT NOT NULL,
+                namespace       TEXT NOT NULL,
+                canonical_path  TEXT NOT NULL, 
+                alias_path      TEXT NOT NULL, 
+                UNIQUE(type, namespace, canonical_path, alias_path),
+                PRIMARY KEY(type, namespace, alias_path)
             )"""
         )
         self._conn.execute(

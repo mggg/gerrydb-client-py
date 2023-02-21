@@ -40,14 +40,13 @@ class LocalityRepo(ObjectRepo):
         locs = [Locality(**loc) for loc in response.json()]
         loc_etag = parse_etag(response)
         for loc in locs:
-            for alias_path in [loc.canonical_path] + loc.aliases:
-                self.session.cache.insert(
-                    obj=loc,
-                    path=alias_path,
-                    namespace="",
-                    autocommit=False,
-                    etag=loc_etag,
-                )
+            self.session.cache.insert(
+                obj=loc,
+                path=loc.canonical_path,
+                namespace="",
+                autocommit=False,
+                etag=loc_etag,
+            )
         self.session.cache.collect(
             obj=Locality, namespace="", etag=loc_etag, autocommit=False
         )
@@ -75,11 +74,9 @@ class LocalityRepo(ObjectRepo):
 
         loc = Locality(**response.json())
         loc_etag = parse_etag(response)
-        for alias_path in [loc.canonical_path] + loc.aliases:
-            self.session.cache.insert(
-                obj=loc, path=alias_path, namespace="", etag=loc_etag, autocommit=False
-            )
-        self.session.cache.commit()
+        self.session.cache.insert(
+            obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
+        )
 
         return loc
 
@@ -128,11 +125,9 @@ class LocalityRepo(ObjectRepo):
 
         loc = Locality(**response.json())
         loc_etag = parse_etag(response)
-        for alias_path in [loc.canonical_path] + loc.aliases:
-            self.session.cache.insert(
-                obj=loc, path=alias_path, namespace="", etag=loc_etag, autocommit=False
-            )
-        self.session.cache.commit()
+        self.session.cache.insert(
+            obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
+        )
         return loc
 
     @err("Failed to update locality")
@@ -161,11 +156,9 @@ class LocalityRepo(ObjectRepo):
 
         loc = Locality(**response.json())
         loc_etag = parse_etag(response)
-        for alias_path in [loc.canonical_path] + loc.aliases:
-            self.session.cache.insert(
-                obj=loc, path=alias_path, namespace="", etag=loc_etag, autocommit=False
-            )
-        self.session.cache.commit()
+        self.session.cache.insert(
+            obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
+        )
         return loc
 
     def __getitem__(self, path: str) -> Optional[Locality]:

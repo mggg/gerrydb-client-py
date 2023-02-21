@@ -4,7 +4,7 @@ from abc import ABC
 from dataclasses import dataclass
 from functools import wraps
 from http import HTTPStatus
-from typing import Callable, Generic, Optional, TypeVar, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Generic, Optional, TypeVar, Union
 
 import httpx
 import pydantic
@@ -12,8 +12,8 @@ import pydantic
 from cherrydb.cache import CacheCollectionResult, CacheResult
 from cherrydb.exceptions import (
     OnlineError,
-    ResultError,
     RequestError,
+    ResultError,
     WriteContextError,
 )
 from cherrydb.schemas import BaseModel

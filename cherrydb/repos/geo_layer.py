@@ -1,8 +1,9 @@
 """Repository for geographic layers."""
-from cherrydb.repos.base import err, online, parse_etag, write_context, ETagObjectRepo
-from cherrydb.exceptions import RequestError
-from cherrydb.schemas import GeoLayer, GeoLayerCreate
 from typing import Optional
+
+from cherrydb.exceptions import RequestError
+from cherrydb.repos.base import ETagObjectRepo, err, online, parse_etag, write_context
+from cherrydb.schemas import GeoLayer, GeoLayerCreate
 
 
 class GeoLayerRepo(ETagObjectRepo[GeoLayer]):

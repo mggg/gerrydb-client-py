@@ -1,5 +1,6 @@
 """Integration/VCR tests for namespaces."""
 import pytest
+
 from cherrydb.exceptions import OnlineError
 
 
