@@ -58,8 +58,8 @@ class ColumnRepo(ETagObjectRepo[Column]):
                 canonical_path=path,
                 namespace=namespace,
                 description=description,
-                column_kind=column_kind,
-                column_type=column_type,
+                kind=column_kind,
+                type=column_type,
                 source_url=source_url,
                 aliases=aliases,
             ).dict(),
@@ -69,7 +69,7 @@ class ColumnRepo(ETagObjectRepo[Column]):
         obj = self.schema(**response.json())
         obj_etag = parse_etag(response)
         self.session.cache.insert(
-            obj=obj, path=obj.path, namespace=namespace, etag=obj_etag
+            obj=obj, path=obj.canonical_path, namespace=namespace, etag=obj_etag
         )
         return obj
 
@@ -94,7 +94,12 @@ class ColumnRepo(ETagObjectRepo[Column]):
         Returns:
             The updated column.
         """
-        # TODO: populate.
+        namespace = self.session.namespace if namespace is None else namespace
+        if namespace is None:
+            raise RequestError(
+                "No namespace specified for update(), and no default available."
+            )
+
         response = self.ctx.client.patch(
             f"{self.base_url}/{namespace}/{path}",
             json=ColumnPatch(aliases=aliases).dict(),
@@ -104,6 +109,6 @@ class ColumnRepo(ETagObjectRepo[Column]):
         col = Column(**response.json())
         col_etag = parse_etag(response)
         self.session.cache.insert(
-            obj=col, path=col.canonical_path, namespace="", etag=col_etag
+            obj=col, path=col.canonical_path, namespace=namespace, etag=col_etag
         )
         return col

@@ -9,8 +9,8 @@ import tomlkit
 
 from cherrydb.cache import CherryCache
 from cherrydb.exceptions import ConfigError
-from cherrydb.repos import GeoLayerRepo, LocalityRepo, NamespaceRepo
-from cherrydb.schemas import GeoLayer, ObjectMeta, ObjectMetaCreate
+from cherrydb.repos import ColumnRepo, GeoLayerRepo, LocalityRepo, NamespaceRepo
+from cherrydb.schemas import Column, GeoLayer, ObjectMeta, ObjectMetaCreate
 
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
 
@@ -140,6 +140,11 @@ class CherryDB:
         return WriteContext(db=self, notes=notes)
 
     @property
+    def columns(self):
+        """Tabular column metadata."""
+        return ColumnRepo(schema=Column, base_url="/columns", session=self)
+
+    @property
     def geo_layers(self):
         """Geographic layers."""
         return GeoLayerRepo(schema=GeoLayer, base_url="/layers", session=self)
@@ -182,6 +187,11 @@ class WriteContext:
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.client.close()
+
+    @property
+    def columns(self):
+        """Tabular column metadata."""
+        return ColumnRepo(schema=Column, base_url="/columns", session=self.db, ctx=self)
 
     @property
     def geo_layers(self):

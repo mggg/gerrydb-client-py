@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"notes": "Test setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline"}'
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_all__online_offline"}'
     headers:
       X-API-Key:
       - DUMMY
@@ -11,7 +11,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '98'
+      - '95'
       content-type:
       - application/json
       host:
@@ -34,7 +34,7 @@ interactions:
     http_version: HTTP/1.1
     status_code: 401
 - request:
-    body: '{"notes": "Test setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline"}'
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_all__online_offline"}'
     headers:
       X-API-Key:
       - DUMMY
@@ -45,7 +45,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '98'
+      - '95'
       content-type:
       - application/json
       host:
@@ -55,21 +55,21 @@ interactions:
     method: POST
     uri: http://localhost:8000/api/v1/meta/
   response:
-    content: '{"notes":"Test setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"f7c6d89a-bcee-485d-85d2-c35406ee3dca","created_at":"2023-02-21T18:57:38.930830+00:00","created_by":"pjrule@me.com"}'
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"51694496-f748-4a89-9aa7-1e07dd2b38b9","created_at":"2023-02-21T18:57:38.114657+00:00","created_by":"pjrule@me.com"}'
     headers:
       content-length:
-      - '220'
+      - '217'
       content-type:
       - application/json
       date:
-      - Tue, 21 Feb 2023 18:57:38 GMT
+      - Tue, 21 Feb 2023 18:57:37 GMT
       server:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
 - request:
-    body: '{"path": "test_geo_layer_repo_create_all__online_offline", "description":
-      "cherrydb-client-py test test_geo_layer_repo_create_all__online_offline", "public":
+    body: '{"path": "test_column_repo_create_all__online_offline", "description":
+      "cherrydb-client-py test test_column_repo_create_all__online_offline", "public":
       true}'
     headers:
       X-API-Key:
@@ -81,7 +81,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '163'
+      - '157'
       content-type:
       - application/json
       host:
@@ -89,28 +89,28 @@ interactions:
       user-agent:
       - cherrydb-client-py
       x-cherry-meta-id:
-      - f7c6d89a-bcee-485d-85d2-c35406ee3dca
+      - 51694496-f748-4a89-9aa7-1e07dd2b38b9
     method: POST
     uri: http://localhost:8000/api/v1/namespaces/
   response:
-    content: '{"path":"test_geo_layer_repo_create_all__online_offline","description":"cherrydb-client-py
-      test test_geo_layer_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
-      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"f7c6d89a-bcee-485d-85d2-c35406ee3dca","created_at":"2023-02-21T18:57:38.930830+00:00","created_by":"pjrule@me.com"}}'
+    content: '{"path":"test_column_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"51694496-f748-4a89-9aa7-1e07dd2b38b9","created_at":"2023-02-21T18:57:38.114657+00:00","created_by":"pjrule@me.com"}}'
     headers:
       content-length:
-      - '386'
+      - '377'
       content-type:
       - application/json
       date:
-      - Tue, 21 Feb 2023 18:57:38 GMT
+      - Tue, 21 Feb 2023 18:57:37 GMT
       etag:
-      - '"9174f3b9-10d5-4b00-8f24-3ac405c1dd2d"'
+      - '"544f977e-a6a8-48d3-88b8-d82d95cda840"'
       server:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
 - request:
-    body: '{"notes": "adding a geographic layer"}'
+    body: '{"notes": "adding a column"}'
     headers:
       X-API-Key:
       - DUMMY
@@ -121,7 +121,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '38'
+      - '28'
       content-type:
       - application/json
       host:
@@ -131,21 +131,22 @@ interactions:
     method: POST
     uri: http://localhost:8000/api/v1/meta/
   response:
-    content: '{"notes":"adding a geographic layer","uuid":"29c2b3bd-af90-4f5e-841a-e2b487c04d9d","created_at":"2023-02-21T18:57:38.970177+00:00","created_by":"pjrule@me.com"}'
+    content: '{"notes":"adding a column","uuid":"1ffaa3a6-51fc-436b-b8d7-95b4f3b98279","created_at":"2023-02-21T18:57:38.147548+00:00","created_by":"pjrule@me.com"}'
     headers:
       content-length:
-      - '160'
+      - '150'
       content-type:
       - application/json
       date:
-      - Tue, 21 Feb 2023 18:57:38 GMT
+      - Tue, 21 Feb 2023 18:57:37 GMT
       server:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
 - request:
-    body: '{"path": "blocks/2020", "description": "2020 Census blocks", "source_url":
-      null}'
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_all__online_offline",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
     headers:
       X-API-Key:
       - DUMMY
@@ -156,7 +157,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '80'
+      - '257'
       content-type:
       - application/json
       host:
@@ -164,21 +165,22 @@ interactions:
       user-agent:
       - cherrydb-client-py
       x-cherry-meta-id:
-      - 29c2b3bd-af90-4f5e-841a-e2b487c04d9d
+      - 1ffaa3a6-51fc-436b-b8d7-95b4f3b98279
     method: POST
-    uri: http://localhost:8000/api/v1/layers/test_geo_layer_repo_create_all__online_offline
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_all__online_offline
   response:
-    content: '{"path":"blocks/2020","description":"2020 Census blocks","source_url":null,"meta":{"notes":"adding
-      a geographic layer","uuid":"29c2b3bd-af90-4f5e-841a-e2b487c04d9d","created_at":"2023-02-21T18:57:38.970177+00:00","created_by":"pjrule@me.com"},"namespace":"test_geo_layer_repo_create_all__online_offline"}'
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_all__online_offline","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a column","uuid":"1ffaa3a6-51fc-436b-b8d7-95b4f3b98279","created_at":"2023-02-21T18:57:38.147548+00:00","created_by":"pjrule@me.com"}}'
     headers:
       content-length:
-      - '304'
+      - '379'
       content-type:
       - application/json
       date:
-      - Tue, 21 Feb 2023 18:57:38 GMT
+      - Tue, 21 Feb 2023 18:57:37 GMT
       etag:
-      - '"6c18eef7-05f8-43f3-97fa-8e73a63c8e26"'
+      - '"41c6afd1-90b6-4157-aecf-70ace4276115"'
       server:
       - uvicorn
     http_version: HTTP/1.1
@@ -199,19 +201,20 @@ interactions:
       user-agent:
       - cherrydb-client-py
     method: GET
-    uri: http://localhost:8000/api/v1/layers/test_geo_layer_repo_create_all__online_offline
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_all__online_offline
   response:
-    content: '[{"path":"blocks/2020","description":"2020 Census blocks","source_url":null,"meta":{"notes":"adding
-      a geographic layer","uuid":"29c2b3bd-af90-4f5e-841a-e2b487c04d9d","created_at":"2023-02-21T18:57:38.970177+00:00","created_by":"pjrule@me.com"},"namespace":"test_geo_layer_repo_create_all__online_offline"}]'
+    content: '[{"canonical_path":"total_pop","namespace":"test_column_repo_create_all__online_offline","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a column","uuid":"1ffaa3a6-51fc-436b-b8d7-95b4f3b98279","created_at":"2023-02-21T18:57:38.147548+00:00","created_by":"pjrule@me.com"}}]'
     headers:
       content-length:
-      - '306'
+      - '381'
       content-type:
       - application/json
       date:
-      - Tue, 21 Feb 2023 18:57:38 GMT
+      - Tue, 21 Feb 2023 18:57:37 GMT
       etag:
-      - '"6c18eef7-05f8-43f3-97fa-8e73a63c8e26"'
+      - '"41c6afd1-90b6-4157-aecf-70ace4276115"'
       server:
       - uvicorn
     http_version: HTTP/1.1

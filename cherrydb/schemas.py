@@ -193,6 +193,11 @@ class Column(ColumnBase):
     aliases: list[CherryPath]
     meta: ObjectMeta
 
+    @property
+    def path(self):
+        """The column's canonical path."""
+        return self.canonical_path
+
 
 class GeoLayerBase(BaseModel):
     """Base model for geographic layer metadata."""

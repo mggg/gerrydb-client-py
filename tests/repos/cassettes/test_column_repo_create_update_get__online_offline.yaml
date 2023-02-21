@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"notes": "Test setup for cherrydb-client-py test test_geo_layer_repo_create_get__online"}'
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline"}'
     headers:
       X-API-Key:
       - DUMMY
@@ -11,7 +11,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '90'
+      - '102'
       content-type:
       - application/json
       host:
@@ -34,7 +34,7 @@ interactions:
     http_version: HTTP/1.1
     status_code: 401
 - request:
-    body: '{"notes": "Test setup for cherrydb-client-py test test_geo_layer_repo_create_get__online"}'
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline"}'
     headers:
       X-API-Key:
       - DUMMY
@@ -45,7 +45,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '90'
+      - '102'
       content-type:
       - application/json
       host:
@@ -55,10 +55,10 @@ interactions:
     method: POST
     uri: http://localhost:8000/api/v1/meta/
   response:
-    content: '{"notes":"Test setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"71fe21a2-a577-4b73-96e5-2f02b65cd1fb","created_at":"2023-02-21T18:57:38.551466+00:00","created_by":"pjrule@me.com"}'
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"b83299a1-acb8-453c-812d-d1f70da01169","created_at":"2023-02-21T18:57:38.413514+00:00","created_by":"pjrule@me.com"}'
     headers:
       content-length:
-      - '212'
+      - '224'
       content-type:
       - application/json
       date:
@@ -68,8 +68,9 @@ interactions:
     http_version: HTTP/1.1
     status_code: 201
 - request:
-    body: '{"path": "test_geo_layer_repo_create_get__online", "description": "cherrydb-client-py
-      test test_geo_layer_repo_create_get__online", "public": true}'
+    body: '{"path": "test_column_repo_create_update_get__online_offline", "description":
+      "cherrydb-client-py test test_column_repo_create_update_get__online_offline",
+      "public": true}'
     headers:
       X-API-Key:
       - DUMMY
@@ -80,7 +81,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '147'
+      - '171'
       content-type:
       - application/json
       host:
@@ -88,28 +89,28 @@ interactions:
       user-agent:
       - cherrydb-client-py
       x-cherry-meta-id:
-      - 71fe21a2-a577-4b73-96e5-2f02b65cd1fb
+      - b83299a1-acb8-453c-812d-d1f70da01169
     method: POST
     uri: http://localhost:8000/api/v1/namespaces/
   response:
-    content: '{"path":"test_geo_layer_repo_create_get__online","description":"cherrydb-client-py
-      test test_geo_layer_repo_create_get__online","public":true,"meta":{"notes":"Test
-      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"71fe21a2-a577-4b73-96e5-2f02b65cd1fb","created_at":"2023-02-21T18:57:38.551466+00:00","created_by":"pjrule@me.com"}}'
+    content: '{"path":"test_column_repo_create_update_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"b83299a1-acb8-453c-812d-d1f70da01169","created_at":"2023-02-21T18:57:38.413514+00:00","created_by":"pjrule@me.com"}}'
     headers:
       content-length:
-      - '362'
+      - '398'
       content-type:
       - application/json
       date:
       - Tue, 21 Feb 2023 18:57:38 GMT
       etag:
-      - '"43a3515e-db3d-49a2-b268-32a822a08cc7"'
+      - '"68e71033-0846-4866-9f9d-03da6c1759a2"'
       server:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
 - request:
-    body: '{"notes": "adding a geographic layer"}'
+    body: '{"notes": "adding and then updating a column"}'
     headers:
       X-API-Key:
       - DUMMY
@@ -120,7 +121,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '38'
+      - '46'
       content-type:
       - application/json
       host:
@@ -130,10 +131,10 @@ interactions:
     method: POST
     uri: http://localhost:8000/api/v1/meta/
   response:
-    content: '{"notes":"adding a geographic layer","uuid":"299e4c50-4f0a-4b37-aa22-9cc84aa51a21","created_at":"2023-02-21T18:57:38.588686+00:00","created_by":"pjrule@me.com"}'
+    content: '{"notes":"adding and then updating a column","uuid":"352fbd9b-0420-462c-8cb4-5a07ad44f33f","created_at":"2023-02-21T18:57:38.444262+00:00","created_by":"pjrule@me.com"}'
     headers:
       content-length:
-      - '160'
+      - '168'
       content-type:
       - application/json
       date:
@@ -143,8 +144,9 @@ interactions:
     http_version: HTTP/1.1
     status_code: 201
 - request:
-    body: '{"path": "blocks/2020", "description": "2020 Census blocks", "source_url":
-      "https://www.census.gov/"}'
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_update_get__online_offline",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
     headers:
       X-API-Key:
       - DUMMY
@@ -155,7 +157,7 @@ interactions:
       connection:
       - keep-alive
       content-length:
-      - '101'
+      - '264'
       content-type:
       - application/json
       host:
@@ -163,27 +165,28 @@ interactions:
       user-agent:
       - cherrydb-client-py
       x-cherry-meta-id:
-      - 299e4c50-4f0a-4b37-aa22-9cc84aa51a21
+      - 352fbd9b-0420-462c-8cb4-5a07ad44f33f
     method: POST
-    uri: http://localhost:8000/api/v1/layers/test_geo_layer_repo_create_get__online
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online_offline
   response:
-    content: '{"path":"blocks/2020","description":"2020 Census blocks","source_url":null,"meta":{"notes":"adding
-      a geographic layer","uuid":"299e4c50-4f0a-4b37-aa22-9cc84aa51a21","created_at":"2023-02-21T18:57:38.588686+00:00","created_by":"pjrule@me.com"},"namespace":"test_geo_layer_repo_create_get__online"}'
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online_offline","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      and then updating a column","uuid":"352fbd9b-0420-462c-8cb4-5a07ad44f33f","created_at":"2023-02-21T18:57:38.444262+00:00","created_by":"pjrule@me.com"}}'
     headers:
       content-length:
-      - '296'
+      - '404'
       content-type:
       - application/json
       date:
       - Tue, 21 Feb 2023 18:57:38 GMT
       etag:
-      - '"272e08e3-2c73-45fd-9a70-7b08afc68b1c"'
+      - '"0fc0f7fe-24e6-4f45-af35-ebec6684976e"'
       server:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
 - request:
-    body: ''
+    body: '{"aliases": ["population"]}'
     headers:
       X-API-Key:
       - DUMMY
@@ -193,61 +196,31 @@ interactions:
       - gzip, deflate
       connection:
       - keep-alive
+      content-length:
+      - '27'
+      content-type:
+      - application/json
       host:
       - localhost:8000
-      if-none-match:
-      - '"272e08e3-2c73-45fd-9a70-7b08afc68b1c"'
       user-agent:
       - cherrydb-client-py
-    method: GET
-    uri: http://localhost:8000/api/v1/layers/test_geo_layer_repo_create_get__online/blocks/2020
+      x-cherry-meta-id:
+      - 352fbd9b-0420-462c-8cb4-5a07ad44f33f
+    method: PATCH
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online_offline/total_pop
   response:
-    content: '{"path":"blocks/2020","description":"2020 Census blocks","source_url":null,"meta":{"notes":"adding
-      a geographic layer","uuid":"299e4c50-4f0a-4b37-aa22-9cc84aa51a21","created_at":"2023-02-21T18:57:38.588686+00:00","created_by":"pjrule@me.com"},"namespace":"test_geo_layer_repo_create_get__online"}'
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online_offline","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001","population"],"meta":{"notes":"adding
+      and then updating a column","uuid":"352fbd9b-0420-462c-8cb4-5a07ad44f33f","created_at":"2023-02-21T18:57:38.444262+00:00","created_by":"pjrule@me.com"}}'
     headers:
       content-length:
-      - '296'
+      - '417'
       content-type:
       - application/json
       date:
       - Tue, 21 Feb 2023 18:57:38 GMT
       etag:
-      - '"272e08e3-2c73-45fd-9a70-7b08afc68b1c"'
-      server:
-      - uvicorn
-    http_version: HTTP/1.1
-    status_code: 200
-- request:
-    body: ''
-    headers:
-      X-API-Key:
-      - DUMMY
-      accept:
-      - '*/*'
-      accept-encoding:
-      - gzip, deflate
-      connection:
-      - keep-alive
-      host:
-      - localhost:8000
-      if-none-match:
-      - '"272e08e3-2c73-45fd-9a70-7b08afc68b1c"'
-      user-agent:
-      - cherrydb-client-py
-    method: GET
-    uri: http://localhost:8000/api/v1/layers/test_geo_layer_repo_create_get__online/blocks/2020
-  response:
-    content: '{"path":"blocks/2020","description":"2020 Census blocks","source_url":null,"meta":{"notes":"adding
-      a geographic layer","uuid":"299e4c50-4f0a-4b37-aa22-9cc84aa51a21","created_at":"2023-02-21T18:57:38.588686+00:00","created_by":"pjrule@me.com"},"namespace":"test_geo_layer_repo_create_get__online"}'
-    headers:
-      content-length:
-      - '296'
-      content-type:
-      - application/json
-      date:
-      - Tue, 21 Feb 2023 18:57:38 GMT
-      etag:
-      - '"272e08e3-2c73-45fd-9a70-7b08afc68b1c"'
+      - '"4ddbe9f2-afaf-406c-94af-5350120c05d9"'
       server:
       - uvicorn
     http_version: HTTP/1.1
