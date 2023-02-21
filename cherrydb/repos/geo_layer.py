@@ -41,7 +41,7 @@ class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
             )
 
         response = self.ctx.client.post(
-            f"{self.base_url}/{namespace}/",
+            f"{self.base_url}/{namespace}",
             json=GeoLayerCreate(
                 path=path, description=description, source_url=source_url
             ).dict(),

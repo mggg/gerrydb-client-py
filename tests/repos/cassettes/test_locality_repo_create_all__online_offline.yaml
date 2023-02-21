@@ -2411,4 +2411,1358 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"32bc5ef0-d42f-430d-a638-86838b02cd63","created_at":"2023-02-20T23:43:51.484228+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:43:51 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 32bc5ef0-d42f-430d-a638-86838b02cd63
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"detail":"Object creation failed. Reason: Failed to create canonical
+      path ''nh'' to new location. (The path may already exist.)"}'
+    headers:
+      content-length:
+      - '128'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:43:51 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 422
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"db73874a-b186-427f-8a57-5606d1ca6062","created_at":"2023-02-20T23:44:00.072932+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:43:59 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - db73874a-b186-427f-8a57-5606d1ca6062
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"db73874a-b186-427f-8a57-5606d1ca6062","created_at":"2023-02-20T23:44:00.072932+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:43:59 GMT
+      etag:
+      - '"4f38f14b-3eaa-4a55-b186-94d52756fae9"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"67b6b78c-886c-4b44-b82d-4e77d00e8392","created_at":"2023-02-20T23:43:59.543846+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"e8de4777-f8c6-46d4-a232-8974104c0dce","created_at":"2023-02-20T23:43:59.702556+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"a2bf68c2-be6a-4ebb-91f1-26c41db5bc9e","created_at":"2023-02-20T23:43:59.928411+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"db73874a-b186-427f-8a57-5606d1ca6062","created_at":"2023-02-20T23:44:00.072932+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:43:59 GMT
+      etag:
+      - '"d906dddd-dd69-4c57-9e91-861a8c951cd9"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"c990a18b-118d-48cb-9c12-38a94338d945","created_at":"2023-02-20T23:44:38.246121+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:44:37 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c990a18b-118d-48cb-9c12-38a94338d945
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"c990a18b-118d-48cb-9c12-38a94338d945","created_at":"2023-02-20T23:44:38.246121+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:44:37 GMT
+      etag:
+      - '"ae053a89-4ec7-4280-841b-2873587a533d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"78524fe4-2c7d-41ff-a749-19ab51ba0b46","created_at":"2023-02-20T23:44:37.847403+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"7b119804-1239-4136-97da-eb05beecf9f5","created_at":"2023-02-20T23:44:38.000006+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"ff7ba924-2a13-4fa3-9859-c3ac67d58100","created_at":"2023-02-20T23:44:38.094541+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"c990a18b-118d-48cb-9c12-38a94338d945","created_at":"2023-02-20T23:44:38.246121+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:44:37 GMT
+      etag:
+      - '"aaa00c1d-7d1f-4719-afc7-934e36b84906"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"6652dfe5-e3af-4a73-b605-5f91709000b9","created_at":"2023-02-20T23:46:00.472382+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:46:00 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 6652dfe5-e3af-4a73-b605-5f91709000b9
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"detail":"Object creation failed. Reason: Failed to create canonical
+      path ''nh'' to new location. (The path may already exist.)"}'
+    headers:
+      content-length:
+      - '128'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:46:00 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 422
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"b088b65e-5dd8-4187-9f0a-188f21a4eb18","created_at":"2023-02-20T23:46:08.058852+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:46:07 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b088b65e-5dd8-4187-9f0a-188f21a4eb18
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"b088b65e-5dd8-4187-9f0a-188f21a4eb18","created_at":"2023-02-20T23:46:08.058852+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:46:07 GMT
+      etag:
+      - '"0d8ae7a5-8a4a-479a-94ae-ec4c7531fc15"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"7224afb0-8e27-48b1-95ef-513d5ef8b07f","created_at":"2023-02-20T23:46:07.671038+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"9062a73c-772d-4f58-b19f-31f07e1f4443","created_at":"2023-02-20T23:46:07.813448+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"85018dbb-f3e2-4ffc-b13e-575e2011f95f","created_at":"2023-02-20T23:46:07.927680+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"b088b65e-5dd8-4187-9f0a-188f21a4eb18","created_at":"2023-02-20T23:46:08.058852+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:46:07 GMT
+      etag:
+      - '"0ca3c868-14c7-4c46-b2b5-a8a960fc612a"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"af1e6533-d087-4273-ad03-9c6e8ec7df07","created_at":"2023-02-20T23:47:03.961557+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:47:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - af1e6533-d087-4273-ad03-9c6e8ec7df07
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"af1e6533-d087-4273-ad03-9c6e8ec7df07","created_at":"2023-02-20T23:47:03.961557+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:47:03 GMT
+      etag:
+      - '"7a09a838-0b25-4f50-8ff2-09b78a49fbc3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"3f34309b-dd75-46cf-911d-12d784a2d640","created_at":"2023-02-20T23:47:03.575434+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"23abd07a-6415-4210-8199-455bf7a012e4","created_at":"2023-02-20T23:47:03.725794+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"64767153-d166-4941-9847-209fcdbfa4c5","created_at":"2023-02-20T23:47:03.822914+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"af1e6533-d087-4273-ad03-9c6e8ec7df07","created_at":"2023-02-20T23:47:03.961557+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:47:03 GMT
+      etag:
+      - '"ae92e282-e73d-40b2-8071-fbc6ee4bcd89"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"315f3639-c433-4de4-bee2-e142b7b9e5f1","created_at":"2023-02-20T23:50:56.444381+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:50:55 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 315f3639-c433-4de4-bee2-e142b7b9e5f1
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"315f3639-c433-4de4-bee2-e142b7b9e5f1","created_at":"2023-02-20T23:50:56.444381+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:50:55 GMT
+      etag:
+      - '"15e21415-06be-48ce-9bad-2c12855370a6"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"a5ebd7d1-8660-4d18-9f57-882893638520","created_at":"2023-02-20T23:50:55.910649+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"f15cfcc0-09b3-4c59-9cbd-ee7538b75da8","created_at":"2023-02-20T23:50:56.188007+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"4a015f1b-d7b8-46c3-bee8-ae948fc95410","created_at":"2023-02-20T23:50:56.291738+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"315f3639-c433-4de4-bee2-e142b7b9e5f1","created_at":"2023-02-20T23:50:56.444381+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:50:55 GMT
+      etag:
+      - '"ec483b4a-9d65-4273-8156-6e6ff44d7de0"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"d95cfa9b-56fe-41e3-9011-e192f4d56b04","created_at":"2023-02-20T23:52:01.628954+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:52:00 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - d95cfa9b-56fe-41e3-9011-e192f4d56b04
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"d95cfa9b-56fe-41e3-9011-e192f4d56b04","created_at":"2023-02-20T23:52:01.628954+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:52:00 GMT
+      etag:
+      - '"bd42ee52-53eb-492b-b41b-593c345f3fdc"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"3bcfdc49-9cf1-495f-880b-fed0086ab6dd","created_at":"2023-02-20T23:52:01.179611+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"1a2b5c77-e9af-46a6-b3c4-8fc02fbeea97","created_at":"2023-02-20T23:52:01.358703+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"eb767ad3-0027-44a0-a475-373625223a19","created_at":"2023-02-20T23:52:01.472455+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"d95cfa9b-56fe-41e3-9011-e192f4d56b04","created_at":"2023-02-20T23:52:01.628954+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:52:00 GMT
+      etag:
+      - '"89e2253f-0ed7-4ede-b6d7-46850877a6e5"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"1fe22fca-7afb-4cb0-ba4b-0f57dec88f79","created_at":"2023-02-20T23:53:46.579625+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:53:46 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 1fe22fca-7afb-4cb0-ba4b-0f57dec88f79
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"1fe22fca-7afb-4cb0-ba4b-0f57dec88f79","created_at":"2023-02-20T23:53:46.579625+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:53:46 GMT
+      etag:
+      - '"36d572ac-891c-44aa-908b-d79786ebd8cf"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"ae204de5-ff07-4593-81fb-12b2cb622c99","created_at":"2023-02-20T23:53:46.157234+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"5d9ac95b-b508-448c-8aff-610e9d73a293","created_at":"2023-02-20T23:53:46.310230+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"43f7dc70-96d2-4ae5-9c54-1ee0d53697af","created_at":"2023-02-20T23:53:46.415216+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"1fe22fca-7afb-4cb0-ba4b-0f57dec88f79","created_at":"2023-02-20T23:53:46.579625+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Mon, 20 Feb 2023 23:53:46 GMT
+      etag:
+      - '"aa7b98c1-7b0d-4a6f-9165-6f2fc56e8f67"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"a3b5fc37-e292-401e-9bb0-aebdba823cfb","created_at":"2023-02-21T01:10:13.929716+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:10:13 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - a3b5fc37-e292-401e-9bb0-aebdba823cfb
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"a3b5fc37-e292-401e-9bb0-aebdba823cfb","created_at":"2023-02-21T01:10:13.929716+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:10:13 GMT
+      etag:
+      - '"6d2e4b50-fe35-4b62-b0ba-f22d4a53c10d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"fe90d13d-8453-4d9f-9569-d19d70e2dbef","created_at":"2023-02-21T01:10:13.526352+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"ea9d4a32-bc07-40ba-93ee-34fe76d60b95","created_at":"2023-02-21T01:10:13.670709+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"b78b235e-e869-45e0-ab70-0a59d3d90a14","created_at":"2023-02-21T01:10:13.790478+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"a3b5fc37-e292-401e-9bb0-aebdba823cfb","created_at":"2023-02-21T01:10:13.929716+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:10:13 GMT
+      etag:
+      - '"40d5a2b3-abe0-44c7-b045-bdf87ab62a37"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"a49ad5a3-f092-4a56-812f-58c1af2ef912","created_at":"2023-02-21T01:11:01.575665+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:11:01 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - a49ad5a3-f092-4a56-812f-58c1af2ef912
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"a49ad5a3-f092-4a56-812f-58c1af2ef912","created_at":"2023-02-21T01:11:01.575665+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:11:01 GMT
+      etag:
+      - '"cd73d6a2-998f-4b1d-862f-fe9d8d1591af"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"f2fe5318-64db-4615-9468-e2c7e1813516","created_at":"2023-02-21T01:11:01.124768+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"9b9183fe-0268-49fd-a0fe-43995e362342","created_at":"2023-02-21T01:11:01.288143+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"b45e04a4-2b1e-4d49-bdf1-e21825fb1321","created_at":"2023-02-21T01:11:01.423371+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"a49ad5a3-f092-4a56-812f-58c1af2ef912","created_at":"2023-02-21T01:11:01.575665+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:11:01 GMT
+      etag:
+      - '"5703509f-389b-415f-91dd-c26abeced1b9"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"bfe5e943-7574-477e-a91c-79686c6ea62c","created_at":"2023-02-21T01:12:16.064708+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:12:15 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - bfe5e943-7574-477e-a91c-79686c6ea62c
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"bfe5e943-7574-477e-a91c-79686c6ea62c","created_at":"2023-02-21T01:12:16.064708+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:12:15 GMT
+      etag:
+      - '"80174dfa-e1b6-4b91-ae51-2139525253ee"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"1df2e75f-e09c-4953-8726-65d1fa6f621c","created_at":"2023-02-21T01:12:15.621354+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"e8813be5-a5b8-4978-a003-89103f8a51aa","created_at":"2023-02-21T01:12:15.785122+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"dcbb1a08-be2c-4f90-a100-edf58d3d4edb","created_at":"2023-02-21T01:12:15.903551+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"bfe5e943-7574-477e-a91c-79686c6ea62c","created_at":"2023-02-21T01:12:16.064708+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:12:15 GMT
+      etag:
+      - '"8c830d53-f2e7-4d6c-81c8-c212985ea8e9"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"a9b650c0-ab05-436e-ad3e-43a11070053d","created_at":"2023-02-21T01:14:08.698049+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:14:08 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "nh", "parent_path": null, "default_proj": null, "name":
+      "State of New Hampshire", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '118'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - a9b650c0-ab05-436e-ad3e-43a11070053d
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"a9b650c0-ab05-436e-ad3e-43a11070053d","created_at":"2023-02-21T01:14:08.698049+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '267'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:14:08 GMT
+      etag:
+      - '"4d60299a-a090-4a4f-9280-4faa2c09c1af"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"a82f6ffc-8cb7-44d8-a0bf-e8cf49b94c09","created_at":"2023-02-21T01:14:08.264658+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"970082ca-d1bc-4052-adba-3f72d9257e08","created_at":"2023-02-21T01:14:08.417252+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"65553f58-f33d-4216-b413-48e758240159","created_at":"2023-02-21T01:14:08.535710+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"nh","parent_path":null,"default_proj":null,"name":"State
+      of New Hampshire","aliases":[],"meta":{"notes":"adding a locality","uuid":"a9b650c0-ab05-436e-ad3e-43a11070053d","created_at":"2023-02-21T01:14:08.698049+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '1071'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 01:14:08 GMT
+      etag:
+      - '"4619f1c7-d1f7-42c9-9c8d-2c839033eeef"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1

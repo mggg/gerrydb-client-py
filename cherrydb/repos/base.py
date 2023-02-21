@@ -118,7 +118,7 @@ class ETagObjectRepo(Generic[SchemaType]):
             return [] if cached is None else list(cached.result.values())
 
         response = self.session.client.get(
-            f"{self.base_url}/{namespace}/", headers=match_etag(cached)
+            f"{self.base_url}/{namespace}", headers=match_etag(cached)
         )
         if response.status_code == HTTPStatus.NOT_MODIFIED:
             return list(cached.result.values())

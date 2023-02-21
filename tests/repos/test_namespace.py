@@ -23,7 +23,7 @@ def test_namespace_repo_create_get__offline(client):
         )
 
     client.offline = True
-    assert client.namespaces["test"] == namespace
+    assert client.namespaces["offline"] == namespace
 
 
 @pytest.mark.vcr
