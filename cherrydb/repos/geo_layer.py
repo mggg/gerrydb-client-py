@@ -2,7 +2,14 @@
 from typing import Optional
 
 from cherrydb.exceptions import RequestError
-from cherrydb.repos.base import ETagObjectRepo, err, online, parse_etag, write_context
+from cherrydb.repos.base import (
+    ETagObjectRepo,
+    err,
+    namespaced,
+    online,
+    parse_etag,
+    write_context,
+)
 from cherrydb.schemas import GeoLayer, GeoLayerCreate
 
 
@@ -10,6 +17,7 @@ class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
     """Repository for geographic layers."""
 
     @err("Failed to create geographic layer")
+    @namespaced
     @write_context
     @online
     def create(
@@ -35,12 +43,6 @@ class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
         Returns:
             The new geographic layer.
         """
-        namespace = self.session.namespace if namespace is None else namespace
-        if namespace is None:
-            raise RequestError(
-                "No namespace specified for create(), and no default available."
-            )
-
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
             json=GeoLayerCreate(

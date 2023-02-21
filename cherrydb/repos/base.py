@@ -4,7 +4,7 @@ from abc import ABC
 from dataclasses import dataclass
 from functools import wraps
 from http import HTTPStatus
-from typing import TYPE_CHECKING, Callable, Generic, Optional, TypeVar, Union
+from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar, Union
 
 import httpx
 import pydantic
@@ -59,6 +59,46 @@ def online(func: Callable) -> Callable:
     return online_wrapper
 
 
+def namespaced(func: Callable) -> Callable:
+    """Decorator for automatic resolution of namespaces from session defaults.
+
+    `func` must follow the convention for CRUD functions within a repository class:
+    the first parameter is `self`, the second parameter is the resource `path`,
+    and the optional third parameter is the `namespace`.
+    """
+
+    @wraps(func)
+    def namespaced_wrapper(*args, **kwargs):
+        repo_obj = args[0]
+
+        # Both `path` and `namespace` can be passed as positional or
+        # keyword arguments, which necessitates this messy parsing.
+        if "path" in kwargs:
+            path = kwargs["path"]
+            del kwargs["path"]
+        else:
+            path = args[1]
+
+        if "namespace" in kwargs:
+            namespace = kwargs["namespace"]
+            del kwargs["namespace"]
+        else:
+            namespace = (
+                args[2]
+                if len(args) >= 3 and args[2] is not None
+                else repo_obj.session.namespace
+            )
+
+        if namespace is None:
+            raise RequestError(
+                "No namespace specified and no session-level default available."
+            )
+
+        return func(repo_obj, path, namespace, *args[3:], **kwargs)
+
+    return namespaced_wrapper
+
+
 def write_context(func: Callable) -> Callable:
     """Decorator for marking operations that require a write context."""
 
@@ -93,6 +133,18 @@ def parse_etag(response: httpx.Response) -> Optional[bytes]:
 def normalize_path(path: str) -> str:
     """Normalizes a path (removes leading, trailing, and duplicate slashes)."""
     return "/".join(seg for seg in path.lower().split("/") if seg)
+
+
+def parse_path(path: str) -> Tuple[str, str]:
+    """Breaks a namespaced path (`/<namespace>/<path>`) into two parts."""
+    parts = path.split("/")
+    try:
+        return parts[1], "/".join(parts[2:])
+    except IndexError:
+        raise KeyError(
+            "Namespaced paths must contain a namespace and a "
+            "namespace-relative path, i.e. /<namespace>/<path>"
+        )
 
 
 @dataclass(frozen=True)
@@ -141,6 +193,7 @@ class ETagObjectRepo(Generic[SchemaType]):
         return objs
 
     @err("Failed to load object")
+    @namespaced
     def get(self, path: str, namespace: Optional[str] = None) -> Optional[SchemaType]:
         """Gets an object by path.
 
@@ -149,12 +202,6 @@ class ETagObjectRepo(Generic[SchemaType]):
                 or if no namespace is specified.
         """
         path = normalize_path(path)
-        namespace = self.session.namespace if namespace is None else namespace
-        if namespace is None:
-            raise RequestError(
-                "No namespace specified for get() query, and no default available."
-            )
-
         cached = self.session.cache.get(obj=self.schema, path=path, namespace=namespace)
         if self.session.offline:
             return None if cached is None else cached.result
@@ -176,15 +223,6 @@ class ETagObjectRepo(Generic[SchemaType]):
 
     def __getitem__(self, path: str) -> Optional[SchemaType]:
         if path.startswith("/"):
-            parts = path.split("/")
-            try:
-                namespace = parts[1]
-                path_in_namespace = "/".join(parts[2:])
-            except IndexError:
-                raise KeyError(
-                    "Absolute paths must contain a namespace and a "
-                    "namespace-relative path, i.e. /<namespace>/<path>"
-                )
+            namespace, path_in_namespace = parse_path(path)
             return self.get(path=path_in_namespace, namespace=namespace)
-
         return self.get(path=path)

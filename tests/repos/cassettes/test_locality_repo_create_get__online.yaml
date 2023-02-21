@@ -142,4 +142,2328 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"33f292aa-1449-4c0a-bd03-98c36a0c140d","created_at":"2023-02-21T19:35:55.026042+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:35:54 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 33f292aa-1449-4c0a-bd03-98c36a0c140d
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"33f292aa-1449-4c0a-bd03-98c36a0c140d","created_at":"2023-02-21T19:35:55.026042+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:35:54 GMT
+      etag:
+      - '"9c7201bc-7584-4573-bde7-20e2b9567ccd"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"9c7201bc-7584-4573-bde7-20e2b9567ccd"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"33f292aa-1449-4c0a-bd03-98c36a0c140d","created_at":"2023-02-21T19:35:55.026042+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:35:54 GMT
+      etag:
+      - '"9c7201bc-7584-4573-bde7-20e2b9567ccd"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"c2e28bfc-bd9e-4733-b99a-c0d923b275db","created_at":"2023-02-21T19:39:53.993614+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:39:53 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c2e28bfc-bd9e-4733-b99a-c0d923b275db
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"detail":"Object creation failed. Reason: Failed to create canonical
+      path ''ma'' to new location. (The path may already exist.)"}'
+    headers:
+      content-length:
+      - '128'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:39:53 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 422
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"30e4de1a-386e-4d4c-9433-ca7f78fbd166","created_at":"2023-02-21T19:40:01.576367+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:40:00 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 30e4de1a-386e-4d4c-9433-ca7f78fbd166
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"30e4de1a-386e-4d4c-9433-ca7f78fbd166","created_at":"2023-02-21T19:40:01.576367+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:40:00 GMT
+      etag:
+      - '"d068bc65-48d9-409b-9916-9b15d0230567"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"d068bc65-48d9-409b-9916-9b15d0230567"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"30e4de1a-386e-4d4c-9433-ca7f78fbd166","created_at":"2023-02-21T19:40:01.576367+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:40:01 GMT
+      etag:
+      - '"d068bc65-48d9-409b-9916-9b15d0230567"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"b7a25c6f-dea7-47a6-ba38-e7521a65d683","created_at":"2023-02-21T19:40:45.014431+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:40:44 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b7a25c6f-dea7-47a6-ba38-e7521a65d683
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"b7a25c6f-dea7-47a6-ba38-e7521a65d683","created_at":"2023-02-21T19:40:45.014431+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:40:44 GMT
+      etag:
+      - '"c405bdf2-b8e7-46db-9e9e-4fa9f60e9353"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"c405bdf2-b8e7-46db-9e9e-4fa9f60e9353"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"b7a25c6f-dea7-47a6-ba38-e7521a65d683","created_at":"2023-02-21T19:40:45.014431+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:40:44 GMT
+      etag:
+      - '"c405bdf2-b8e7-46db-9e9e-4fa9f60e9353"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"0fa76003-2aa0-4da8-b685-4486379afe9b","created_at":"2023-02-21T19:42:08.622775+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:42:07 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 0fa76003-2aa0-4da8-b685-4486379afe9b
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"0fa76003-2aa0-4da8-b685-4486379afe9b","created_at":"2023-02-21T19:42:08.622775+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:42:07 GMT
+      etag:
+      - '"4227d789-4943-419b-bdb4-b6de133607fe"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"4227d789-4943-419b-bdb4-b6de133607fe"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"0fa76003-2aa0-4da8-b685-4486379afe9b","created_at":"2023-02-21T19:42:08.622775+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:42:07 GMT
+      etag:
+      - '"4227d789-4943-419b-bdb4-b6de133607fe"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"d771fb3f-0176-42fa-9567-631296b75464","created_at":"2023-02-21T19:42:58.760628+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:42:57 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - d771fb3f-0176-42fa-9567-631296b75464
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"d771fb3f-0176-42fa-9567-631296b75464","created_at":"2023-02-21T19:42:58.760628+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:42:57 GMT
+      etag:
+      - '"2088ab64-680e-4b78-9ac1-7473fec6187d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"2088ab64-680e-4b78-9ac1-7473fec6187d"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"d771fb3f-0176-42fa-9567-631296b75464","created_at":"2023-02-21T19:42:58.760628+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:42:57 GMT
+      etag:
+      - '"2088ab64-680e-4b78-9ac1-7473fec6187d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"b2976916-b733-4854-8b4e-9b51935e7b23","created_at":"2023-02-21T19:43:42.686933+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:43:42 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b2976916-b733-4854-8b4e-9b51935e7b23
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"b2976916-b733-4854-8b4e-9b51935e7b23","created_at":"2023-02-21T19:43:42.686933+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:43:42 GMT
+      etag:
+      - '"51e252a9-e6fd-4eb6-8ee7-a63347dee1d5"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"51e252a9-e6fd-4eb6-8ee7-a63347dee1d5"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"b2976916-b733-4854-8b4e-9b51935e7b23","created_at":"2023-02-21T19:43:42.686933+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:43:42 GMT
+      etag:
+      - '"51e252a9-e6fd-4eb6-8ee7-a63347dee1d5"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"a2575e07-f3d5-49e0-9e13-57fad65d7838","created_at":"2023-02-21T19:44:41.469682+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:44:40 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - a2575e07-f3d5-49e0-9e13-57fad65d7838
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"a2575e07-f3d5-49e0-9e13-57fad65d7838","created_at":"2023-02-21T19:44:41.469682+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:44:40 GMT
+      etag:
+      - '"f9241f52-57cf-455c-b840-2c0a7556568c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"f9241f52-57cf-455c-b840-2c0a7556568c"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"a2575e07-f3d5-49e0-9e13-57fad65d7838","created_at":"2023-02-21T19:44:41.469682+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:44:40 GMT
+      etag:
+      - '"f9241f52-57cf-455c-b840-2c0a7556568c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"03357239-f1e5-40d7-893d-a9a6547eb6bf","created_at":"2023-02-21T19:48:20.399618+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:48:19 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 03357239-f1e5-40d7-893d-a9a6547eb6bf
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"03357239-f1e5-40d7-893d-a9a6547eb6bf","created_at":"2023-02-21T19:48:20.399618+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:48:19 GMT
+      etag:
+      - '"df0e7d0b-0c9a-4e2b-b2a5-77c7ac8631cd"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"df0e7d0b-0c9a-4e2b-b2a5-77c7ac8631cd"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"03357239-f1e5-40d7-893d-a9a6547eb6bf","created_at":"2023-02-21T19:48:20.399618+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:48:19 GMT
+      etag:
+      - '"df0e7d0b-0c9a-4e2b-b2a5-77c7ac8631cd"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"344b02f5-41d5-40e1-8300-3129cb1c142d","created_at":"2023-02-21T19:48:52.877323+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:48:52 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 344b02f5-41d5-40e1-8300-3129cb1c142d
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"detail":"Object creation failed. Reason: Failed to create canonical
+      path ''ma'' to new location. (The path may already exist.)"}'
+    headers:
+      content-length:
+      - '128'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:48:52 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 422
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"45714db2-e9ea-4cac-8727-0e8588c3b792","created_at":"2023-02-21T19:49:02.452785+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:49:02 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 45714db2-e9ea-4cac-8727-0e8588c3b792
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"45714db2-e9ea-4cac-8727-0e8588c3b792","created_at":"2023-02-21T19:49:02.452785+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:49:02 GMT
+      etag:
+      - '"774a2db2-5b80-42eb-bd8a-eeb77ff58f27"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"774a2db2-5b80-42eb-bd8a-eeb77ff58f27"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"45714db2-e9ea-4cac-8727-0e8588c3b792","created_at":"2023-02-21T19:49:02.452785+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:49:02 GMT
+      etag:
+      - '"774a2db2-5b80-42eb-bd8a-eeb77ff58f27"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"4c75ff15-1591-418c-87d0-e20a7472fb1f","created_at":"2023-02-21T19:58:02.270236+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:58:01 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 4c75ff15-1591-418c-87d0-e20a7472fb1f
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"4c75ff15-1591-418c-87d0-e20a7472fb1f","created_at":"2023-02-21T19:58:02.270236+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:58:01 GMT
+      etag:
+      - '"d4824916-d4b3-4376-a6ec-54197bb42b7f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"d4824916-d4b3-4376-a6ec-54197bb42b7f"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"4c75ff15-1591-418c-87d0-e20a7472fb1f","created_at":"2023-02-21T19:58:02.270236+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:58:01 GMT
+      etag:
+      - '"d4824916-d4b3-4376-a6ec-54197bb42b7f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"894c8c2f-d216-491d-bb5f-9dfb3363f324","created_at":"2023-02-21T19:59:18.617219+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:59:18 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 894c8c2f-d216-491d-bb5f-9dfb3363f324
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"894c8c2f-d216-491d-bb5f-9dfb3363f324","created_at":"2023-02-21T19:59:18.617219+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:59:18 GMT
+      etag:
+      - '"5acfd401-a96d-47b2-b9bd-c3270f7c2333"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"5acfd401-a96d-47b2-b9bd-c3270f7c2333"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"894c8c2f-d216-491d-bb5f-9dfb3363f324","created_at":"2023-02-21T19:59:18.617219+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:59:18 GMT
+      etag:
+      - '"5acfd401-a96d-47b2-b9bd-c3270f7c2333"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"98cbd90c-84dc-41af-88b2-7da23c2c2552","created_at":"2023-02-21T19:59:53.461815+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:59:53 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 98cbd90c-84dc-41af-88b2-7da23c2c2552
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"98cbd90c-84dc-41af-88b2-7da23c2c2552","created_at":"2023-02-21T19:59:53.461815+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:59:53 GMT
+      etag:
+      - '"343f2281-ece0-43a9-b824-901abefbbc50"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"343f2281-ece0-43a9-b824-901abefbbc50"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"98cbd90c-84dc-41af-88b2-7da23c2c2552","created_at":"2023-02-21T19:59:53.461815+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 19:59:53 GMT
+      etag:
+      - '"343f2281-ece0-43a9-b824-901abefbbc50"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"344d51f7-f776-429a-943a-ecbe137c5e4a","created_at":"2023-02-21T21:29:32.804519+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:29:32 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 344d51f7-f776-429a-943a-ecbe137c5e4a
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"344d51f7-f776-429a-943a-ecbe137c5e4a","created_at":"2023-02-21T21:29:32.804519+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:29:32 GMT
+      etag:
+      - '"c35072f1-6857-477b-9dab-3577f3dfaddc"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"c35072f1-6857-477b-9dab-3577f3dfaddc"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"344d51f7-f776-429a-943a-ecbe137c5e4a","created_at":"2023-02-21T21:29:32.804519+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:29:32 GMT
+      etag:
+      - '"c35072f1-6857-477b-9dab-3577f3dfaddc"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"203afae2-0f08-4dec-9356-919d7f5ddc3b","created_at":"2023-02-21T21:32:52.500223+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:32:52 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 203afae2-0f08-4dec-9356-919d7f5ddc3b
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"203afae2-0f08-4dec-9356-919d7f5ddc3b","created_at":"2023-02-21T21:32:52.500223+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:32:52 GMT
+      etag:
+      - '"7f53113d-5a82-4797-820c-8e75f2ac9ffa"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"7f53113d-5a82-4797-820c-8e75f2ac9ffa"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"203afae2-0f08-4dec-9356-919d7f5ddc3b","created_at":"2023-02-21T21:32:52.500223+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:32:52 GMT
+      etag:
+      - '"7f53113d-5a82-4797-820c-8e75f2ac9ffa"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"c4836f2a-a375-4459-8ef5-5fb59624358f","created_at":"2023-02-21T21:33:14.631836+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:33:14 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c4836f2a-a375-4459-8ef5-5fb59624358f
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"c4836f2a-a375-4459-8ef5-5fb59624358f","created_at":"2023-02-21T21:33:14.631836+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:33:14 GMT
+      etag:
+      - '"2db0ed2d-79dd-40b8-804b-4cafd8b0b66f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"2db0ed2d-79dd-40b8-804b-4cafd8b0b66f"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"c4836f2a-a375-4459-8ef5-5fb59624358f","created_at":"2023-02-21T21:33:14.631836+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:33:14 GMT
+      etag:
+      - '"2db0ed2d-79dd-40b8-804b-4cafd8b0b66f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"6485b244-41a8-4df8-82ce-5c0f828695ce","created_at":"2023-02-21T21:41:29.030341+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:41:28 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 6485b244-41a8-4df8-82ce-5c0f828695ce
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"6485b244-41a8-4df8-82ce-5c0f828695ce","created_at":"2023-02-21T21:41:29.030341+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:41:28 GMT
+      etag:
+      - '"a54fcdf0-31d1-4bf8-b637-56704bf8a67c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"a54fcdf0-31d1-4bf8-b637-56704bf8a67c"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"6485b244-41a8-4df8-82ce-5c0f828695ce","created_at":"2023-02-21T21:41:29.030341+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:41:28 GMT
+      etag:
+      - '"a54fcdf0-31d1-4bf8-b637-56704bf8a67c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"48f6c7c3-6e7d-4670-8c93-7c3eedad68d0","created_at":"2023-02-21T21:56:36.502893+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:56:35 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 48f6c7c3-6e7d-4670-8c93-7c3eedad68d0
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"48f6c7c3-6e7d-4670-8c93-7c3eedad68d0","created_at":"2023-02-21T21:56:36.502893+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:56:35 GMT
+      etag:
+      - '"be6ff663-f394-4dea-8af7-48cb3b4bf7e4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"be6ff663-f394-4dea-8af7-48cb3b4bf7e4"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"48f6c7c3-6e7d-4670-8c93-7c3eedad68d0","created_at":"2023-02-21T21:56:36.502893+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:56:35 GMT
+      etag:
+      - '"be6ff663-f394-4dea-8af7-48cb3b4bf7e4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"12780fd9-04d4-490f-808e-ded8f150a5b4","created_at":"2023-02-21T21:57:05.123731+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:57:05 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 12780fd9-04d4-490f-808e-ded8f150a5b4
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"12780fd9-04d4-490f-808e-ded8f150a5b4","created_at":"2023-02-21T21:57:05.123731+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:57:05 GMT
+      etag:
+      - '"856deb15-b929-4db3-9b0d-105c0ceecea4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"856deb15-b929-4db3-9b0d-105c0ceecea4"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"12780fd9-04d4-490f-808e-ded8f150a5b4","created_at":"2023-02-21T21:57:05.123731+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:57:05 GMT
+      etag:
+      - '"856deb15-b929-4db3-9b0d-105c0ceecea4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"1d19a66e-ca56-4963-afe0-7d8f22d1cc31","created_at":"2023-02-21T21:58:08.109325+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:58:07 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 1d19a66e-ca56-4963-afe0-7d8f22d1cc31
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"1d19a66e-ca56-4963-afe0-7d8f22d1cc31","created_at":"2023-02-21T21:58:08.109325+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:58:07 GMT
+      etag:
+      - '"37c473dd-df4e-4ad8-a3df-d28884b91df3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"37c473dd-df4e-4ad8-a3df-d28884b91df3"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"1d19a66e-ca56-4963-afe0-7d8f22d1cc31","created_at":"2023-02-21T21:58:08.109325+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:58:07 GMT
+      etag:
+      - '"37c473dd-df4e-4ad8-a3df-d28884b91df3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"2deeb880-c785-49ef-8292-c0218deb0512","created_at":"2023-02-21T21:58:36.287661+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:58:36 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "ma", "parent_path": null, "default_proj": null, "name":
+      "Commonwealth of Massachusetts", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '125'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 2deeb880-c785-49ef-8292-c0218deb0512
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"2deeb880-c785-49ef-8292-c0218deb0512","created_at":"2023-02-21T21:58:36.287661+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:58:36 GMT
+      etag:
+      - '"d09e4aaa-edc8-4acc-99f3-08e21bc30e0a"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"d09e4aaa-edc8-4acc-99f3-08e21bc30e0a"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/ma
+  response:
+    content: '{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"2deeb880-c785-49ef-8292-c0218deb0512","created_at":"2023-02-21T21:58:36.287661+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '274'
+      content-type:
+      - application/json
+      date:
+      - Tue, 21 Feb 2023 21:58:36 GMT
+      etag:
+      - '"d09e4aaa-edc8-4acc-99f3-08e21bc30e0a"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1

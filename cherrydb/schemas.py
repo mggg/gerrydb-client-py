@@ -293,7 +293,7 @@ class ColumnSet(ColumnSetBase):
     """Logical column grouping returned by the database."""
 
     __cache_name__ = "column_set"
-    __cache_policy__ = ObjectCachePolicy.TIMESTAMP
+    __cache_policy__ = ObjectCachePolicy.ETAG
 
     meta: ObjectMeta
     namespace: str

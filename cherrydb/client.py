@@ -9,8 +9,14 @@ import tomlkit
 
 from cherrydb.cache import CherryCache
 from cherrydb.exceptions import ConfigError
-from cherrydb.repos import ColumnRepo, GeoLayerRepo, LocalityRepo, NamespaceRepo
-from cherrydb.schemas import Column, GeoLayer, ObjectMeta, ObjectMetaCreate
+from cherrydb.repos import (
+    ColumnRepo,
+    ColumnSetRepo,
+    GeoLayerRepo,
+    LocalityRepo,
+    NamespaceRepo,
+)
+from cherrydb.schemas import Column, ColumnSet, GeoLayer, ObjectMeta, ObjectMetaCreate
 
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
 
@@ -140,22 +146,27 @@ class CherryDB:
         return WriteContext(db=self, notes=notes)
 
     @property
-    def columns(self):
+    def columns(self) -> ColumnRepo:
         """Tabular column metadata."""
         return ColumnRepo(schema=Column, base_url="/columns", session=self)
 
     @property
-    def geo_layers(self):
+    def column_sets(self) -> ColumnSetRepo:
+        """Column sets."""
+        return ColumnSetRepo(schema=ColumnSet, base_url="/column-sets", session=self)
+
+    @property
+    def geo_layers(self) -> GeoLayerRepo:
         """Geographic layers."""
         return GeoLayerRepo(schema=GeoLayer, base_url="/layers", session=self)
 
     @property
-    def localities(self):
+    def localities(self) -> LocalityRepo:
         """Localities."""
         return LocalityRepo(session=self)
 
     @property
-    def namespaces(self):
+    def namespaces(self) -> NamespaceRepo:
         """Namespaces."""
         return NamespaceRepo(session=self)
 
@@ -189,23 +200,30 @@ class WriteContext:
         self.client.close()
 
     @property
-    def columns(self):
+    def columns(self) -> ColumnRepo:
         """Tabular column metadata."""
         return ColumnRepo(schema=Column, base_url="/columns", session=self.db, ctx=self)
 
     @property
-    def geo_layers(self):
+    def column_sets(self) -> ColumnSetRepo:
+        """Column sets."""
+        return ColumnSetRepo(
+            schema=ColumnSet, base_url="/column-sets", session=self.db, ctx=self
+        )
+
+    @property
+    def geo_layers(self) -> GeoLayerRepo:
         """Geographic layers."""
         return GeoLayerRepo(
             schema=GeoLayer, base_url="/layers", session=self.db, ctx=self
         )
 
     @property
-    def localities(self):
+    def localities(self) -> LocalityRepo:
         """Localities."""
         return LocalityRepo(session=self.db, ctx=self)
 
     @property
-    def namespaces(self):
+    def namespaces(self) -> NamespaceRepo:
         """Namespaces."""
         return NamespaceRepo(session=self.db, ctx=self)

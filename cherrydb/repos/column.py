@@ -2,7 +2,14 @@
 from typing import Optional
 
 from cherrydb.exceptions import RequestError
-from cherrydb.repos.base import ETagObjectRepo, err, online, parse_etag, write_context
+from cherrydb.repos.base import (
+    ETagObjectRepo,
+    err,
+    namespaced,
+    online,
+    parse_etag,
+    write_context,
+)
 from cherrydb.schemas import Column, ColumnCreate, ColumnKind, ColumnPatch, ColumnType
 
 
@@ -10,6 +17,7 @@ class ColumnRepo(ETagObjectRepo[Column]):
     """Repository for columns."""
 
     @err("Failed to create column")
+    @namespaced
     @write_context
     @online
     def create(
@@ -46,12 +54,6 @@ class ColumnRepo(ETagObjectRepo[Column]):
         Returns:
             Metadata for the new column.
         """
-        namespace = self.session.namespace if namespace is None else namespace
-        if namespace is None:
-            raise RequestError(
-                "No namespace specified for create(), and no default available."
-            )
-
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
             json=ColumnCreate(
@@ -74,6 +76,7 @@ class ColumnRepo(ETagObjectRepo[Column]):
         return obj
 
     @err("Failed to update column")
+    @namespaced
     @write_context
     @online
     def update(
@@ -94,12 +97,6 @@ class ColumnRepo(ETagObjectRepo[Column]):
         Returns:
             The updated column.
         """
-        namespace = self.session.namespace if namespace is None else namespace
-        if namespace is None:
-            raise RequestError(
-                "No namespace specified for update(), and no default available."
-            )
-
         response = self.ctx.client.patch(
             f"{self.base_url}/{namespace}/{path}",
             json=ColumnPatch(aliases=aliases).dict(),

@@ -11,7 +11,14 @@ import pytest
 from cherrydb.cache import CacheResult
 from cherrydb.client import CherryDB, WriteContext
 from cherrydb.exceptions import OnlineError, ResultError, WriteContextError
-from cherrydb.repos.base import err, match_etag, online, parse_etag, write_context
+from cherrydb.repos.base import (
+    err,
+    match_etag,
+    online,
+    parse_etag,
+    parse_path,
+    write_context,
+)
 from cherrydb.schemas import BaseModel
 
 
@@ -91,3 +98,14 @@ def test_repos_parse_etag__present():
 def test_repos_etag__absent():
     response = MockResponse(headers={})
     assert parse_etag(response) is None
+
+
+def test_repos_parse_path__valid():
+    namespace, path_in_namespace = parse_path("/a/b")
+    assert namespace == "a"
+    assert path_in_namespace == "b"
+
+
+def test_repos_parse_path__invalid():
+    with pytest.raises(KeyError, match="must contain"):
+        parse_path("a")
