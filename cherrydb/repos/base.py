@@ -24,6 +24,8 @@ if TYPE_CHECKING:
 
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
 
+NAMESPACE_ERR = "No namespace specified for all() query, and no default available."
+
 
 class ObjectRepo(ABC):
     """A repository for a generic CherryDB object."""
@@ -161,9 +163,7 @@ class ETagObjectRepo(Generic[SchemaType]):
         """Gets all objects in a namespace."""
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
-            raise RequestError(
-                "No namespace specified for all() query, and no default available."
-            )
+            raise RequestError(NAMESPACE_ERR)
 
         cached = self.session.cache.all(obj=self.schema, namespace=namespace)
         if self.session.offline:

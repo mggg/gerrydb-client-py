@@ -233,6 +233,7 @@ class GeoImport(GeoImportBase):
     uuid: str
     namespace: str
     created_at: datetime
+    created_by: str
     meta: ObjectMeta
 
 

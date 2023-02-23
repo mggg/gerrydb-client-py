@@ -1,7 +1,6 @@
 """Repository for columns."""
 from typing import Optional
 
-from cherrydb.exceptions import RequestError
 from cherrydb.repos.base import (
     ETagObjectRepo,
     err,

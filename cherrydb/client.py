@@ -12,11 +12,20 @@ from cherrydb.exceptions import ConfigError
 from cherrydb.repos import (
     ColumnRepo,
     ColumnSetRepo,
+    GeographyRepo,
     GeoLayerRepo,
     LocalityRepo,
     NamespaceRepo,
 )
-from cherrydb.schemas import Column, ColumnSet, GeoLayer, ObjectMeta, ObjectMetaCreate
+from cherrydb.schemas import (
+    Column,
+    ColumnSet,
+    Geography,
+    GeoImport,
+    GeoLayer,
+    ObjectMeta,
+    ObjectMetaCreate,
+)
 
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
 
@@ -156,6 +165,11 @@ class CherryDB:
         return ColumnSetRepo(schema=ColumnSet, base_url="/column-sets", session=self)
 
     @property
+    def geo(self) -> GeoLayerRepo:
+        """Geographies."""
+        return GeographyRepo(schema=Geography, base_url="/geographies", session=self)
+
+    @property
     def geo_layers(self) -> GeoLayerRepo:
         """Geographic layers."""
         return GeoLayerRepo(schema=GeoLayer, base_url="/layers", session=self)
@@ -179,6 +193,7 @@ class WriteContext:
     notes: str
     meta: ObjectMeta | None = None
     client: httpx.Client | None = None
+    geo_import: GeoImport | None = None
 
     def __enter__(self) -> "WriteContext":
         """Creates a write context with metadata."""
@@ -209,6 +224,13 @@ class WriteContext:
         """Column sets."""
         return ColumnSetRepo(
             schema=ColumnSet, base_url="/column-sets", session=self.db, ctx=self
+        )
+
+    @property
+    def geo(self) -> GeoLayerRepo:
+        """Geographies."""
+        return GeographyRepo(
+            schema=Geography, base_url="/geographies", session=self.db, ctx=self
         )
 
     @property
