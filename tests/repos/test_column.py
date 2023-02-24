@@ -1,5 +1,6 @@
 """Integration/VCR tests for columns."""
 import pytest
+from shapely import box
 
 from cherrydb.schemas import ColumnKind, ColumnType
 
@@ -74,3 +75,12 @@ def test_column_repo_create_update_get__online_offline(client_ns, column):
 
     client_ns.offline = True
     assert client_ns.columns["population"] == updated_col
+
+
+def test_column_repo_set_values(client_ns, column):
+    n = 10000
+    with client_ns.context(notes="adding a column, geographies, and values") as ctx:
+        col = ctx.columns.create(**column)
+        with ctx.geo.bulk() as geo_ctx:
+            geo_ctx.create({str(idx): box(0, 0, 1, 1) for idx in range(n)})
+        ctx.columns.set_values(col, values={str(idx): idx for idx in range(n)})

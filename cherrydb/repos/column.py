@@ -142,7 +142,7 @@ class ColumnRepo(ETagObjectRepo[Column]):
         """
         path = path_or_col.path if isinstance(path_or_col, Column) else path_or_col
 
-        response = self.ctx.client.patch(
+        response = self.ctx.client.put(
             f"{self.base_url}/{namespace}/{path}",
             json=[
                 ColumnValue(
