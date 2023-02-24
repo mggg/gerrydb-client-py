@@ -1,5 +1,5 @@
 """Repository for columns."""
-from typing import Optional
+from typing import Any, Optional, Union
 
 from cherrydb.repos.base import (
     ETagObjectRepo,
@@ -9,7 +9,15 @@ from cherrydb.repos.base import (
     parse_etag,
     write_context,
 )
-from cherrydb.schemas import Column, ColumnCreate, ColumnKind, ColumnPatch, ColumnType
+from cherrydb.schemas import (
+    Column,
+    ColumnCreate,
+    ColumnKind,
+    ColumnPatch,
+    ColumnType,
+    ColumnValue,
+    Geography,
+)
 
 
 class ColumnRepo(ETagObjectRepo[Column]):
@@ -108,3 +116,46 @@ class ColumnRepo(ETagObjectRepo[Column]):
             obj=col, path=col.canonical_path, namespace=namespace, etag=col_etag
         )
         return col
+
+    @err("Failed to set column values")
+    @namespaced
+    @write_context
+    @online
+    def set_values(
+        self,
+        path_or_col: Union[Column, str],
+        namespace: Optional[str] = None,
+        *,
+        values: dict[Union[str, Geography], Any],
+    ) -> None:
+        """Sets the values of a column on a collection of geographies.
+
+        Args:
+            path_or_col: Short identifier for the column or a `Column` metadata object.
+            namespace: Namespace of the column (used when `path_or_col` is a raw path).
+            values:
+                A mapping from geography paths or `Geography` metadata objects
+                to column values.
+
+        Raises:
+            RequestError: If the values cannot be set on the server side.
+        """
+        path = path_or_col.path if isinstance(path_or_col, Column) else path_or_col
+
+        response = self.ctx.client.patch(
+            f"{self.base_url}/{namespace}/{path}",
+            json=[
+                ColumnValue(
+                    path=(
+                        f"/{geo.namespace}/{geo.path}"
+                        if isinstance(geo, Geography)
+                        else geo
+                    ),
+                    value=value,
+                ).dict()
+                for geo, value in values.items()
+            ],
+        )
+        response.raise_for_status()
+
+        # TODO: what's the proper caching behavior here?

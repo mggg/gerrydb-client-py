@@ -3,17 +3,20 @@ import sqlite3
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from os import PathLike
-from typing import Optional, Union
+from typing import Generic, Optional, TypeVar, Union
 from uuid import UUID
 
 import orjson as json
+import shapely.wkb
 from dateutil.parser import parse as ts_parse
 
 from cherrydb.exceptions import CacheInitError, CacheObjectError, CachePolicyError
-from cherrydb.schemas import BaseModel, ObjectCachePolicy
+from cherrydb.schemas import BaseModel, Geography, ObjectCachePolicy
 
 _REQUIRED_TABLES = {"cache_meta", "collection", "object", "object_alias", "object_meta"}
 _CACHE_SCHEMA_VERSION = "0"
+
+SchemaType = TypeVar("SchemaType", bound=BaseModel)
 
 
 def cache_name(obj: BaseModel | type) -> str:
@@ -82,6 +85,7 @@ class CherryCache:
     """
 
     _conn: sqlite3.Connection
+    extensions: dict[SchemaType, object] = {}
 
     def __init__(self, database: Union[str, PathLike, sqlite3.Connection]):
         """Loads or initializes a cache."""
@@ -99,6 +103,11 @@ class CherryCache:
             self._init_db()
         else:
             self._assert_clean()
+
+    @classmethod
+    def register_extension(cls, schema: SchemaType, ext: object) -> None:
+        """Registers a schema-specific cache extension."""
+        cls.extensions[schema] = ext
 
     def commit(self) -> bool:
         """Commits the cache transaction."""
@@ -132,6 +141,9 @@ class CherryCache:
         Returns:
             The cached object wrapped in a `CacheResult`, if available.
         """
+        if type(obj) in self.extensions:
+            ext = self.extensions[type(obj)](self._conn)
+            return ext.get(path=path, namespace=namespace, at=at, etag=etag)
 
         name = cache_name(obj)
         policy = cache_policy(obj)
@@ -150,7 +162,7 @@ class CherryCache:
             "type": name,
             "path": path,
             "namespace": namespace,
-            "at": at,
+            "at": at.isoformat(),
             "etag": etag,
         }
         where_clauses = [
@@ -233,53 +245,63 @@ class CherryCache:
                 (meta_id, json.dumps(obj_meta).decode("utf-8")),
             )
 
-        if policy == ObjectCachePolicy.ETAG:
-            # For ETag-versioned objects, we always prefer the newest version.
-            self._conn.execute(
-                "DELETE FROM object WHERE type = ? AND path = ? AND namespace = ?",
-                (name, path, namespace),
+        if type(obj) in self.extensions:
+            ext = self.extensions[type(obj)](self._conn)
+            ext.insert(
+                obj=obj,
+                path=path,
+                namespace=namespace,
+                valid_from=valid_from,
+                etag=etag,
             )
+        else:
+            if policy == ObjectCachePolicy.ETAG:
+                # For ETag-versioned objects, we always prefer the newest version.
+                self._conn.execute(
+                    "DELETE FROM object WHERE type = ? AND path = ? AND namespace = ?",
+                    (name, path, namespace),
+                )
 
-        obj_stmt = """
-        INSERT INTO object(
-            type, path, namespace, data, meta_id, etag, valid_from, cached_at
-        )
-        VALUES(
-            :type, :path, :namespace, :data, :meta_id,
-            :etag, :valid_from, :cached_at
-        )
-        """
-        obj_params = {
-            "type": name,
-            "path": path,
-            "namespace": namespace,
-            "data": json.dumps(obj_data).decode("utf-8"),
-            "meta_id": meta_id,
-            "etag": etag,
-            "valid_from": None if valid_from is None else valid_from.isoformat(),
-            "cached_at": datetime.now(tz=timezone.utc).isoformat(),
-        }
-        self._conn.execute(obj_stmt, obj_params)
+            obj_stmt = """
+            INSERT INTO object(
+                type, path, namespace, data, meta_id, etag, valid_from, cached_at
+            )
+            VALUES(
+                :type, :path, :namespace, :data, :meta_id,
+                :etag, :valid_from, :cached_at
+            )
+            """
+            obj_params = {
+                "type": name,
+                "path": path,
+                "namespace": namespace,
+                "data": json.dumps(obj_data).decode("utf-8"),
+                "meta_id": meta_id,
+                "etag": etag,
+                "valid_from": None if valid_from is None else valid_from.isoformat(),
+                "cached_at": datetime.now(tz=timezone.utc).isoformat(),
+            }
+            self._conn.execute(obj_stmt, obj_params)
 
-        # Update the object's aliases if necessary.
-        # TODO: come up with a reasonable way to track change in aliases over time
-        # for timestamp-versioned objects, should this be something we ever want
-        # to do....
-        if (
-            getattr(obj, "__cache_aliased__", False)
-            and policy == ObjectCachePolicy.ETAG
-            and getattr(obj, "aliases", None) is not None
-        ):
-            self._conn.execute(
-                "DELETE FROM object_alias "
-                "WHERE type = ? AND namespace = ? AND canonical_path = ?",
-                (name, namespace, path),
-            )
-            self._conn.executemany(
-                "INSERT INTO object_alias (type, namespace, canonical_path, alias_path) "
-                "VALUES (?, ?, ?, ?)",
-                ((name, namespace, path, alias) for alias in obj.aliases),
-            )
+            # Update the object's aliases if necessary.
+            # TODO: come up with a reasonable way to track change in aliases over time
+            # for timestamp-versioned objects, should this be something we ever want
+            # to do....
+            if (
+                getattr(obj, "__cache_aliased__", False)
+                and policy == ObjectCachePolicy.ETAG
+                and getattr(obj, "aliases", None) is not None
+            ):
+                self._conn.execute(
+                    "DELETE FROM object_alias "
+                    "WHERE type = ? AND namespace = ? AND canonical_path = ?",
+                    (name, namespace, path),
+                )
+                self._conn.executemany(
+                    "INSERT INTO object_alias (type, namespace, canonical_path, alias_path) "
+                    "VALUES (?, ?, ?, ?)",
+                    ((name, namespace, path, alias) for alias in obj.aliases),
+                )
 
         if autocommit:
             self.commit()
@@ -393,9 +415,7 @@ class CherryCache:
             ON object.meta_id = object_meta.meta_id
             WHERE object.type = ? AND object.namespace = ?
             """
-            collection_raw = self._conn.execute(
-                members_query, (name, namespace)
-            ).fetchall()
+            query_params = (name, namespace)
         else:
             base_collection_query = """
             SELECT etag, cached_at, valid_at FROM collection
@@ -449,17 +469,20 @@ class CherryCache:
             GROUP BY object.path
             HAVING MAX(object.valid_from)
             """
-            collection_raw = self._conn.execute(
-                members_query, (name, namespace, valid_at)
-            ).fetchall()
+            query_params = (name, namespace, valid_at)
 
-        collection = {}
-        for row in collection_raw:
-            path = row[0]
-            data = json.loads(row[1])
-            if row[2] is not None:
-                data["meta"] = json.loads(row[2])
-            collection[path] = obj(**data)
+        if type(obj) in self.extensions:
+            ext = self.extensions[type(obj)](self._conn)
+            collection = ext.all(obj=obj, namespace=namespace, valid_at=valid_at)
+        else:
+            collection_raw = self._conn.execute(members_query, query_params).fetchall()
+            collection = {}
+            for row in collection_raw:
+                path = row[0]
+                data = json.loads(row[1])
+                if row[2] is not None:
+                    data["meta"] = json.loads(row[2])
+                collection[path] = obj(**data)
 
         return CacheCollectionResult(
             result=collection,
@@ -556,9 +579,9 @@ class CherryCache:
         )
         self._conn.execute(
             """CREATE TABLE object(
-                type       TEXT,
+                type       TEXT NOT NULL,
                 path       TEXT NOT NULL, 
-                namespace  TEXT,
+                namespace  TEXT NOT NULL,
                 data       TEXT NOT NULL,
                 meta_id    BLOB,
                 etag       BLOB,
@@ -582,7 +605,7 @@ class CherryCache:
         self._conn.execute(
             """CREATE TABLE collection(
                 type      TEXT NOT NULL,
-                namespace TEXT,
+                namespace TEXT NOT NULL,
                 etag      BLOB,
                 valid_at  TEXT,
                 cached_at TEXT NOT NULL,
@@ -593,4 +616,169 @@ class CherryCache:
             "INSERT INTO cache_meta (key, value) VALUES ('schema_version', ?)",
             _CACHE_SCHEMA_VERSION,
         )
+        for ext in self.extensions.values():
+            ext(self._conn).init_db()
         self._conn.commit()
+
+
+@dataclass
+class CacheExtension(Generic[SchemaType]):
+    """Schema-specific cache extension interface."""
+
+    conn: sqlite3.Connection
+
+    def get(
+        self,
+        path: str,
+        namespace: str,
+        *,
+        at: Optional[datetime] = None,
+        etag: Optional[bytes] = None,
+    ) -> Optional[CacheResult]:
+        """Retrieves an object from the cache."""
+        raise NotImplementedError
+
+    def insert(
+        self,
+        obj: SchemaType,
+        path: str,
+        namespace: str,
+        *,
+        valid_from: Optional[datetime] = None,
+        etag: Optional[bytes] = None,
+        autocommit: bool = True,
+    ) -> None:
+        """Caches an object."""
+        raise NotImplementedError
+
+    def all(
+        self,
+        namespace: str,
+        valid_at: datetime,
+    ) -> dict[str, SchemaType]:
+        """Gets all objects in `namespace` at `valid_at`."""
+        raise NotImplementedError
+
+    def init_db(self) -> None:
+        """Initializes the extension within the database."""
+        raise NotImplementedError
+
+    @property
+    def tables(self) -> list[str]:
+        """Returns a list of database tables created by the extension."""
+        raise NotImplementedError
+
+
+class GeographyCacheExtension(CacheExtension[Geography]):
+    """Cache extension for storing geographies."""
+
+    def get(
+        self,
+        path: str,
+        namespace: str,
+        *,
+        at: Optional[datetime] = None,
+        etag: Optional[bytes] = None,
+    ) -> Optional[CacheResult]:
+        """Retrieves a geography."""
+        order_by_col = "valid_from" if at is None else "cached_at"
+        valid_from_bound = "" if at is None else "valid_from <= := at"
+        query = f"""
+            SELECT geography.data, object_meta.data AS metadata,
+                   geography.cached_at, geography.valid_from
+            FROM geography 
+            LEFT JOIN object_meta
+            ON geography.meta_id = object_meta.meta_id
+            WHERE path=:path AND namespace=:namespace {valid_from_bound}
+            ORDER BY {order_by_col} DESC LIMIT 1
+        """
+        params = {"path": path, "namespace": namespace, "at": at.isoformat()}
+        cur = self.conn.execute(query, params)
+        result_row = cur.fetchone()
+        if result_row is None:
+            return None
+
+        return CacheResult(
+            result=Geography(
+                geography=shapely.wkb.loads(result_row[0]),
+                meta=json.loads(result_row[1]),
+            ),
+            cached_at=ts_parse(result_row[2]),
+            valid_from=ts_parse(result_row[3]),
+            etag=None,
+        )
+
+    def insert(
+        self,
+        obj: Geography,
+        path: str,
+        namespace: str,
+        *,
+        valid_from: Optional[datetime] = None,
+        etag: Optional[bytes] = None,
+    ) -> None:
+        """Caches a geography."""
+        obj_stmt = """
+        INSERT INTO geography(path, namespace, data, meta_id, valid_from, cached_at)
+        VALUES(?, ?, ?, ?, ?, ?)
+        """
+        meta_id = UUID(obj.meta.uuid).bytes
+        self.conn.execute(
+            obj_stmt,
+            (
+                path,
+                namespace,
+                obj.geography.wkb,
+                meta_id,
+                valid_from.isoformat(),
+                datetime.now(tz=timezone.utc).isoformat(),
+            ),
+        )
+
+    def all(
+        self, namespace: str, *, valid_at: datetime
+    ) -> Optional[CacheCollectionResult]:
+        """Gets all objects in `namespace`."""
+        members_query = """
+        SELECT geography.path, geography.data, object_meta.data AS metadata
+        FROM geography 
+        LEFT JOIN object_meta
+        ON geography.meta_id = object_meta.meta_id
+        WHERE geography.namespace = ? AND geography.valid_from <= ?
+        GROUP BY geography.path
+        HAVING MAX(geography.valid_from)
+        """
+        collection_raw = self.conn.execute(
+            members_query, (namespace, valid_at)
+        ).fetchall()
+
+        return {
+            row[0]: Geography(
+                geography=shapely.wkb.loads(row[1]), meta=json.loads(row[2])
+            )
+            for row in collection_raw
+        }
+
+    def init_db(self) -> None:
+        """Initializes the extension within the database."""
+        self.conn.execute(
+            """CREATE TABLE geography(
+                path       TEXT NOT NULL, 
+                namespace  TEXT NOT NULL,
+                data       BLOB NOT NULL,
+                meta_id    BLOB NOT NULL,
+                valid_from TEXT,
+                cached_at  TEXT NOT NULL,
+                FOREIGN KEY(meta_id) REFERENCES object_meta(meta_id),
+                UNIQUE(path, namespace, valid_from)
+            )"""
+        )
+        self.conn.commit()
+
+    @property
+    def tables(self) -> list[str]:
+        """Returns a list of database tables created by the extension."""
+        return ["geography"]
+
+
+CherryCache.register_extension(Geography, GeographyCacheExtension)

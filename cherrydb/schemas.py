@@ -4,6 +4,7 @@ This file should be kept in sync with the server-side version.
 """
 from datetime import datetime
 from enum import Enum
+from typing import Any
 
 from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
@@ -199,6 +200,13 @@ class Column(ColumnBase):
         return self.canonical_path
 
 
+class ColumnValue(BaseModel):
+    """Value of a column for a geography."""
+
+    path: str  # of geography
+    value: Any
+
+
 class GeoLayerBase(BaseModel):
     """Base model for geographic layer metadata."""
 
@@ -247,34 +255,27 @@ class GeographyBase(BaseModel):
         arbitrary_types_allowed = True
 
 
-class GeographyCreateRaw(GeographyBase):
+class GeographyCreate(BaseModel):
     """Geographic unit data received on creation (geography as raw WKB bytes)."""
 
     path: CherryPath
     geography: bytes
 
 
-class GeographyCreate(GeographyBase):
-    """Geographic unit data received on creation."""
-
-
-class GeographyPatch(BaseModel):
-    """Geographic unit data received on PATCH."""
-
-    class Config:
-        arbitrary_types_allowed = True
-
-    geography: BaseGeometry
-
-
 class Geography(GeographyBase):
     """Geographic unit data returned by the database."""
 
     __cache_name__ = "geography"
+    __cache_policy__ = ObjectCachePolicy.TIMESTAMP
 
     meta: ObjectMeta
     namespace: str
-    modified_at: datetime
+    valid_from: datetime
+
+    @property
+    def full_path(self):
+        """The path of the geography, including its namespace."""
+        return f"/{self.namespace}/{self.path}"
 
 
 class ColumnSetBase(BaseModel):
