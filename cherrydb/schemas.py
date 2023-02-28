@@ -220,6 +220,12 @@ class GeoLayerCreate(GeoLayerBase):
     """Geographic layer metadata received on creation."""
 
 
+class GeoSetCreate(BaseModel):
+    """Paths to geographies in a `GeoSet`."""
+
+    paths: list[str]
+
+
 class GeoLayer(GeoLayerBase):
     """Geographic layer metadata returned by the database."""
 

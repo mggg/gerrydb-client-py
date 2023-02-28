@@ -1,6 +1,7 @@
 """Repository for columns."""
-import httpx
 from typing import Any, Optional, Union
+
+import httpx
 
 from cherrydb.repos.base import (
     ETagObjectRepo,

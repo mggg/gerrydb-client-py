@@ -1,6 +1,6 @@
 """Repository for geographies."""
 from dataclasses import dataclass
-from typing import Any, Optional, Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import httpx
 import msgpack
@@ -10,9 +10,8 @@ from shapely.geometry.base import BaseGeometry
 from cherrydb.exceptions import RequestError
 from cherrydb.repos.base import (
     NAMESPACE_ERR,
-    ETagObjectRepo,
+    TimestampObjectRepo,
     err,
-    namespaced,
     online,
     parse_etag,
     write_context,
@@ -72,7 +71,7 @@ class GeoImporter:
     def __exit__(self, exc_type, exc_value, traceback):
         self.client.close()
 
-    # @err("Failed to create geographies")
+    @err("Failed to create geographies")
     def create(self, geographies: dict[str, Optional[BaseGeometry]]) -> list[Geography]:
         """Creates one or more geographies.
 
@@ -88,7 +87,7 @@ class GeoImporter:
         """
         return self._send(geographies, method="POST")
 
-    # @err("Failed to update geographies")
+    @err("Failed to update geographies")
     def update(
         self, geographies: dict[Union[str, Geography], Optional[BaseGeometry]]
     ) -> list[Geography]:
@@ -145,16 +144,13 @@ class AsyncGeoImporter:
         """Creates a context for asynchronously importing geographies in bulk."""
         params = _importer_params(self.repo.ctx, self.namespace)
         params["transport"] = httpx.AsyncHTTPTransport(retries=1)
-        #if self.max_conns is not None:
-            #params["limits"] = httpx.Limits(max_connections=self.max_conns)
-
         self.client = httpx.AsyncClient(**params)
         return self
 
     async def __aexit__(self, exc_type, exc_value, traceback):
         await self.client.aclose()
 
-    # @err("Failed to create geographies")
+    @err("Failed to create geographies")
     async def create(
         self, geographies: dict[str, Optional[BaseGeometry]]
     ) -> list[Geography]:
@@ -172,7 +168,7 @@ class AsyncGeoImporter:
         """
         return await self._send(geographies, method="POST")
 
-    # @err("Failed to update geographies")
+    @err("Failed to update geographies")
     async def update(
         self, geographies: dict[Union[str, Geography], Optional[BaseGeometry]]
     ) -> list[Geography]:
@@ -196,7 +192,6 @@ class AsyncGeoImporter:
         method: str,
     ) -> list[Geography]:
         """Creates or updates one or more geographies."""
-        print("sending", len(geographies), "geographies")
         response = await self.client.request(
             method,
             f"{self.repo.base_url}/{self.namespace}",
@@ -217,7 +212,7 @@ class AsyncGeoImporter:
             )
 
 
-class GeographyRepo(ETagObjectRepo[Geography]):
+class GeographyRepo(TimestampObjectRepo[Geography]):
     """Repository for geographies."""
 
     @write_context

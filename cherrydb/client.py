@@ -4,12 +4,12 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional, Union
-from shapely.geometry.base import BaseGeometry
 
 import geopandas as gpd
-import pandas as pd
 import httpx
+import pandas as pd
 import tomlkit
+from shapely.geometry.base import BaseGeometry
 
 from cherrydb.cache import CherryCache
 from cherrydb.exceptions import ConfigError
@@ -314,12 +314,19 @@ class WriteContext:
                 df = df.to_crs("epsg:4326")  # import as lat/long
                 geos = dict(df.geometry)
             else:
-                geos = {idx: None for idx in df.index}
+                geos = {key: None for key in df.index}
             asyncio.run(_load_geos(self.geo, geos, namespace, batch_size, max_conns))
 
         asyncio.run(
             _load_column_values(self.columns, df, columns, batch_size, max_conns)
         )
+
+        if locality is not None and layer is not None:
+            self.geo_layers.map_locality(
+                layer=layer,
+                locality=locality,
+                geographies=[f"/{namespace}/{key}" for key in df.index],
+            )
 
 
 # based on https://stackoverflow.com/a/61478547
@@ -330,7 +337,7 @@ async def gather_batch(coros, n):
     async def sem_coro(coro):
         async with semaphore:
             return await coro
-        
+
     return await asyncio.gather(*(sem_coro(c) for c in coros))
 
 
@@ -340,7 +347,7 @@ async def _load_geos(
     namespace: str,
     batch_size: int,
     max_conns: Optional[int],
-) -> None:
+) -> list[Geography]:
     """Asynchronously loads geographies in batches."""
     geo_pairs = list(geos.items())
     tasks = []
@@ -367,8 +374,6 @@ async def _load_column_values(
     """Asynchronously loads column values from a DataFrame in batches."""
     params = repo.ctx.client_params.copy()
     params["transport"] = httpx.AsyncHTTPTransport(retries=1)
-    #if max_conns is not None:
-        #params["limits"] = httpx.Limits(max_connections=max_conns)
 
     val_batches: list[tuple[Column, dict[str, Any]]] = []
     for col_name, col_meta in columns.items():

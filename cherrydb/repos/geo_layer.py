@@ -1,5 +1,5 @@
 """Repository for geographic layers."""
-from typing import Optional
+from typing import Optional, Union
 
 from cherrydb.exceptions import RequestError
 from cherrydb.repos.base import (
@@ -10,7 +10,7 @@ from cherrydb.repos.base import (
     parse_etag,
     write_context,
 )
-from cherrydb.schemas import GeoLayer, GeoLayerCreate
+from cherrydb.schemas import Geography, GeoLayer, GeoLayerCreate, GeoSetCreate, Locality
 
 
 class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
@@ -57,3 +57,30 @@ class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
             obj=obj, path=obj.path, namespace=namespace, etag=obj_etag
         )
         return obj
+
+    @err("Failed to map locality to geographic layer")
+    @write_context
+    @online
+    def map_locality(
+        self,
+        layer: GeoLayer,
+        locality: Locality,
+        geographies: list[Union[str, Geography]],
+    ) -> None:
+        """Maps a set of `geographies` to `layer` in `locality`.
+
+        Raises:
+            RequestError: If the mapping cannot be created on the server side,
+                or if the parameters fail validation.
+        """
+        response = self.ctx.client.put(
+            f"{self.base_url}/{layer.namespace}/{layer.path}",
+            params={"locality": locality.canonical_path},
+            json=GeoSetCreate(
+                paths=[
+                    geo if isinstance(geo, str) else geo.full_path
+                    for geo in geographies
+                ]
+            ).dict(),
+        )
+        response.raise_for_status()

@@ -2,6 +2,7 @@
 import uuid
 from abc import ABC
 from dataclasses import dataclass
+from datetime import datetime
 from functools import wraps
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar, Union
@@ -226,3 +227,6 @@ class ETagObjectRepo(Generic[SchemaType]):
             namespace, path_in_namespace = parse_path(path)
             return self.get(path=path_in_namespace, namespace=namespace)
         return self.get(path=path)
+
+
+TimestampObjectRepo = ETagObjectRepo  # TODO: subclass with `at` parameters?
