@@ -1,9 +1,13 @@
 """CherryDB session management."""
+import asyncio
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional, Union
+from shapely.geometry.base import BaseGeometry
 
+import geopandas as gpd
+import pandas as pd
 import httpx
 import tomlkit
 
@@ -23,6 +27,7 @@ from cherrydb.schemas import (
     Geography,
     GeoImport,
     GeoLayer,
+    Locality,
     ObjectMeta,
     ObjectMetaCreate,
 )
@@ -191,9 +196,10 @@ class WriteContext:
 
     db: CherryDB
     notes: str
-    meta: ObjectMeta | None = None
-    client: httpx.Client | None = None
-    geo_import: GeoImport | None = None
+    meta: Optional[ObjectMeta] = None
+    client: Optional[httpx.Client] = None
+    client_params: Optional[dict[str, Any]] = None
+    geo_import: Optional[GeoImport] = None
 
     def __enter__(self) -> "WriteContext":
         """Creates a write context with metadata."""
@@ -203,12 +209,16 @@ class WriteContext:
         response.raise_for_status()  # TODO: refine?
 
         self.meta = ObjectMeta(**response.json())
-        self.client = httpx.Client(
-            base_url=self.db._base_url,
-            headers={**self.db._base_headers, "X-Cherry-Meta-ID": str(self.meta.uuid)},
-            timeout=self.db.timeout,
-            transport=self.db._transport,
-        )
+        self.client_params = {
+            "base_url": self.db._base_url,
+            "headers": {
+                **self.db._base_headers,
+                "X-Cherry-Meta-ID": str(self.meta.uuid),
+            },
+            "timeout": self.db.timeout,
+            "transport": self.db._transport,
+        }
+        self.client = httpx.Client(**self.client_params)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -249,3 +259,132 @@ class WriteContext:
     def namespaces(self) -> NamespaceRepo:
         """Namespaces."""
         return NamespaceRepo(session=self.db, ctx=self)
+
+    def load_dataframe(
+        self,
+        df: Union[pd.DataFrame, gpd.GeoDataFrame],
+        columns: dict[str, Column],
+        *,
+        create_geo: bool = False,
+        namespace: Optional[str] = None,
+        locality: Optional[Union[str, Locality]] = None,
+        layer: Optional[Union[str, GeoLayer]] = None,
+        batch_size: int = 5000,
+        max_conns: int = 10,
+    ) -> None:
+        """Imports a DataFrame to CherryDB.
+
+        Plain DataFrames do not include rich column metadata, so the columns used
+        in the DataFrame must be defined before import.
+
+        Given column metadata, this function imports column values. It also optionally
+        creates geographies.
+
+            * If `create_geo` is `True` and a `geometry` column is present in `df`,
+                geographies are imported in addition to tabular data.
+            * If `create_geo` is `True` and a `geometry` column is not present in `df`,
+                empty geographies are created in addition to tabular data.
+            * If `create_geo` is `False`, it is assumed that the rows in the DataFrame
+            correspond to geographies that already exist in CherryDB.
+
+        In all cases, the index of `df` is used as the key for geographies within
+        `namespace`. Typically, the `GEOID` column or equivalent should be used as
+        the index.
+
+        If `layer` and `locality` are provided, a `GeoSet` is created from the
+        rows in `df`.
+
+        Args:
+            db: CherryDB client instance.
+            df: DataFrame to import column values and geographies from.
+            columns: Mapping between column names in `df` and CherryDB column metadata.
+                Only columns included in the mapping will be imported.
+            create_geo: Determines whether to create geographies from the DataFrame.
+            namespace: Namespace to load geographies into.
+            locality: `Locality` to associate a new `GeoSet` with.
+            layer: `GeoLayer` to associate a new `GeoSet` with.
+            batch_size: Number of rows to import per API request batch.
+            max_conns: Maximum number of simultaneous API connections.
+
+        Raises:
+            LoadError: ...
+        """
+        if create_geo:
+            if hasattr(df, "geometry"):
+                df = df.to_crs("epsg:4326")  # import as lat/long
+                geos = dict(df.geometry)
+            else:
+                geos = {idx: None for idx in df.index}
+            asyncio.run(_load_geos(self.geo, geos, namespace, batch_size, max_conns))
+
+        asyncio.run(
+            _load_column_values(self.columns, df, columns, batch_size, max_conns)
+        )
+
+
+# based on https://stackoverflow.com/a/61478547
+async def gather_batch(coros, n):
+    """Limits concurrency of a batch of coroutines."""
+    semaphore = asyncio.Semaphore(n)
+
+    async def sem_coro(coro):
+        async with semaphore:
+            return await coro
+        
+    return await asyncio.gather(*(sem_coro(c) for c in coros))
+
+
+async def _load_geos(
+    repo: GeographyRepo,
+    geos: dict[str, Optional[BaseGeometry]],
+    namespace: str,
+    batch_size: int,
+    max_conns: Optional[int],
+) -> None:
+    """Asynchronously loads geographies in batches."""
+    geo_pairs = list(geos.items())
+    tasks = []
+    async with repo.async_bulk(namespace, max_conns) as ctx:
+        for idx in range(0, len(geo_pairs), batch_size):
+            chunk = dict(geo_pairs[idx : idx + batch_size])
+            tasks.append(ctx.create(chunk))
+        results = await gather_batch(tasks, max_conns)
+
+    # TODO: more sophisticated error handling -- which batches were successful?
+    # what can be retried? etc.
+    for result in results:
+        if isinstance(result, Exception):
+            raise result
+
+
+async def _load_column_values(
+    repo: ColumnRepo,
+    df: pd.DataFrame,
+    columns: dict[str, Column],
+    batch_size: int,
+    max_conns: Optional[int],
+) -> None:
+    """Asynchronously loads column values from a DataFrame in batches."""
+    params = repo.ctx.client_params.copy()
+    params["transport"] = httpx.AsyncHTTPTransport(retries=1)
+    #if max_conns is not None:
+        #params["limits"] = httpx.Limits(max_connections=max_conns)
+
+    val_batches: list[tuple[Column, dict[str, Any]]] = []
+    for col_name, col_meta in columns.items():
+        col_vals = list(dict(df[col_name]).items())
+        for idx in range(0, len(df), batch_size):
+            val_batches.append((col_meta, dict(col_vals[idx : idx + batch_size])))
+
+    async with httpx.AsyncClient(**params) as client:
+        tasks = [
+            repo.async_set_values(col, col.namespace, values=batch, client=client)
+            for col, batch in val_batches
+        ]
+        results = await gather_batch(tasks, max_conns)
+
+    # TODO: more sophisticated error handling -- which batches were successful?
+    # what can be retried? etc.
+    for result in results:
+        if isinstance(result, Exception):
+            raise result

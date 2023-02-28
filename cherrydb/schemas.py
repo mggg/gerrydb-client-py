@@ -4,7 +4,7 @@ This file should be kept in sync with the server-side version.
 """
 from datetime import datetime
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
@@ -31,6 +31,7 @@ class ColumnKind(str, Enum):
     COUNT = "count"
     PERCENT = "percent"
     CATEGORICAL = "categorical"
+    IDENTIFIER = "identifier"
     OTHER = "other"
 
 
@@ -249,7 +250,7 @@ class GeographyBase(BaseModel):
     """Base model for a geographic unit."""
 
     path: CherryPath
-    geography: BaseGeometry
+    geography: Optional[BaseGeometry]
 
     class Config:
         arbitrary_types_allowed = True
@@ -259,7 +260,7 @@ class GeographyCreate(BaseModel):
     """Geographic unit data received on creation (geography as raw WKB bytes)."""
 
     path: CherryPath
-    geography: bytes
+    geography: Optional[bytes]
 
 
 class Geography(GeographyBase):

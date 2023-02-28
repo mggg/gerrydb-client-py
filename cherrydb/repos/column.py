@@ -1,4 +1,5 @@
 """Repository for columns."""
+import httpx
 from typing import Any, Optional, Union
 
 from cherrydb.repos.base import (
@@ -157,5 +158,60 @@ class ColumnRepo(ETagObjectRepo[Column]):
             ],
         )
         response.raise_for_status()
+
+        # TODO: what's the proper caching behavior here?
+
+    @err("Failed to set column values")
+    @namespaced
+    @write_context
+    @online
+    async def async_set_values(
+        self,
+        path_or_col: Union[Column, str],
+        namespace: Optional[str] = None,
+        *,
+        values: dict[Union[str, Geography], Any],
+        client: Optional[httpx.AsyncClient] = None,
+    ) -> None:
+        """Asynchronously sets the values of a column on a collection of geographies.
+
+        Args:
+            path_or_col: Short identifier for the column or a `Column` metadata object.
+            namespace: Namespace of the column (used when `path_or_col` is a raw path).
+            values:
+                A mapping from geography paths or `Geography` metadata objects
+                to column values.
+            client: Asynchronous API client to use (for efficient connection pooling
+                across batched requests).
+
+        Raises:
+            RequestError: If the values cannot be set on the server side.
+        """
+        path = path_or_col.path if isinstance(path_or_col, Column) else path_or_col
+
+        ephemeral_client = client is None
+        if ephemeral_client:
+            params = self.ctx.client_params.copy()
+            params["transport"] = httpx.AsyncHTTPTransport(retries=1)
+            client = httpx.AsyncClient(**params)
+
+        response = await client.put(
+            f"{self.base_url}/{namespace}/{path}",
+            json=[
+                ColumnValue(
+                    path=(
+                        f"/{geo.namespace}/{geo.path}"
+                        if isinstance(geo, Geography)
+                        else geo
+                    ),
+                    value=value,
+                ).dict()
+                for geo, value in values.items()
+            ],
+        )
+        response.raise_for_status()
+
+        if ephemeral_client:
+            await client.aclose()
 
         # TODO: what's the proper caching behavior here?

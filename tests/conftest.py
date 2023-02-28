@@ -1,4 +1,4 @@
-"""Fixtures for repository tests."""
+"""Fixtures for API tests."""
 import os
 
 import pytest
