@@ -162,7 +162,7 @@ class CherryCache:
             "type": name,
             "path": path,
             "namespace": namespace,
-            "at": at.isoformat(),
+            "at": None if at is None else at.isoformat(),
             "etag": etag,
         }
         where_clauses = [

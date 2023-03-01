@@ -1,7 +1,6 @@
 """Repository for geographic layers."""
 from typing import Optional, Union
 
-from cherrydb.exceptions import RequestError
 from cherrydb.repos.base import (
     ETagObjectRepo,
     err,

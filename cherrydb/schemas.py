@@ -307,3 +307,4 @@ class ColumnSet(ColumnSetBase):
     meta: ObjectMeta
     namespace: str
     columns: list[Column]
+    refs: list[str]
