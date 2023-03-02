@@ -1,0 +1,5428 @@
+interactions:
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"69c0f1ad-7676-4b46-8276-ffbe70605717","created_at":"2023-03-02T16:21:57.128415+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:21:56 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 69c0f1ad-7676-4b46-8276-ffbe70605717
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"69c0f1ad-7676-4b46-8276-ffbe70605717","created_at":"2023-03-02T16:21:57.128415+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:21:57 GMT
+      etag:
+      - '"12e9c43f-4e2f-479c-9321-b1ccbafc2903"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"11e7ed19-236f-4d70-895b-9361bd388727","created_at":"2023-03-02T16:21:57.448520+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:21:57 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 11e7ed19-236f-4d70-895b-9361bd388727
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"11e7ed19-236f-4d70-895b-9361bd388727","created_at":"2023-03-02T16:21:57.448520+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:21:57 GMT
+      etag:
+      - '"ad63ad81-fa1f-4f7f-be99-c452377b7d71"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 11e7ed19-236f-4d70-895b-9361bd388727
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"11e7ed19-236f-4d70-895b-9361bd388727","created_at":"2023-03-02T16:21:57.448520+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:21:57 GMT
+      etag:
+      - '"d770eb35-38a3-4e43-98de-e94c0e38af9f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/column-sets/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/column-sets/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '228'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 11e7ed19-236f-4d70-895b-9361bd388727
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"detail":"Unknown resource \"\"."}'
+    headers:
+      content-length:
+      - '35'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:21:57 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 404
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"bbda603a-55e3-4ad9-92d8-bafebed1cada","created_at":"2023-03-02T16:26:04.501447+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - bbda603a-55e3-4ad9-92d8-bafebed1cada
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"bbda603a-55e3-4ad9-92d8-bafebed1cada","created_at":"2023-03-02T16:26:04.501447+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:04 GMT
+      etag:
+      - '"8218c0f5-6858-4c4f-8628-c5d147435ba7"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"9d600224-9466-4f83-a1c5-7e8271f9dd5a","created_at":"2023-03-02T16:26:04.810289+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:04 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 9d600224-9466-4f83-a1c5-7e8271f9dd5a
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"9d600224-9466-4f83-a1c5-7e8271f9dd5a","created_at":"2023-03-02T16:26:04.810289+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:04 GMT
+      etag:
+      - '"ed6ab14f-3751-4326-91d6-bfda53e57c33"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 9d600224-9466-4f83-a1c5-7e8271f9dd5a
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"9d600224-9466-4f83-a1c5-7e8271f9dd5a","created_at":"2023-03-02T16:26:04.810289+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:04 GMT
+      etag:
+      - '"5a2cae26-5712-4a6c-bb9b-c459a281c2f2"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/column-sets/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/column-sets/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '228'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 9d600224-9466-4f83-a1c5-7e8271f9dd5a
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"detail":"Unknown resource \"\"."}'
+    headers:
+      content-length:
+      - '35'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:04 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 404
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"981f342f-aa4b-415f-b546-95e62b4dd520","created_at":"2023-03-02T16:26:41.750426+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 981f342f-aa4b-415f-b546-95e62b4dd520
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"981f342f-aa4b-415f-b546-95e62b4dd520","created_at":"2023-03-02T16:26:41.750426+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:41 GMT
+      etag:
+      - '"5ded5d50-4451-4f2d-83df-c323cbcfd7d7"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"90358d42-455b-4192-aad8-f6e819809305","created_at":"2023-03-02T16:26:42.096476+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 90358d42-455b-4192-aad8-f6e819809305
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"90358d42-455b-4192-aad8-f6e819809305","created_at":"2023-03-02T16:26:42.096476+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:41 GMT
+      etag:
+      - '"dac34584-0b42-48a2-97f4-abf27eb46766"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 90358d42-455b-4192-aad8-f6e819809305
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"90358d42-455b-4192-aad8-f6e819809305","created_at":"2023-03-02T16:26:42.096476+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:41 GMT
+      etag:
+      - '"b97d34b9-d553-4bd7-ab91-cda292eb8739"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/column-sets/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/column-sets/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '228'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 90358d42-455b-4192-aad8-f6e819809305
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"detail":"Unknown resource \"\"."}'
+    headers:
+      content-length:
+      - '35'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:42 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 404
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"3051b58a-2fc3-4cc0-9077-c861c39af047","created_at":"2023-03-02T16:26:59.735822+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:58 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 3051b58a-2fc3-4cc0-9077-c861c39af047
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"detail":"Object creation failed. Reason: Failed to create namespace
+      ''test_view_template_repo_create_get__online_columns_only''. (The namespace
+      may already exist.)"}'
+    headers:
+      content-length:
+      - '165'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:26:58 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 422
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"72130a16-247d-4a8c-8753-76f56e94dd9c","created_at":"2023-03-02T16:27:16.048733+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:27:15 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 72130a16-247d-4a8c-8753-76f56e94dd9c
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"72130a16-247d-4a8c-8753-76f56e94dd9c","created_at":"2023-03-02T16:27:16.048733+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:27:15 GMT
+      etag:
+      - '"714c1082-3f77-480a-a710-ee155151966b"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"b26fc089-12a3-4b6d-9fbc-ef0d7c0f05ae","created_at":"2023-03-02T16:27:16.370133+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:27:15 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b26fc089-12a3-4b6d-9fbc-ef0d7c0f05ae
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"b26fc089-12a3-4b6d-9fbc-ef0d7c0f05ae","created_at":"2023-03-02T16:27:16.370133+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:27:15 GMT
+      etag:
+      - '"ba71b0ef-0206-43a3-be86-ee6c3f7b0b69"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b26fc089-12a3-4b6d-9fbc-ef0d7c0f05ae
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"b26fc089-12a3-4b6d-9fbc-ef0d7c0f05ae","created_at":"2023-03-02T16:27:16.370133+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:27:15 GMT
+      etag:
+      - '"bc7031e8-d90e-4ddf-8ad6-15b4a050366e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/column-sets/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/column-sets/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '228'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b26fc089-12a3-4b6d-9fbc-ef0d7c0f05ae
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"detail":"Unknown resource \"\"."}'
+    headers:
+      content-length:
+      - '35'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:27:16 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 404
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"62eb4d47-5672-4565-8511-46a41cfd3d37","created_at":"2023-03-02T16:28:19.607483+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:19 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 62eb4d47-5672-4565-8511-46a41cfd3d37
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"62eb4d47-5672-4565-8511-46a41cfd3d37","created_at":"2023-03-02T16:28:19.607483+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:19 GMT
+      etag:
+      - '"a07a9335-4dc6-4fc8-97ec-18a2aedd0dea"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"9b259a24-13ee-4dcc-b51b-b6cccf423633","created_at":"2023-03-02T16:28:19.903772+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:19 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 9b259a24-13ee-4dcc-b51b-b6cccf423633
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"9b259a24-13ee-4dcc-b51b-b6cccf423633","created_at":"2023-03-02T16:28:19.903772+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:19 GMT
+      etag:
+      - '"30e7c99e-7998-45e5-a803-4de2b7662673"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 9b259a24-13ee-4dcc-b51b-b6cccf423633
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"9b259a24-13ee-4dcc-b51b-b6cccf423633","created_at":"2023-03-02T16:28:19.903772+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:20 GMT
+      etag:
+      - '"3b9f875b-33ca-4a36-9fc8-36be5c306484"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/column-sets/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/column-sets/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '228'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 9b259a24-13ee-4dcc-b51b-b6cccf423633
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"detail":"Namespace \"column-sets\" not found, or you do not have sufficient
+      permissions to read geographies in this namespace."}'
+    headers:
+      content-length:
+      - '130'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:20 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 404
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"2d646002-42b8-404e-ab09-df9aef2023fc","created_at":"2023-03-02T16:28:44.885478+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:44 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 2d646002-42b8-404e-ab09-df9aef2023fc
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"2d646002-42b8-404e-ab09-df9aef2023fc","created_at":"2023-03-02T16:28:44.885478+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:44 GMT
+      etag:
+      - '"a9ec8cf1-1d85-4b59-96aa-00b9727ad9cd"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"997b762a-d2e5-4377-9fe7-2a388faae676","created_at":"2023-03-02T16:28:45.180182+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:44 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 997b762a-d2e5-4377-9fe7-2a388faae676
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"997b762a-d2e5-4377-9fe7-2a388faae676","created_at":"2023-03-02T16:28:45.180182+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:44 GMT
+      etag:
+      - '"7407e4f2-c0af-4893-acd4-b715f71f8d6f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 997b762a-d2e5-4377-9fe7-2a388faae676
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"997b762a-d2e5-4377-9fe7-2a388faae676","created_at":"2023-03-02T16:28:45.180182+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:28:45 GMT
+      etag:
+      - '"ad59163a-b729-4464-99b2-8ebd6c3a1a1e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/column-sets/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/column-sets/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '228'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 997b762a-d2e5-4377-9fe7-2a388faae676
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:28:45 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"e76a6c1e-ff0f-419a-a5d2-f909e9b74304","created_at":"2023-03-02T16:29:03.934026+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:29:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - e76a6c1e-ff0f-419a-a5d2-f909e9b74304
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"e76a6c1e-ff0f-419a-a5d2-f909e9b74304","created_at":"2023-03-02T16:29:03.934026+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:29:03 GMT
+      etag:
+      - '"8fd53e09-dbf2-4fd6-b20d-4676da91f614"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"35f4e66f-dab2-40dc-9a30-a79093eeda39","created_at":"2023-03-02T16:29:04.240621+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:29:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 35f4e66f-dab2-40dc-9a30-a79093eeda39
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"35f4e66f-dab2-40dc-9a30-a79093eeda39","created_at":"2023-03-02T16:29:04.240621+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:29:03 GMT
+      etag:
+      - '"d5b3dc74-fd60-4504-9385-3820c252e8a4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 35f4e66f-dab2-40dc-9a30-a79093eeda39
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"35f4e66f-dab2-40dc-9a30-a79093eeda39","created_at":"2023-03-02T16:29:04.240621+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:29:04 GMT
+      etag:
+      - '"f13fb347-8d2e-44b4-b8fd-7eedc34d29bf"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/column-sets/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/column-sets/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '228'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 35f4e66f-dab2-40dc-9a30-a79093eeda39
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"detail":"Not found: /column-sets/test_view_template_repo_create_get__online_columns_only/total_pop"}'
+    headers:
+      content-length:
+      - '102'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:29:04 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 404
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"fdf704eb-0c20-4a93-bedd-1719d7f84503","created_at":"2023-03-02T16:32:00.038750+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:31:58 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - fdf704eb-0c20-4a93-bedd-1719d7f84503
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"fdf704eb-0c20-4a93-bedd-1719d7f84503","created_at":"2023-03-02T16:32:00.038750+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:31:59 GMT
+      etag:
+      - '"b4cf0f39-330c-48f3-a823-34af7543d589"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"bc23b0eb-2aa2-4456-bff0-0f70f1b498f5","created_at":"2023-03-02T16:32:00.343275+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:31:59 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - bc23b0eb-2aa2-4456-bff0-0f70f1b498f5
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"bc23b0eb-2aa2-4456-bff0-0f70f1b498f5","created_at":"2023-03-02T16:32:00.343275+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:31:59 GMT
+      etag:
+      - '"217bd648-8501-487c-b635-f36d5b2b45cf"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - bc23b0eb-2aa2-4456-bff0-0f70f1b498f5
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"bc23b0eb-2aa2-4456-bff0-0f70f1b498f5","created_at":"2023-03-02T16:32:00.343275+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:31:59 GMT
+      etag:
+      - '"47b0f6b2-728d-48b7-9a73-2222488c2bb2"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - bc23b0eb-2aa2-4456-bff0-0f70f1b498f5
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:31:59 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"2960937d-45c8-45fd-b608-cf5dbf693ff4","created_at":"2023-03-02T16:36:03.990241+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:36:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 2960937d-45c8-45fd-b608-cf5dbf693ff4
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"2960937d-45c8-45fd-b608-cf5dbf693ff4","created_at":"2023-03-02T16:36:03.990241+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:36:03 GMT
+      etag:
+      - '"f34fb187-8e4c-4eb3-98fc-2bbbb99349ce"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"0f5fef0d-61b8-40d1-8e42-016b6abb122c","created_at":"2023-03-02T16:36:04.298315+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:36:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 0f5fef0d-61b8-40d1-8e42-016b6abb122c
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"0f5fef0d-61b8-40d1-8e42-016b6abb122c","created_at":"2023-03-02T16:36:04.298315+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:36:03 GMT
+      etag:
+      - '"c3f30e7f-8a96-42a7-908c-40a881792b97"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 0f5fef0d-61b8-40d1-8e42-016b6abb122c
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"0f5fef0d-61b8-40d1-8e42-016b6abb122c","created_at":"2023-03-02T16:36:04.298315+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:36:03 GMT
+      etag:
+      - '"5d3542a9-1328-4af0-9b2b-aabbaf65d92e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 0f5fef0d-61b8-40d1-8e42-016b6abb122c
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:36:04 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"cb735253-0901-4230-b551-ba5fe89defa0","created_at":"2023-03-02T16:47:06.627739+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:47:05 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - cb735253-0901-4230-b551-ba5fe89defa0
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"cb735253-0901-4230-b551-ba5fe89defa0","created_at":"2023-03-02T16:47:06.627739+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:47:05 GMT
+      etag:
+      - '"84be00e2-fde1-4c6b-862c-c97e4bda2f07"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"4f6ea552-74e1-45d5-9d42-797f595585e0","created_at":"2023-03-02T16:47:06.942072+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:47:06 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 4f6ea552-74e1-45d5-9d42-797f595585e0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"4f6ea552-74e1-45d5-9d42-797f595585e0","created_at":"2023-03-02T16:47:06.942072+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:47:06 GMT
+      etag:
+      - '"f8fdce19-f4b7-488b-bfaa-6f8224d72ac1"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 4f6ea552-74e1-45d5-9d42-797f595585e0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"4f6ea552-74e1-45d5-9d42-797f595585e0","created_at":"2023-03-02T16:47:06.942072+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:47:06 GMT
+      etag:
+      - '"b7e037ff-2ff2-4762-9215-ba7e8ee6463e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 4f6ea552-74e1-45d5-9d42-797f595585e0
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:47:06 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"537cd34b-c6e4-4b8f-bd61-d7113abbfcc5","created_at":"2023-03-02T16:48:05.161437+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:48:04 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 537cd34b-c6e4-4b8f-bd61-d7113abbfcc5
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"537cd34b-c6e4-4b8f-bd61-d7113abbfcc5","created_at":"2023-03-02T16:48:05.161437+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:48:04 GMT
+      etag:
+      - '"0d0e10d9-41c8-4225-9fd1-b64448a05ec6"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"27f25993-a73c-4d4e-8ae4-4e4be31df1af","created_at":"2023-03-02T16:48:05.452106+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:48:04 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 27f25993-a73c-4d4e-8ae4-4e4be31df1af
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"27f25993-a73c-4d4e-8ae4-4e4be31df1af","created_at":"2023-03-02T16:48:05.452106+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:48:05 GMT
+      etag:
+      - '"9ca6933e-cb24-4e78-bfe5-ab4c4c215004"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 27f25993-a73c-4d4e-8ae4-4e4be31df1af
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"27f25993-a73c-4d4e-8ae4-4e4be31df1af","created_at":"2023-03-02T16:48:05.452106+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:48:05 GMT
+      etag:
+      - '"7eb22b82-845b-45fa-aaee-e47d1898cdf4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 27f25993-a73c-4d4e-8ae4-4e4be31df1af
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:48:05 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"b0e93be2-48c9-4dad-924d-a76e4acc5b3d","created_at":"2023-03-02T16:49:05.301855+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:05 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b0e93be2-48c9-4dad-924d-a76e4acc5b3d
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"b0e93be2-48c9-4dad-924d-a76e4acc5b3d","created_at":"2023-03-02T16:49:05.301855+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:05 GMT
+      etag:
+      - '"18576e35-9cae-45b7-b1c0-3204468e5da1"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"031599b7-735c-41a5-a410-05d5984f6aab","created_at":"2023-03-02T16:49:05.601812+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:05 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 031599b7-735c-41a5-a410-05d5984f6aab
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"031599b7-735c-41a5-a410-05d5984f6aab","created_at":"2023-03-02T16:49:05.601812+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:05 GMT
+      etag:
+      - '"d9d1d6cb-28c0-4194-baa9-f4f6f0d3b6fe"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 031599b7-735c-41a5-a410-05d5984f6aab
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"031599b7-735c-41a5-a410-05d5984f6aab","created_at":"2023-03-02T16:49:05.601812+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:05 GMT
+      etag:
+      - '"8b45bc75-1253-4017-a953-69360f8ba8ef"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 031599b7-735c-41a5-a410-05d5984f6aab
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:49:05 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"e9dec74c-328c-4de0-b0ea-5c51cead9d1a","created_at":"2023-03-02T16:49:41.203250+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:40 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - e9dec74c-328c-4de0-b0ea-5c51cead9d1a
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"e9dec74c-328c-4de0-b0ea-5c51cead9d1a","created_at":"2023-03-02T16:49:41.203250+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:40 GMT
+      etag:
+      - '"a18f13b9-1df6-4f0d-bdfc-62048e3587c2"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"d032964a-a071-4f9e-948a-36eaf5aca087","created_at":"2023-03-02T16:49:41.504521+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:40 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - d032964a-a071-4f9e-948a-36eaf5aca087
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"d032964a-a071-4f9e-948a-36eaf5aca087","created_at":"2023-03-02T16:49:41.504521+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:40 GMT
+      etag:
+      - '"156a9fe4-941d-4541-af86-4d98ba8f3004"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - d032964a-a071-4f9e-948a-36eaf5aca087
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"d032964a-a071-4f9e-948a-36eaf5aca087","created_at":"2023-03-02T16:49:41.504521+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:49:40 GMT
+      etag:
+      - '"bc3bb20c-6681-4142-a683-dc44c5f34b9e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - d032964a-a071-4f9e-948a-36eaf5aca087
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:49:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"32c186a8-be95-49ae-8f3d-42b0f0347218","created_at":"2023-03-02T16:50:24.195811+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:50:23 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 32c186a8-be95-49ae-8f3d-42b0f0347218
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"32c186a8-be95-49ae-8f3d-42b0f0347218","created_at":"2023-03-02T16:50:24.195811+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:50:24 GMT
+      etag:
+      - '"3bfc5181-97a2-4976-bd4c-a41c8ec041b6"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"91938709-739d-4e39-8e27-ea4ae33b64aa","created_at":"2023-03-02T16:50:24.520068+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:50:24 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 91938709-739d-4e39-8e27-ea4ae33b64aa
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"91938709-739d-4e39-8e27-ea4ae33b64aa","created_at":"2023-03-02T16:50:24.520068+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:50:24 GMT
+      etag:
+      - '"4b78a70e-a0f6-422f-a1eb-f36a95527b9f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 91938709-739d-4e39-8e27-ea4ae33b64aa
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"91938709-739d-4e39-8e27-ea4ae33b64aa","created_at":"2023-03-02T16:50:24.520068+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:50:24 GMT
+      etag:
+      - '"f9574d54-0754-4924-b601-179b361419a4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 91938709-739d-4e39-8e27-ea4ae33b64aa
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:50:24 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"b8cc76d8-0682-4348-b734-b9d8b7d425dd","created_at":"2023-03-02T16:53:01.972917+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:53:01 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b8cc76d8-0682-4348-b734-b9d8b7d425dd
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"b8cc76d8-0682-4348-b734-b9d8b7d425dd","created_at":"2023-03-02T16:53:01.972917+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:53:01 GMT
+      etag:
+      - '"f41569a2-8163-48f6-8ee2-19bbe130034c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"c7926ff8-ce98-4d49-9033-be3ca68decbe","created_at":"2023-03-02T16:53:02.290304+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:53:01 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c7926ff8-ce98-4d49-9033-be3ca68decbe
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"c7926ff8-ce98-4d49-9033-be3ca68decbe","created_at":"2023-03-02T16:53:02.290304+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:53:01 GMT
+      etag:
+      - '"fb0196cb-1fad-4856-9f84-2471940cb89d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c7926ff8-ce98-4d49-9033-be3ca68decbe
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"c7926ff8-ce98-4d49-9033-be3ca68decbe","created_at":"2023-03-02T16:53:02.290304+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:53:02 GMT
+      etag:
+      - '"3e09eb58-c425-42ea-84ac-b4e9beaa94b4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c7926ff8-ce98-4d49-9033-be3ca68decbe
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:53:02 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"cc944563-b9bf-4b58-8730-42859b739d2c","created_at":"2023-03-02T16:55:46.422712+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:55:45 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - cc944563-b9bf-4b58-8730-42859b739d2c
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"cc944563-b9bf-4b58-8730-42859b739d2c","created_at":"2023-03-02T16:55:46.422712+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:55:45 GMT
+      etag:
+      - '"40b60394-c60a-489e-a50f-7a6d363f699d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"aad58c16-c50e-491a-bc9c-507ad4c41721","created_at":"2023-03-02T16:55:46.724245+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:55:46 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - aad58c16-c50e-491a-bc9c-507ad4c41721
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"aad58c16-c50e-491a-bc9c-507ad4c41721","created_at":"2023-03-02T16:55:46.724245+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:55:46 GMT
+      etag:
+      - '"f6ca8d35-1862-4c20-9870-8bda84a6b73a"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - aad58c16-c50e-491a-bc9c-507ad4c41721
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"aad58c16-c50e-491a-bc9c-507ad4c41721","created_at":"2023-03-02T16:55:46.724245+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 16:55:46 GMT
+      etag:
+      - '"26391abe-50e0-4a6d-9e41-b7632bc9f241"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - aad58c16-c50e-491a-bc9c-507ad4c41721
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 16:55:46 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"ccded511-6ff2-49fb-8700-f7dab3ec18dc","created_at":"2023-03-02T17:00:13.326292+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:00:12 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - ccded511-6ff2-49fb-8700-f7dab3ec18dc
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"ccded511-6ff2-49fb-8700-f7dab3ec18dc","created_at":"2023-03-02T17:00:13.326292+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:00:13 GMT
+      etag:
+      - '"a7e7b6ce-a76c-4951-821d-5c44054332ec"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"867d5570-93ae-4c14-b68e-e76164a17cb7","created_at":"2023-03-02T17:00:13.621940+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:00:13 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 867d5570-93ae-4c14-b68e-e76164a17cb7
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"867d5570-93ae-4c14-b68e-e76164a17cb7","created_at":"2023-03-02T17:00:13.621940+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:00:13 GMT
+      etag:
+      - '"b3b192d2-3178-4e67-a0c4-02ccb6e0ffb6"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 867d5570-93ae-4c14-b68e-e76164a17cb7
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"867d5570-93ae-4c14-b68e-e76164a17cb7","created_at":"2023-03-02T17:00:13.621940+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:00:13 GMT
+      etag:
+      - '"ddfc57e8-a2c4-46ee-af29-9b94684d132a"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 867d5570-93ae-4c14-b68e-e76164a17cb7
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 17:00:13 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"30d66e2e-d663-4403-b94b-292cc578911e","created_at":"2023-03-02T17:01:03.566352+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:01:02 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 30d66e2e-d663-4403-b94b-292cc578911e
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"30d66e2e-d663-4403-b94b-292cc578911e","created_at":"2023-03-02T17:01:03.566352+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:01:03 GMT
+      etag:
+      - '"ee0aa655-ad96-4188-96d9-04fb2618f4fe"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"e006a4f6-6e48-49c1-9fcd-ece0b7bcd6a2","created_at":"2023-03-02T17:01:03.854377+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:01:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - e006a4f6-6e48-49c1-9fcd-ece0b7bcd6a2
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"e006a4f6-6e48-49c1-9fcd-ece0b7bcd6a2","created_at":"2023-03-02T17:01:03.854377+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:01:03 GMT
+      etag:
+      - '"7cf06dc7-7555-4909-9cbe-a9c1cf4ecd0d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - e006a4f6-6e48-49c1-9fcd-ece0b7bcd6a2
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"e006a4f6-6e48-49c1-9fcd-ece0b7bcd6a2","created_at":"2023-03-02T17:01:03.854377+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:01:03 GMT
+      etag:
+      - '"aefab68d-1f8c-4cc8-a21c-36047a05e241"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - e006a4f6-6e48-49c1-9fcd-ece0b7bcd6a2
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Thu, 02 Mar 2023 17:01:03 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"72c66d5a-36c6-47e2-a2e2-0d99a4d3b405","created_at":"2023-03-02T17:02:05.443135+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:04 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 72c66d5a-36c6-47e2-a2e2-0d99a4d3b405
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"72c66d5a-36c6-47e2-a2e2-0d99a4d3b405","created_at":"2023-03-02T17:02:05.443135+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:04 GMT
+      etag:
+      - '"7ae2fe67-9821-4b87-8676-4b481fbef186"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"ec1898e3-a8ad-476c-bf24-8c5b3699818f","created_at":"2023-03-02T17:02:05.751045+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:05 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - ec1898e3-a8ad-476c-bf24-8c5b3699818f
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"ec1898e3-a8ad-476c-bf24-8c5b3699818f","created_at":"2023-03-02T17:02:05.751045+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:05 GMT
+      etag:
+      - '"c82ccec6-dbc4-403a-aae7-81b526cba21c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - ec1898e3-a8ad-476c-bf24-8c5b3699818f
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"ec1898e3-a8ad-476c-bf24-8c5b3699818f","created_at":"2023-03-02T17:02:05.751045+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:05 GMT
+      etag:
+      - '"aaacfbcb-7c2e-4bc8-b14a-6a57c8cf865d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - ec1898e3-a8ad-476c-bf24-8c5b3699818f
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"path":"pops","description":"Population view.","members":[],"meta":{"notes":"adding
+      a view template with two columns","uuid":"ec1898e3-a8ad-476c-bf24-8c5b3699818f","created_at":"2023-03-02T17:02:05.751045+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '243'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:05 GMT
+      etag:
+      - '"9d1baa62-fdbe-4460-9b52-1f43d4a99fb3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"cf11ef04-6f1f-48e2-96e1-04144871b599","created_at":"2023-03-02T17:02:32.835489+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:31 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - cf11ef04-6f1f-48e2-96e1-04144871b599
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"cf11ef04-6f1f-48e2-96e1-04144871b599","created_at":"2023-03-02T17:02:32.835489+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:32 GMT
+      etag:
+      - '"1f260d24-7bf5-497d-8533-34633d80d167"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"92542847-959a-4579-a787-047bd1c15251","created_at":"2023-03-02T17:02:33.124605+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:32 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 92542847-959a-4579-a787-047bd1c15251
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"92542847-959a-4579-a787-047bd1c15251","created_at":"2023-03-02T17:02:33.124605+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:32 GMT
+      etag:
+      - '"baabb2ca-0322-440b-9b10-e0d35ee73a77"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 92542847-959a-4579-a787-047bd1c15251
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"92542847-959a-4579-a787-047bd1c15251","created_at":"2023-03-02T17:02:33.124605+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:32 GMT
+      etag:
+      - '"20dc3ac8-bcdf-4d43-bf4e-db9956a777fd"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 92542847-959a-4579-a787-047bd1c15251
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"path":"pops","description":"Population view.","members":[],"meta":{"notes":"adding
+      a view template with two columns","uuid":"92542847-959a-4579-a787-047bd1c15251","created_at":"2023-03-02T17:02:33.124605+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '243'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:02:32 GMT
+      etag:
+      - '"afe7bec3-4223-4cc9-bd81-a97a65c6fbf4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"91e30994-e1b2-4af5-b7ce-3e9d623e1878","created_at":"2023-03-02T17:03:33.014060+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:03:32 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 91e30994-e1b2-4af5-b7ce-3e9d623e1878
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"91e30994-e1b2-4af5-b7ce-3e9d623e1878","created_at":"2023-03-02T17:03:33.014060+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:03:32 GMT
+      etag:
+      - '"580a3f05-ac08-49b3-94be-4bbcb260b29e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"ae0898e4-f220-4f1a-b88f-053a206a1b0d","created_at":"2023-03-02T17:03:33.321746+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:03:32 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - ae0898e4-f220-4f1a-b88f-053a206a1b0d
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"ae0898e4-f220-4f1a-b88f-053a206a1b0d","created_at":"2023-03-02T17:03:33.321746+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:03:33 GMT
+      etag:
+      - '"c42130ab-0644-4c05-99d3-adc3990dfd02"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - ae0898e4-f220-4f1a-b88f-053a206a1b0d
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"ae0898e4-f220-4f1a-b88f-053a206a1b0d","created_at":"2023-03-02T17:03:33.321746+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:03:33 GMT
+      etag:
+      - '"9a3089bd-9d2a-40c3-8349-aa23b51ddbf9"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - ae0898e4-f220-4f1a-b88f-053a206a1b0d
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"path":"pops","description":"Population view.","members":[],"meta":{"notes":"adding
+      a view template with two columns","uuid":"ae0898e4-f220-4f1a-b88f-053a206a1b0d","created_at":"2023-03-02T17:03:33.321746+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '243'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:03:33 GMT
+      etag:
+      - '"2e2ed379-fc9d-4060-bae7-f69e10c8a4df"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"a8a09523-bb7d-4f98-82f7-3a68afb652a3","created_at":"2023-03-02T17:04:51.636062+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:04:51 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - a8a09523-bb7d-4f98-82f7-3a68afb652a3
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"a8a09523-bb7d-4f98-82f7-3a68afb652a3","created_at":"2023-03-02T17:04:51.636062+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:04:51 GMT
+      etag:
+      - '"e13d44fd-0ae3-43b7-8d2a-69494a764bbb"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"6dceddd3-5b0f-4a65-981a-6c2d418b6e5d","created_at":"2023-03-02T17:04:51.931451+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:04:51 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 6dceddd3-5b0f-4a65-981a-6c2d418b6e5d
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"6dceddd3-5b0f-4a65-981a-6c2d418b6e5d","created_at":"2023-03-02T17:04:51.931451+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:04:51 GMT
+      etag:
+      - '"c81f12cf-2d78-4681-9939-39d3a52dfe20"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 6dceddd3-5b0f-4a65-981a-6c2d418b6e5d
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"6dceddd3-5b0f-4a65-981a-6c2d418b6e5d","created_at":"2023-03-02T17:04:51.931451+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:04:52 GMT
+      etag:
+      - '"8c9bdad3-b103-43ce-926f-b44437ffd917"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 6dceddd3-5b0f-4a65-981a-6c2d418b6e5d
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"path":"pops","description":"Population view.","members":[],"valid_from":"2023-03-02T12:04:52.607972+00:00","meta":{"notes":"adding
+      a view template with two columns","uuid":"6dceddd3-5b0f-4a65-981a-6c2d418b6e5d","created_at":"2023-03-02T17:04:51.931451+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '291'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:04:52 GMT
+      etag:
+      - '"d8823362-f28c-4a31-9ae3-e2507a7f6817"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '107'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"887d7ad3-9678-4bcc-a1f1-a2994b314a1e","created_at":"2023-03-02T17:05:09.437119+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '229'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:05:08 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_view_template_repo_create_get__online_columns_only", "description":
+      "cherrydb-client-py test test_view_template_repo_create_get__online_columns_only",
+      "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '181'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 887d7ad3-9678-4bcc-a1f1-a2994b314a1e
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_view_template_repo_create_get__online_columns_only","description":"cherrydb-client-py
+      test test_view_template_repo_create_get__online_columns_only","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_view_template_repo_create_get__online_columns_only","uuid":"887d7ad3-9678-4bcc-a1f1-a2994b314a1e","created_at":"2023-03-02T17:05:09.437119+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '413'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:05:08 GMT
+      etag:
+      - '"83f2cb80-22f5-4800-8948-7d4786f73c25"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a view template with two columns"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '52'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a view template with two columns","uuid":"3b02548f-e428-467d-b582-5078f3582121","created_at":"2023-03-02T17:05:09.751184+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '174'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:05:08 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '269'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 3b02548f-e428-467d-b582-5078f3582121
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"3b02548f-e428-467d-b582-5078f3582121","created_at":"2023-03-02T17:05:09.751184+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:05:08 GMT
+      etag:
+      - '"e5791145-f934-4d37-81c7-aded1b077c28"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_view_template_repo_create_get__online_columns_only",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '288'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 3b02548f-e428-467d-b582-5078f3582121
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_view_template_repo_create_get__online_columns_only","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      a view template with two columns","uuid":"3b02548f-e428-467d-b582-5078f3582121","created_at":"2023-03-02T17:05:09.751184+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '434'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:05:09 GMT
+      etag:
+      - '"c9f4d4d7-0570-460d-8d04-1b08750c7af3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "pops", "description": "Population view.", "members": ["/columns/test_view_template_repo_create_get__online_columns_only/total_pop",
+      "/columns/test_view_template_repo_create_get__online_columns_only/total_vap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '220'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 3b02548f-e428-467d-b582-5078f3582121
+    method: POST
+    uri: http://localhost:8000/api/v1/view-templates/test_view_template_repo_create_get__online_columns_only
+  response:
+    content: '{"path":"pops","description":"Population view.","members":[],"valid_from":"2023-03-02T12:05:10.433078+00:00","meta":{"notes":"adding
+      a view template with two columns","uuid":"3b02548f-e428-467d-b582-5078f3582121","created_at":"2023-03-02T17:05:09.751184+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '291'
+      content-type:
+      - application/json
+      date:
+      - Thu, 02 Mar 2023 17:05:09 GMT
+      etag:
+      - '"3527673e-e718-4fb9-b198-88d32b7d2fa8"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+version: 1

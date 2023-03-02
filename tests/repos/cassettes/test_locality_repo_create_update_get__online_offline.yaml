@@ -2571,4 +2571,346 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "adding and then updating a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '48'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a locality","uuid":"79d5873d-b5b2-4ac3-950c-cb9922da3d18","created_at":"2023-03-01T18:59:42.440084+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '170'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "md", "parent_path": null, "default_proj": null, "name":
+      "State of Maryland", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '113'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 79d5873d-b5b2-4ac3-950c-cb9922da3d18
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"md","parent_path":null,"default_proj":null,"name":"State
+      of Maryland","aliases":[],"meta":{"notes":"adding and then updating a locality","uuid":"79d5873d-b5b2-4ac3-950c-cb9922da3d18","created_at":"2023-03-01T18:59:42.440084+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '280'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:41 GMT
+      etag:
+      - '"a54fbffb-2766-493f-b8d8-1ed7844682ac"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["maryland"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '25'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 79d5873d-b5b2-4ac3-950c-cb9922da3d18
+    method: PATCH
+    uri: http://localhost:8000/api/v1/localities/md
+  response:
+    content: '{"canonical_path":"md","parent_path":null,"default_proj":null,"name":"State
+      of Maryland","aliases":["maryland"],"meta":{"notes":"adding and then updating
+      a locality","uuid":"79d5873d-b5b2-4ac3-950c-cb9922da3d18","created_at":"2023-03-01T18:59:42.440084+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '290'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:41 GMT
+      etag:
+      - '"1137c908-8234-4e0a-9a38-d26cef2aa88b"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding and then updating a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '48'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a locality","uuid":"5017197e-5e19-4be1-b861-7c01911e23c9","created_at":"2023-03-01T19:01:54.041748+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '170'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:53 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "md", "parent_path": null, "default_proj": null, "name":
+      "State of Maryland", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '113'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5017197e-5e19-4be1-b861-7c01911e23c9
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"md","parent_path":null,"default_proj":null,"name":"State
+      of Maryland","aliases":[],"meta":{"notes":"adding and then updating a locality","uuid":"5017197e-5e19-4be1-b861-7c01911e23c9","created_at":"2023-03-01T19:01:54.041748+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '280'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:53 GMT
+      etag:
+      - '"299b5e5c-72b4-4324-a76c-8a21b5d549b7"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["maryland"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '25'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5017197e-5e19-4be1-b861-7c01911e23c9
+    method: PATCH
+    uri: http://localhost:8000/api/v1/localities/md
+  response:
+    content: '{"canonical_path":"md","parent_path":null,"default_proj":null,"name":"State
+      of Maryland","aliases":["maryland"],"meta":{"notes":"adding and then updating
+      a locality","uuid":"5017197e-5e19-4be1-b861-7c01911e23c9","created_at":"2023-03-01T19:01:54.041748+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '290'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:53 GMT
+      etag:
+      - '"fdf85804-9346-4558-b8a4-02e2f90a76b5"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding and then updating a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '48'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a locality","uuid":"3e72eb58-a04c-4a1e-9fea-422782b2a61e","created_at":"2023-03-01T19:04:35.031315+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '170'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:34 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "md", "parent_path": null, "default_proj": null, "name":
+      "State of Maryland", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '113'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 3e72eb58-a04c-4a1e-9fea-422782b2a61e
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"md","parent_path":null,"default_proj":null,"name":"State
+      of Maryland","aliases":[],"meta":{"notes":"adding and then updating a locality","uuid":"3e72eb58-a04c-4a1e-9fea-422782b2a61e","created_at":"2023-03-01T19:04:35.031315+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '280'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:34 GMT
+      etag:
+      - '"d6d86960-31ad-403b-b9a8-241af8ffd67e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["maryland"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '25'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 3e72eb58-a04c-4a1e-9fea-422782b2a61e
+    method: PATCH
+    uri: http://localhost:8000/api/v1/localities/md
+  response:
+    content: '{"canonical_path":"md","parent_path":null,"default_proj":null,"name":"State
+      of Maryland","aliases":["maryland"],"meta":{"notes":"adding and then updating
+      a locality","uuid":"3e72eb58-a04c-4a1e-9fea-422782b2a61e","created_at":"2023-03-01T19:04:35.031315+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '290'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:34 GMT
+      etag:
+      - '"d1fdda15-3bc5-4fd5-af48-a0546dd841bb"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1

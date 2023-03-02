@@ -2466,4 +2466,346 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"e30702c0-c8ba-41ce-a001-5a28f79fd236","created_at":"2023-03-01T18:59:41.347252+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:40 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "vt", "parent_path": null, "default_proj": null, "name":
+      "State of Vermont", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '112'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - e30702c0-c8ba-41ce-a001-5a28f79fd236
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"e30702c0-c8ba-41ce-a001-5a28f79fd236","created_at":"2023-03-01T18:59:41.347252+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '261'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:40 GMT
+      etag:
+      - '"17b73cb6-e55d-4882-a344-bf3d5e4aff18"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"iowa","parent_path":null,"default_proj":null,"name":"State
+      of Iowa","aliases":["ia","19"],"meta":{"notes":"Importing Iowa counties shapefile","uuid":"5c8a7088-c720-4ef3-b26b-0290abe4606e","created_at":"2023-03-01T18:59:10.402246+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"6bdd26f4-6742-4449-b4f8-aa62a2b9b93a","created_at":"2023-03-01T18:59:40.477457+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"308020e2-f9ec-44e9-9594-8466913a7597","created_at":"2023-03-01T18:59:40.928653+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"e30702c0-c8ba-41ce-a001-5a28f79fd236","created_at":"2023-03-01T18:59:41.347252+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '411'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:40 GMT
+      etag:
+      - '"41c7d488-38b0-405b-954c-85e86f8fff53"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"112d4e64-ffaf-4f07-a109-c3771dbb656e","created_at":"2023-03-01T19:01:52.935352+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:52 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "vt", "parent_path": null, "default_proj": null, "name":
+      "State of Vermont", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '112'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 112d4e64-ffaf-4f07-a109-c3771dbb656e
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"112d4e64-ffaf-4f07-a109-c3771dbb656e","created_at":"2023-03-01T19:01:52.935352+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '261'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:52 GMT
+      etag:
+      - '"1468f474-9457-4ced-9895-429f699a4c51"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"iowa","parent_path":null,"default_proj":null,"name":"State
+      of Iowa","aliases":["ia","19"],"meta":{"notes":"Importing Iowa counties shapefile","uuid":"7ec7beb5-ff81-4ca9-99ac-5746c994631b","created_at":"2023-03-01T19:01:20.292178+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"1d20cc52-9b02-4cbc-8e8d-5f05c88ce38a","created_at":"2023-03-01T19:01:52.028090+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"1bcc4b9a-2729-4051-9db3-d12ff35cd2b2","created_at":"2023-03-01T19:01:52.486176+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"112d4e64-ffaf-4f07-a109-c3771dbb656e","created_at":"2023-03-01T19:01:52.935352+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '411'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:52 GMT
+      etag:
+      - '"3da19d3f-e17a-42b6-841f-32f2f4174402"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"9d84aef5-3e5f-4f5a-83b4-0dc5b681bbf2","created_at":"2023-03-01T19:04:33.916790+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:32 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "vt", "parent_path": null, "default_proj": null, "name":
+      "State of Vermont", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '112'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 9d84aef5-3e5f-4f5a-83b4-0dc5b681bbf2
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"9d84aef5-3e5f-4f5a-83b4-0dc5b681bbf2","created_at":"2023-03-01T19:04:33.916790+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '261'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:33 GMT
+      etag:
+      - '"0ca64b1d-c162-4c28-8e64-78a58333f41e"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"iowa","parent_path":null,"default_proj":null,"name":"State
+      of Iowa","aliases":["ia","19"],"meta":{"notes":"Importing Iowa counties shapefile","uuid":"40f1fb7d-5d06-4003-9dcb-33aeb3fa74b0","created_at":"2023-03-01T19:04:01.380541+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ma","parent_path":null,"default_proj":null,"name":"Commonwealth
+      of Massachusetts","aliases":[],"meta":{"notes":"adding a locality","uuid":"5a0b4328-9548-4783-9e8a-fd0d4f427f33","created_at":"2023-03-01T19:04:32.974856+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"8e1bdde4-d91b-4b72-91c5-ce51ccf78ff3","created_at":"2023-03-01T19:04:33.543291+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"vt","parent_path":null,"default_proj":null,"name":"State
+      of Vermont","aliases":[],"meta":{"notes":"adding a locality","uuid":"9d84aef5-3e5f-4f5a-83b4-0dc5b681bbf2","created_at":"2023-03-01T19:04:33.916790+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:33 GMT
+      etag:
+      - '"b83cbfa7-dac4-465a-a97a-2e86596c9bf4"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1

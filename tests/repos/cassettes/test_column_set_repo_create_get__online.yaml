@@ -2374,4 +2374,939 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_set_repo_create_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '91'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"68352d62-30df-40b7-ab41-f43173a0cd0d","created_at":"2023-03-01T18:59:27.471809+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '213'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:26 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_set_repo_create_get__online", "description": "cherrydb-client-py
+      test test_column_set_repo_create_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '149'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 68352d62-30df-40b7-ab41-f43173a0cd0d
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"68352d62-30df-40b7-ab41-f43173a0cd0d","created_at":"2023-03-01T18:59:27.471809+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '365'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:26 GMT
+      etag:
+      - '"dab20bea-f92c-41b9-a073-dcf1a3a4ce96"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding three columns in a column set"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '49'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding three columns in a column set","uuid":"8e76bfe4-b788-48ce-97f7-8c2501cd4c8e","created_at":"2023-03-01T18:59:27.746027+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '171'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:26 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_set_repo_create_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '253'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 8e76bfe4-b788-48ce-97f7-8c2501cd4c8e
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"8e76bfe4-b788-48ce-97f7-8c2501cd4c8e","created_at":"2023-03-01T18:59:27.746027+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:27 GMT
+      etag:
+      - '"c8b3b5f8-a8d7-4d35-bc1b-3b2fb2579c52"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_column_set_repo_create_get__online",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '272'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 8e76bfe4-b788-48ce-97f7-8c2501cd4c8e
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"8e76bfe4-b788-48ce-97f7-8c2501cd4c8e","created_at":"2023-03-01T18:59:27.746027+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:27 GMT
+      etag:
+      - '"12dcbef2-0af6-42d0-86ab-7ad98685f4e3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_cvap", "namespace": "test_column_set_repo_create_get__online",
+      "description": "ACS total citizen voting-age population (CVAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "int", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '243'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 8e76bfe4-b788-48ce-97f7-8c2501cd4c8e
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_cvap","namespace":"test_column_set_repo_create_get__online","description":"ACS
+      total citizen voting-age population (CVAP)","source_url":null,"kind":"count","type":"int","aliases":[],"meta":{"notes":"adding
+      three columns in a column set","uuid":"8e76bfe4-b788-48ce-97f7-8c2501cd4c8e","created_at":"2023-03-01T18:59:27.746027+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '386'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:27 GMT
+      etag:
+      - '"dfd34b08-8546-416c-bd78-6a95622cf343"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "totals", "description": "Total population columns", "columns":
+      ["total_pop", "total_vap", "total_cvap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '114'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 8e76bfe4-b788-48ce-97f7-8c2501cd4c8e
+    method: POST
+    uri: http://localhost:8000/api/v1/column-sets/test_column_set_repo_create_get__online
+  response:
+    content: Internal Server Error
+    headers:
+      content-length:
+      - '21'
+      content-type:
+      - text/plain; charset=utf-8
+      date:
+      - Wed, 01 Mar 2023 18:59:27 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 500
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_set_repo_create_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '91'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"594ee569-d13e-4e97-bd30-00e2eb3fc51c","created_at":"2023-03-01T19:01:37.309275+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '213'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:37 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_set_repo_create_get__online", "description": "cherrydb-client-py
+      test test_column_set_repo_create_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '149'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 594ee569-d13e-4e97-bd30-00e2eb3fc51c
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"594ee569-d13e-4e97-bd30-00e2eb3fc51c","created_at":"2023-03-01T19:01:37.309275+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '365'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:37 GMT
+      etag:
+      - '"827940b0-0f9b-45b5-8d5e-44ec7a7674b3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding three columns in a column set"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '49'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '171'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:37 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_set_repo_create_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '253'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 28e9d76d-a4cd-435a-85c6-2712b83969a0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:37 GMT
+      etag:
+      - '"afcef88c-5180-452c-bfcd-6f94fa85fe8b"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_column_set_repo_create_get__online",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '272'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 28e9d76d-a4cd-435a-85c6-2712b83969a0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:37 GMT
+      etag:
+      - '"4129a139-3f4e-4e5d-9bb4-634e7682c413"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_cvap", "namespace": "test_column_set_repo_create_get__online",
+      "description": "ACS total citizen voting-age population (CVAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "int", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '243'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 28e9d76d-a4cd-435a-85c6-2712b83969a0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_cvap","namespace":"test_column_set_repo_create_get__online","description":"ACS
+      total citizen voting-age population (CVAP)","source_url":null,"kind":"count","type":"int","aliases":[],"meta":{"notes":"adding
+      three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '386'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:38 GMT
+      etag:
+      - '"1049d5de-321b-469c-a18b-c177a6366f98"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "totals", "description": "Total population columns", "columns":
+      ["total_pop", "total_vap", "total_cvap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '114'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 28e9d76d-a4cd-435a-85c6-2712b83969a0
+    method: POST
+    uri: http://localhost:8000/api/v1/column-sets/test_column_set_repo_create_get__online
+  response:
+    content: '{"path":"totals","description":"Total population columns","meta":{"notes":"adding
+      three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"},"namespace":"test_column_set_repo_create_get__online","columns":[{"canonical_path":"total_pop","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_vap","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_cvap","namespace":"test_column_set_repo_create_get__online","description":"ACS
+      total citizen voting-age population (CVAP)","source_url":null,"kind":"count","type":"int","aliases":[],"meta":{"notes":"adding
+      three columns in a column set","uuid":"28e9d76d-a4cd-435a-85c6-2712b83969a0","created_at":"2023-03-01T19:01:37.650870+00:00","created_by":"pjrule@me.com"}}],"refs":["total_pop","total_vap","total_cvap"]}'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '407'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:38 GMT
+      etag:
+      - '"39ec54c0-3063-4b3f-af87-6214b54c25b3"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_set_repo_create_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '91'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"30830bb4-6336-47b8-8397-d613a2b5e38c","created_at":"2023-03-01T19:04:19.048818+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '213'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:18 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_set_repo_create_get__online", "description": "cherrydb-client-py
+      test test_column_set_repo_create_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '149'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 30830bb4-6336-47b8-8397-d613a2b5e38c
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"30830bb4-6336-47b8-8397-d613a2b5e38c","created_at":"2023-03-01T19:04:19.048818+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '365'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:18 GMT
+      etag:
+      - '"25fe722c-2365-4500-817d-93ca692cfc4b"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding three columns in a column set"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '49'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '171'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:18 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_set_repo_create_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '253'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5794bfca-2232-4f4f-bce2-a00e23fbe2f0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:18 GMT
+      etag:
+      - '"2828db09-6128-4889-ba3c-6f2666c971ca"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_vap", "namespace": "test_column_set_repo_create_get__online",
+      "description": "2020 Census total voting-age population (VAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "float", "aliases": ["totvap",
+      "p003001", "p0003001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '272'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5794bfca-2232-4f4f-bce2-a00e23fbe2f0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_vap","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '415'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:18 GMT
+      etag:
+      - '"693db8e8-04f4-4e4e-b61b-710435dace20"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_cvap", "namespace": "test_column_set_repo_create_get__online",
+      "description": "ACS total citizen voting-age population (CVAP)", "source_url":
+      "https://www.census.gov/", "kind": "count", "type": "int", "aliases": null}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '243'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5794bfca-2232-4f4f-bce2-a00e23fbe2f0
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_set_repo_create_get__online
+  response:
+    content: '{"canonical_path":"total_cvap","namespace":"test_column_set_repo_create_get__online","description":"ACS
+      total citizen voting-age population (CVAP)","source_url":null,"kind":"count","type":"int","aliases":[],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '386'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:19 GMT
+      etag:
+      - '"58494868-de49-4308-8f22-3eaa1c0549c8"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "totals", "description": "Total population columns", "columns":
+      ["total_pop", "total_vap", "total_cvap"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '114'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5794bfca-2232-4f4f-bce2-a00e23fbe2f0
+    method: POST
+    uri: http://localhost:8000/api/v1/column-sets/test_column_set_repo_create_get__online
+  response:
+    content: '{"path":"totals","description":"Total population columns","meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"},"namespace":"test_column_set_repo_create_get__online","columns":[{"canonical_path":"total_pop","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_vap","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_cvap","namespace":"test_column_set_repo_create_get__online","description":"ACS
+      total citizen voting-age population (CVAP)","source_url":null,"kind":"count","type":"int","aliases":[],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}}],"refs":["total_pop","total_vap","total_cvap"]}'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:19 GMT
+      etag:
+      - '"aa0ba239-b576-457c-9258-7756bce4f628"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"aa0ba239-b576-457c-9258-7756bce4f628"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/column-sets/test_column_set_repo_create_get__online/totals
+  response:
+    content: '{"path":"totals","description":"Total population columns","meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"},"namespace":"test_column_set_repo_create_get__online","columns":[{"canonical_path":"total_pop","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_vap","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_cvap","namespace":"test_column_set_repo_create_get__online","description":"ACS
+      total citizen voting-age population (CVAP)","source_url":null,"kind":"count","type":"int","aliases":[],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}}],"refs":["total_pop","total_vap","total_cvap"]}'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:19 GMT
+      etag:
+      - '"aa0ba239-b576-457c-9258-7756bce4f628"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"aa0ba239-b576-457c-9258-7756bce4f628"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/column-sets/test_column_set_repo_create_get__online/totals
+  response:
+    content: '{"path":"totals","description":"Total population columns","meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"},"namespace":"test_column_set_repo_create_get__online","columns":[{"canonical_path":"total_pop","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["totpop","p001001","p0001001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_vap","namespace":"test_column_set_repo_create_get__online","description":"2020
+      Census total voting-age population (VAP)","source_url":null,"kind":"count","type":"float","aliases":["totvap","p003001","p0003001"],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"total_cvap","namespace":"test_column_set_repo_create_get__online","description":"ACS
+      total citizen voting-age population (CVAP)","source_url":null,"kind":"count","type":"int","aliases":[],"meta":{"notes":"adding
+      three columns in a column set","uuid":"5794bfca-2232-4f4f-bce2-a00e23fbe2f0","created_at":"2023-03-01T19:04:19.332574+00:00","created_by":"pjrule@me.com"}}],"refs":["total_pop","total_vap","total_cvap"]}'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:19 GMT
+      etag:
+      - '"aa0ba239-b576-457c-9258-7756bce4f628"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1

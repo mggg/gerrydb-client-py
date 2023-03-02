@@ -6,16 +6,9 @@ from cherrydb.schemas import ColumnKind, ColumnType
 
 
 @pytest.fixture
-def column():
+def column(pop_column_meta):
     """Column metadata."""
-    return {
-        "path": "total_pop",
-        "description": "2020 Census total population",
-        "source_url": "https://www.census.gov/",
-        "column_kind": "count",
-        "column_type": "int",
-        "aliases": ["totpop", "p001001", "p0001001"],
-    }
+    return pop_column_meta 
 
 
 @pytest.mark.vcr

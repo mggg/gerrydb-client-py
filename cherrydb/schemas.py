@@ -4,7 +4,7 @@ This file should be kept in sync with the server-side version.
 """
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
@@ -200,6 +200,11 @@ class Column(ColumnBase):
         """The column's canonical path."""
         return self.canonical_path
 
+    @property
+    def path_with_resource(self) -> str:
+        """The column's absolute path."""
+        return f"/columns/{self.namespace}/{self.path}"
+
 
 class ColumnValue(BaseModel):
     """Value of a column for a geography."""
@@ -308,3 +313,38 @@ class ColumnSet(ColumnSetBase):
     namespace: str
     columns: list[Column]
     refs: list[str]
+
+    @property
+    def path_with_resource(self) -> str:
+        """The column set's absolute path."""
+        return f"/column-sets/{self.namespace}/{self.path}"
+
+
+class ViewTemplateBase(BaseModel):
+    """Base model for a view template."""
+
+    path: CherryPath
+    description: str
+
+
+class ViewTemplateCreate(ViewTemplateBase):
+    """View template data received on creation."""
+
+    members: list[str]
+
+
+class ViewTemplatePatch(ViewTemplateBase):
+    """View template data received on update."""
+
+    members: list[str]
+
+
+class ViewTemplate(ViewTemplateBase):
+    """View template returned by the database."""
+    
+    __cache_name__ = "view_template"
+    __cache_policy__ = ObjectCachePolicy.TIMESTAMP
+
+    members: list[Union[Column, ColumnSet]]
+    meta: ObjectMeta
+    valid_from: datetime

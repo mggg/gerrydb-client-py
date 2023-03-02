@@ -2443,4 +2443,258 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"681ce477-523f-4dfa-aa48-1d6115aff95e","created_at":"2023-03-01T18:59:43.005365+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '66'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 681ce477-523f-4dfa-aa48-1d6115aff95e
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"681ce477-523f-4dfa-aa48-1d6115aff95e","created_at":"2023-03-01T18:59:43.005365+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '222'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 18:59:42 GMT
+      etag:
+      - '"62340aee-4bc5-4fa5-afd2-798ae64245b7"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"5bb18940-2bd0-43a8-b2eb-8605127ffb7b","created_at":"2023-03-01T19:01:54.602284+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:54 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '66'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5bb18940-2bd0-43a8-b2eb-8605127ffb7b
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"5bb18940-2bd0-43a8-b2eb-8605127ffb7b","created_at":"2023-03-01T19:01:54.602284+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '222'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:01:54 GMT
+      etag:
+      - '"5fdf42bf-7260-4a18-aa9d-0daf7a5eaef0"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"426699d5-8ae0-476b-ba1b-7d111f7c69e6","created_at":"2023-03-01T19:04:35.576855+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:34 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '66'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 426699d5-8ae0-476b-ba1b-7d111f7c69e6
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"426699d5-8ae0-476b-ba1b-7d111f7c69e6","created_at":"2023-03-01T19:04:35.576855+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '222'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:34 GMT
+      etag:
+      - '"5368ec2b-2c1a-4330-bf59-7fc992e6ac67"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"5368ec2b-2c1a-4330-bf59-7fc992e6ac67"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/namespaces/test
+  response:
+    content: '{"path":"test","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"426699d5-8ae0-476b-ba1b-7d111f7c69e6","created_at":"2023-03-01T19:04:35.576855+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '222'
+      content-type:
+      - application/json
+      date:
+      - Wed, 01 Mar 2023 19:04:34 GMT
+      etag:
+      - '"b83cbfa7-dac4-465a-a97a-2e86596c9bf4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1

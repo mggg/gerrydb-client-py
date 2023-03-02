@@ -5,3 +5,4 @@ from cherrydb.repos.geo_layer import GeoLayerRepo
 from cherrydb.repos.geography import GeographyRepo
 from cherrydb.repos.locality import LocalityRepo
 from cherrydb.repos.namespace import NamespaceRepo
+from cherrydb.repos.view_template import ViewTemplateRepo

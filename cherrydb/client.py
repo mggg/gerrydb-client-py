@@ -20,6 +20,7 @@ from cherrydb.repos import (
     GeoLayerRepo,
     LocalityRepo,
     NamespaceRepo,
+    ViewTemplateRepo,
 )
 from cherrydb.schemas import (
     Column,
@@ -30,6 +31,7 @@ from cherrydb.schemas import (
     Locality,
     ObjectMeta,
     ObjectMetaCreate,
+    ViewTemplate,
 )
 
 DEFAULT_CHERRY_ROOT = Path(os.path.expanduser("~")) / ".cherry"
@@ -189,6 +191,13 @@ class CherryDB:
         """Namespaces."""
         return NamespaceRepo(session=self)
 
+    @property
+    def view_templates(self) -> ViewTemplateRepo:
+        """View templates."""
+        return ViewTemplateRepo(
+            schema=ViewTemplate, base_url="/view-templates", session=self
+        )
+
 
 @dataclass
 class WriteContext:
@@ -259,6 +268,13 @@ class WriteContext:
     def namespaces(self) -> NamespaceRepo:
         """Namespaces."""
         return NamespaceRepo(session=self.db, ctx=self)
+
+    @property
+    def view_templates(self) -> ViewTemplateRepo:
+        """View templates."""
+        return ViewTemplateRepo(
+            schema=ViewTemplate, base_url="/view-templates", session=self.db, ctx=self
+        )
 
     def load_dataframe(
         self,
