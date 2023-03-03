@@ -240,6 +240,11 @@ class GeoLayer(GeoLayerBase):
     meta: ObjectMeta
     namespace: str
 
+    @property
+    def full_path(self) -> str:
+        """The path of the geographic layers, including its namespace."""
+        return f"/{self.namespace}/{self.path}"
+
 
 class GeoImportBase(BaseModel):
     """Base model for a geographic unit import."""
@@ -341,10 +346,46 @@ class ViewTemplatePatch(ViewTemplateBase):
 
 class ViewTemplate(ViewTemplateBase):
     """View template returned by the database."""
-    
+
     __cache_name__ = "view_template"
     __cache_policy__ = ObjectCachePolicy.TIMESTAMP
 
+    namespace: str
     members: list[Union[Column, ColumnSet]]
     meta: ObjectMeta
     valid_from: datetime
+
+    @property
+    def full_path(self) -> str:
+        """The path of the view template, including its namespace."""
+        return f"/{self.namespace}/{self.path}"
+
+
+class ViewBase(BaseModel):
+    """Base model for a view."""
+
+    path: CherryPath
+
+
+class ViewCreate(ViewBase):
+    """View definition received on creation."""
+
+    template: NamespacedCherryPath
+    locality: NamespacedCherryPath
+    layer: NamespacedCherryPath
+    valid_at: Optional[datetime] = None
+    proj: Optional[str] = None
+
+
+class View(ViewBase):
+    """Rendered view."""
+
+    namespace: str
+    template: ViewTemplate
+    locality: Locality
+    layer: GeoLayer
+    meta: ObjectMeta
+    valid_at: datetime
+    proj: Optional[str]
+    geographies: list[Geography]
+    values: dict[str, list]  # keys are columns, values are in order of `geographies`

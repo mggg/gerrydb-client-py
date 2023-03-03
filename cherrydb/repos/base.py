@@ -43,7 +43,9 @@ def err(message: str) -> Callable:
             except pydantic.ValidationError as ex:
                 raise ResultError(f"{message}: cannot parse response.") from ex
             except httpx.HTTPError as ex:
-                raise ResultError(f"{message}: HTTP request failed. Reason: {ex.response.json()}") from ex
+                raise ResultError(
+                    f"{message}: HTTP request failed. Reason: {ex.response.json()}"
+                ) from ex
 
         return err_wrapper
 

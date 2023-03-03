@@ -1,6 +1,7 @@
 """Fixtures for repository tests."""
 import pytest
 
+
 @pytest.fixture
 def pop_column_meta():
     """Example metadata for a population column."""
@@ -25,4 +26,3 @@ def vap_column_meta():
         "column_type": "float",
         "aliases": ["totvap", "p003001", "p0003001"],
     }
-

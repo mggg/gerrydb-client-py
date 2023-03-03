@@ -8,7 +8,7 @@ from cherrydb.schemas import ColumnKind, ColumnType
 @pytest.fixture
 def column(pop_column_meta):
     """Column metadata."""
-    return pop_column_meta 
+    return pop_column_meta
 
 
 @pytest.mark.vcr

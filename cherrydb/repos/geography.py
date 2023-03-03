@@ -196,7 +196,10 @@ class AsyncGeoImporter:
             method,
             f"{self.repo.base_url}/{self.namespace}",
             content=msgpack.dumps(_serialize_geos(geographies)),
-            headers={"content-type": "application/msgpack"},
+            headers={
+                "accept": "application/msgpack",
+                "content-type": "application/msgpack",
+            },
         )
         geos_etag = parse_etag(response)
         response.raise_for_status()
@@ -236,3 +239,5 @@ class GeographyRepo(TimestampObjectRepo[Geography]):
             raise RequestError(NAMESPACE_ERR)
 
         return AsyncGeoImporter(repo=self, namespace=namespace, max_conns=max_conns)
+
+    # TODO: get()

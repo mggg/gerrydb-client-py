@@ -1,6 +1,7 @@
 """Integration/VCR tests for columns."""
 import pytest
 
+
 @pytest.mark.vcr
 def test_column_set_repo_create_get__online(
     client_ns, pop_column_meta, vap_column_meta

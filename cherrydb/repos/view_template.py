@@ -1,5 +1,6 @@
 """Repository for view templates."""
 from typing import Collection, Optional, Union
+
 from cherrydb.repos.base import (
     TimestampObjectRepo,
     err,
@@ -55,7 +56,9 @@ class ViewTemplateRepo(TimestampObjectRepo[ViewTemplate]):
         obj = self.schema(**response.json())
         obj_etag = parse_etag(response)
         self.session.cache.insert(
-            obj=obj, path=obj.path, namespace=namespace, 
+            obj=obj,
+            path=obj.path,
+            namespace=namespace,
             valid_from=obj.valid_from,
         )
         return obj
