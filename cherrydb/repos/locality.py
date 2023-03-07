@@ -113,22 +113,57 @@ class LocalityRepo(ObjectRepo):
         """
         response = self.ctx.client.post(
             "/localities/",
-            json=LocalityCreate(
-                canonical_path=canonical_path,
-                name=name,
-                parent_path=parent_path,
-                default_proj=default_proj,
-                aliases=aliases,
-            ).dict(),
+            json=[
+                LocalityCreate(
+                    canonical_path=canonical_path,
+                    name=name,
+                    parent_path=parent_path,
+                    default_proj=default_proj,
+                    aliases=aliases,
+                ).dict()
+            ],
         )
         response.raise_for_status()
 
-        loc = Locality(**response.json())
+        loc = Locality(**response.json()[0])
         loc_etag = parse_etag(response)
         self.session.cache.insert(
             obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
         )
         return loc
+
+    @err("Failed to create localities")
+    @write_context
+    @online
+    def create_bulk(
+        self,
+        locs: list[LocalityCreate],
+    ) -> list[Locality]:
+        """Creates localities in bulk (primarily useful for bootstrapping a database).
+
+        Args:
+            locs: New locality requests.
+
+        Raises:
+        RequestError: If the localities cannot be created on the server side,
+                or if the parameters fail validation.
+
+        Returns:
+            The new localities.
+        """
+        response = self.ctx.client.post(
+            "/localities/",
+            json=[loc.dict() for loc in locs],
+        )
+        response.raise_for_status()
+
+        locs = [Locality(**loc) for loc in response.json()]
+        loc_etag = parse_etag(response)
+        for loc in locs:
+            self.session.cache.insert(
+                obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
+            )
+        return locs
 
     @err("Failed to update locality")
     @write_context

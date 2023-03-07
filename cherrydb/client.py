@@ -9,6 +9,7 @@ import geopandas as gpd
 import httpx
 import pandas as pd
 import tomlkit
+from shapely import Point
 from shapely.geometry.base import BaseGeometry
 
 from cherrydb.cache import CherryCache
@@ -23,6 +24,7 @@ from cherrydb.repos import (
     ViewRepo,
     ViewTemplateRepo,
 )
+from cherrydb.repos.geography import GeoValType
 from cherrydb.schemas import (
     Column,
     ColumnSet,
@@ -333,16 +335,21 @@ class WriteContext:
             layer: `GeoLayer` to associate a new `GeoSet` with.
             batch_size: Number of rows to import per API request batch.
             max_conns: Maximum number of simultaneous API connections.
-
-        Raises:
-            LoadError: ...
         """
         if create_geo:
-            if hasattr(df, "geometry"):
+            if "geometry" in df.columns:
                 df = df.to_crs("epsg:4326")  # import as lat/long
                 geos = dict(df.geometry)
             else:
                 geos = {key: None for key in df.index}
+
+            # Augment geographies with internal points if available.
+            if "internal_point" in df.columns:
+                internal_points = dict(df.internal_point)
+                geos = {
+                    path: (geo, internal_points[path]) for path, geo in geos.items()
+                }
+
             asyncio.run(_load_geos(self.geo, geos, namespace, batch_size, max_conns))
 
         asyncio.run(
@@ -371,7 +378,7 @@ async def gather_batch(coros, n):
 
 async def _load_geos(
     repo: GeographyRepo,
-    geos: dict[str, Optional[BaseGeometry]],
+    geos: dict[str, GeoValType],
     namespace: str,
     batch_size: int,
     max_conns: Optional[int],

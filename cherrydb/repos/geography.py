@@ -1,10 +1,11 @@
 """Repository for geographies."""
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Tuple, Union
 
 import httpx
 import msgpack
 import shapely.wkb
+from shapely import Point
 from shapely.geometry.base import BaseGeometry
 
 from cherrydb.exceptions import RequestError
@@ -21,6 +22,9 @@ from cherrydb.schemas import Geography, GeographyCreate, GeoImport
 if TYPE_CHECKING:
     from cherrydb.client import WriteContext
 
+GeoValType = Union[None, BaseGeometry, Tuple[Optional[BaseGeometry], Optional[Point]]]
+GeosType = dict[Union[str, Geography], GeoValType]
+
 
 def _importer_params(ctx: "WriteContext", namespace: str) -> dict[str, Any]:
     """Generates client parameters with a `GeoImport` context."""
@@ -33,17 +37,27 @@ def _importer_params(ctx: "WriteContext", namespace: str) -> dict[str, Any]:
     return params
 
 
-def _serialize_geos(
-    geographies: dict[Union[str, Geography], Optional[BaseGeometry]]
-) -> list[GeographyCreate]:
+def _serialize_geos(geographies: GeosType) -> list[GeographyCreate]:
     """Serializes geographies into raw bytes."""
-    return [
-        GeographyCreate(
-            path=key.full_path if isinstance(key, Geography) else key,
-            geography=shapely.wkb.dumps(geo),
-        ).dict()
-        for key, geo in geographies.items()
-    ]
+    serialized = []
+    for key, geo_pair in geographies.items():
+        if isinstance(geo, tuple):
+            geo, point = geo_pair
+        elif isinstance(geo, BaseGeometry):
+            geo = geo_pair
+            point = None
+        else:
+            geo = point = None
+
+        serialized.append(
+            GeographyCreate(
+                path=key.full_path if isinstance(key, Geography) else key,
+                geography=None if geo is None else shapely.wkb.dumps(geo),
+                internal_point=None if point is None else shapely.wkb.dumps(point),
+            ).dict()
+        )
+
+    return serialized
 
 
 def _parse_geo_response(response: httpx.Response) -> list[Geography]:
@@ -72,7 +86,7 @@ class GeoImporter:
         self.client.close()
 
     @err("Failed to create geographies")
-    def create(self, geographies: dict[str, Optional[BaseGeometry]]) -> list[Geography]:
+    def create(self, geographies: dict[str, GeoValType]) -> list[Geography]:
         """Creates one or more geographies.
 
         Args:
@@ -88,9 +102,7 @@ class GeoImporter:
         return self._send(geographies, method="POST")
 
     @err("Failed to update geographies")
-    def update(
-        self, geographies: dict[Union[str, Geography], Optional[BaseGeometry]]
-    ) -> list[Geography]:
+    def update(self, geographies: GeosType) -> list[Geography]:
         """Updates the shapes of one or more geographies.
 
         Args:
@@ -105,11 +117,7 @@ class GeoImporter:
         """
         return self._send(geographies, method="PATCH")
 
-    def _send(
-        self,
-        geographies: dict[Union[str, Geography], Optional[BaseGeometry]],
-        method: str,
-    ) -> list[Geography]:
+    def _send(self, geographies: GeosType, method: str) -> list[Geography]:
         """Creates or updates one or more geographies."""
         response = self.client.request(
             method,
@@ -151,9 +159,7 @@ class AsyncGeoImporter:
         await self.client.aclose()
 
     @err("Failed to create geographies")
-    async def create(
-        self, geographies: dict[str, Optional[BaseGeometry]]
-    ) -> list[Geography]:
+    async def create(self, geographies: dict[str, GeoValType]) -> list[Geography]:
         """Creates one or more geographies.
 
         Args:
@@ -169,9 +175,7 @@ class AsyncGeoImporter:
         return await self._send(geographies, method="POST")
 
     @err("Failed to update geographies")
-    async def update(
-        self, geographies: dict[Union[str, Geography], Optional[BaseGeometry]]
-    ) -> list[Geography]:
+    async def update(self, geographies: GeosType) -> list[Geography]:
         """Updates the shapes of one or more geographies.
 
         Args:
@@ -186,11 +190,7 @@ class AsyncGeoImporter:
         """
         return await self._send(geographies, method="PATCH")
 
-    async def _send(
-        self,
-        geographies: dict[Union[str, Geography], Optional[BaseGeometry]],
-        method: str,
-    ) -> list[Geography]:
+    async def _send(self, geographies: GeosType, method: str) -> list[Geography]:
         """Creates or updates one or more geographies."""
         response = await self.client.request(
             method,
