@@ -9,6 +9,7 @@ from typing import Any, Optional, Union
 from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import constr
+from shapely.geometry import Point
 from shapely.geometry.base import BaseGeometry
 
 UserEmail = constr(max_length=254)
@@ -32,6 +33,7 @@ class ColumnKind(str, Enum):
     PERCENT = "percent"
     CATEGORICAL = "categorical"
     IDENTIFIER = "identifier"
+    AREA = "area"
     OTHER = "other"
 
 
@@ -267,6 +269,7 @@ class GeographyBase(BaseModel):
 
     path: CherryPath
     geography: Optional[BaseGeometry]
+    internal_point: Optional[Point]
 
     class Config:
         arbitrary_types_allowed = True
@@ -277,6 +280,7 @@ class GeographyCreate(BaseModel):
 
     path: CherryPath
     geography: Optional[bytes]
+    internal_point: Optional[bytes]
 
 
 class Geography(GeographyBase):

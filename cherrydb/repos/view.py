@@ -98,7 +98,6 @@ class ViewRepo(ETagObjectRepo[View]):
             .transpose()
             .set_index("index")
         )
-        print(gdf)
         return gdf
 
         """
