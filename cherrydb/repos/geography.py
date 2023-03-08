@@ -41,9 +41,9 @@ def _serialize_geos(geographies: GeosType) -> list[GeographyCreate]:
     """Serializes geographies into raw bytes."""
     serialized = []
     for key, geo_pair in geographies.items():
-        if isinstance(geo, tuple):
+        if isinstance(geo_pair, tuple):
             geo, point = geo_pair
-        elif isinstance(geo, BaseGeometry):
+        elif isinstance(geo_pair, BaseGeometry):
             geo = geo_pair
             point = None
         else:

@@ -30,7 +30,7 @@ class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
         """Creates a geographic layer.
 
         Args:
-            canonical_path: A short identifier for the layer (e.g. `block_groups`).
+            path: A short identifier for the layer (e.g. `block_groups`).
             description: Longform description of the layer.
             source_url: Original source of the layer
                 (e.g. a link to a shapefile on the U.S. Census Bureau website).
