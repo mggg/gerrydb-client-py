@@ -58,7 +58,7 @@ class CherryDB:
         key: Optional[str] = None,
         namespace: Optional[str] = None,
         offline: bool = False,
-        timeout: int = 60,
+        timeout: int = 180,
     ):
         """Creates a CherryDB session.
 
@@ -336,6 +336,10 @@ class WriteContext:
             batch_size: Number of rows to import per API request batch.
             max_conns: Maximum number of simultaneous API connections.
         """
+        namespace = self.db.namespace if namespace is None else namespace
+        if namespace is None:
+            raise ValueError("No namespace available.")
+
         if create_geo:
             if "geometry" in df.columns:
                 df = df.to_crs("epsg:4326")  # import as lat/long
@@ -356,7 +360,7 @@ class WriteContext:
             _load_column_values(self.columns, df, columns, batch_size, max_conns)
         )
 
-        if locality is not None and layer is not None:
+        if create_geo and locality is not None and layer is not None:
             self.geo_layers.map_locality(
                 layer=layer,
                 locality=locality,

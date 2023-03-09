@@ -63,7 +63,7 @@ class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
     def map_locality(
         self,
         layer: GeoLayer,
-        locality: Locality,
+        locality: Union[str, Locality],
         geographies: list[Union[str, Geography]],
     ) -> None:
         """Maps a set of `geographies` to `layer` in `locality`.
@@ -74,7 +74,11 @@ class GeoLayerRepo(ETagObjectRepo[GeoLayer]):
         """
         response = self.ctx.client.put(
             f"{self.base_url}/{layer.namespace}/{layer.path}",
-            params={"locality": locality.canonical_path},
+            params={
+                "locality": locality.canonical_path
+                if isinstance(locality, Locality)
+                else locality
+            },
             json=GeoSetCreate(
                 paths=[
                     geo if isinstance(geo, str) else geo.full_path

@@ -2,6 +2,7 @@
 from typing import Any, Optional, Union
 
 import httpx
+import numpy as np
 
 from cherrydb.repos.base import (
     ETagObjectRepo,
@@ -205,7 +206,7 @@ class ColumnRepo(ETagObjectRepo[Column]):
                         if isinstance(geo, Geography)
                         else geo
                     ),
-                    value=value,
+                    value=_coerce(value),
                 ).dict()
                 for geo, value in values.items()
             ],
@@ -216,3 +217,12 @@ class ColumnRepo(ETagObjectRepo[Column]):
             await client.aclose()
 
         # TODO: what's the proper caching behavior here?
+
+
+def _coerce(val: Any) -> Any:
+    """Coerces values for JSON serialization."""
+    if isinstance(val, np.int64):
+        return int(val)
+    if isinstance(val, np.float64):
+        return float(val)
+    return val

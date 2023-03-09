@@ -2,6 +2,7 @@
 from typing import Optional
 
 import click
+
 from cherrydb import CherryDB
 
 
