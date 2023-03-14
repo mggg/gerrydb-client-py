@@ -6,6 +6,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Optional, Union
 
+import geopandas as gpd
 from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import constr
@@ -269,7 +270,7 @@ class GeographyBase(BaseModel):
 
     path: CherryPath
     geography: Optional[BaseGeometry]
-    internal_point: Optional[Point]
+    internal_point: Optional[Point] = None
 
     class Config:
         arbitrary_types_allowed = True
@@ -393,3 +394,23 @@ class View(ViewBase):
     proj: Optional[str]
     geographies: list[Geography]
     values: dict[str, list]  # keys are columns, values are in order of `geographies`
+
+    def df(self) -> gpd.GeoDataFrame:
+        """Converts a view to a DataFrame."""
+        gdf = (
+            gpd.GeoDataFrame.from_dict(
+                {
+                    **{
+                        key.split("/")[-1]: values
+                        for key, values in self.values.items()
+                    },
+                    "path": [geo.path for geo in self.geographies],
+                    "geometry": [geo.geography for geo in self.geographies],
+                },
+                orient="index",
+            )
+            .transpose()
+            .set_index("path")
+        )
+        gdf.crs = "epsg:4326"
+        return gdf

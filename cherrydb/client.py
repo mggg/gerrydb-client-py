@@ -300,7 +300,7 @@ class WriteContext:
         locality: Optional[Union[str, Locality]] = None,
         layer: Optional[Union[str, GeoLayer]] = None,
         batch_size: int = 5000,
-        max_conns: int = 10,
+        max_conns: int = 1,
     ) -> None:
         """Imports a DataFrame to CherryDB.
 

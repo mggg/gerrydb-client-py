@@ -62,7 +62,7 @@ class ViewRepo(ETagObjectRepo[View]):
                 if the parameters fail validation, or if no namespace is provided.
 
         Returns:
-            Metadata for the new column.
+            The new view.
         """
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
@@ -83,29 +83,35 @@ class ViewRepo(ETagObjectRepo[View]):
 
         raw_view = msgpack.loads(response.content)
         for geography in raw_view["geographies"]:
-            geography["geography"] = shapely.wkb.loads(geography["geography"])
-        view = View(**raw_view)
+            for key in ("geography", "internal_point"):
+                geography[key] = (
+                    None if geography is None else shapely.wkb.loads(geography[key])
+                )
+        return View(**raw_view)
 
-        gdf = (
-            gpd.GeoDataFrame.from_dict(
-                {
-                    **view.values,
-                    "index": [geo.path for geo in view.geographies],
-                    "geometry": [geo.geography for geo in view.geographies],
-                },
-                orient="index",
-            )
-            .transpose()
-            .set_index("index")
-        )
-        return gdf
+    @namespaced
+    @online
+    def get(
+        self,
+        path: str,
+        namespace: Optional[str] = None,
+    ) -> View:
+        """Gets a view.
 
+        Raises:
+            RequestError: If the view cannot be retrieved on the server side,
+                if the parameters fail validation, or if no namespace is provided.
         """
-        obj = self.schema(**response.json())
-        obj_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=obj, path=obj.path, namespace=namespace, 
-            valid_from=obj.valid_from,
+        response = self.session.client.get(
+            f"{self.base_url}/{namespace}/{path}",
+            headers={"accept": "application/msgpack"},
         )
-        return obj
-        """
+        response.raise_for_status()
+
+        raw_view = msgpack.loads(response.content)
+        for geography in raw_view["geographies"]:
+            for key in ("geography", "internal_point"):
+                geography[key] = (
+                    None if geography is None else shapely.wkb.loads(geography[key])
+                )
+        return View(**raw_view)
