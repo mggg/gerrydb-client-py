@@ -53,7 +53,7 @@ class CherryDB:
 
     def __init__(
         self,
-        profile: Optional[str] = "default",
+        profile: Optional[str] = None,
         host: Optional[str] = None,
         key: Optional[str] = None,
         namespace: Optional[str] = None,
@@ -88,6 +88,8 @@ class CherryDB:
         self.offline = offline
         self.timeout = timeout
 
+        if profile is None:
+            profile = os.getenv("CHERRY_PROFILE", "default")
         if host is not None and key is None:
             raise ConfigError(f'No API key specified for host "{host}".')
         if host is None and key is not None:

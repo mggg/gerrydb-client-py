@@ -2,7 +2,6 @@
 from datetime import datetime
 from typing import Optional, Union
 
-import geopandas as gpd
 import msgpack
 import shapely.wkb
 
