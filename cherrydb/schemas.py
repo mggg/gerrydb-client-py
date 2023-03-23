@@ -412,5 +412,5 @@ class View(ViewBase):
             .transpose()
             .set_index("path")
         )
-        gdf.crs = "epsg:4326"
+        gdf.crs = "epsg:4269"
         return gdf

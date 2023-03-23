@@ -344,7 +344,7 @@ class WriteContext:
 
         if create_geo:
             if "geometry" in df.columns:
-                df = df.to_crs("epsg:4326")  # import as lat/long
+                df = df.to_crs("epsg:4269")  # import as lat/long
                 geos = dict(df.geometry)
             else:
                 geos = {key: None for key in df.index}

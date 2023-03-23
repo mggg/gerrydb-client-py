@@ -53,7 +53,7 @@ class ViewRepo(ETagObjectRepo[View]):
                 If not specified, the latest data sources are used.
             proj: Projection to use for geographies in the view.
                 If not specified, the default projection of `locality` is used;
-                if that is not specified, WGS 84 lat/long (EPSG:4326) coordinates
+                if that is not specified, NAD 83 lat/long (EPSG:4269) coordinates
                 are used.
 
         Raises:
