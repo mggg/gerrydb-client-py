@@ -1,0 +1,43 @@
+name: CherryDB client tests
+on: [push, pull_request]
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11']
+        os: [ubuntu-latest, macos-latest]
+    env:
+      OS: ${{ matrix.os }}
+      PYTHON: ${{ matrix.python-version }}
+    steps:
+    - uses: actions/checkout@main
+    - name: Set up Python
+      uses: actions/setup-python@master
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        pip install poetry
+        pip install .
+        pip install black isort
+    - name: Check formatting
+        run: |
+          python -m black . --check
+          python -m isort . --diff
+    - name: Run tests and generate coverage report
+      run: |
+        pip install pytest
+        pip install pytest-cov
+        pytest --cov=./ --cov-report=xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage/reports/
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true
+        files: ./coverage1.xml,./coverage2.xml,!./cache
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true
