@@ -21,6 +21,7 @@ from cherrydb.repos import (
     GeoLayerRepo,
     LocalityRepo,
     NamespaceRepo,
+    PlanRepo,
     ViewRepo,
     ViewTemplateRepo,
 )
@@ -34,6 +35,7 @@ from cherrydb.schemas import (
     Locality,
     ObjectMeta,
     ObjectMetaCreate,
+    Plan,
     View,
     ViewTemplate,
 )
@@ -198,6 +200,11 @@ class CherryDB:
         return NamespaceRepo(session=self)
 
     @property
+    def plans(self) -> PlanRepo:
+        """Districting plans."""
+        return PlanRepo(schema=Plan, base_url="/plans", session=self)
+
+    @property
     def views(self) -> ViewRepo:
         """Views."""
         return ViewRepo(schema=View, base_url="/views", session=self)
@@ -279,6 +286,11 @@ class WriteContext:
     def namespaces(self) -> NamespaceRepo:
         """Namespaces."""
         return NamespaceRepo(session=self.db, ctx=self)
+
+    @property
+    def plans(self) -> PlanRepo:
+        """Districting plans."""
+        return PlanRepo(schema=Plan, base_url="/plans", session=self.db, ctx=self)
 
     @property
     def views(self) -> ViewRepo:

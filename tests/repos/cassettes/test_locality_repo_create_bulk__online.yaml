@@ -1,0 +1,382 @@
+interactions:
+- request:
+    body: '{"notes": "adding localities in bulk"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '38'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding localities in bulk","uuid":"51b2031c-6f53-4f47-a0d2-113514e47104","created_at":"2023-03-07T23:34:35.395442+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '160'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:34 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "foo", "parent_path": null, "default_proj": null, "name":
+      "Foo", "aliases": null}, {"canonical_path": "bar", "parent_path": null, "default_proj":
+      null, "name": "Bar", "aliases": ["baz"]}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '207'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 51b2031c-6f53-4f47-a0d2-113514e47104
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"foo","parent_path":null,"default_proj":null,"name":"Foo","aliases":[],"meta":{"notes":"adding
+      localities in bulk","uuid":"51b2031c-6f53-4f47-a0d2-113514e47104","created_at":"2023-03-07T23:34:35.395442+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"bar","parent_path":null,"default_proj":null,"name":"Bar","aliases":["baz"],"meta":{"notes":"adding
+      localities in bulk","uuid":"51b2031c-6f53-4f47-a0d2-113514e47104","created_at":"2023-03-07T23:34:35.395442+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '238'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:34 GMT
+      etag:
+      - '"ea560bf3-6949-4a40-a28f-84363ca4ef7c"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"ea560bf3-6949-4a40-a28f-84363ca4ef7c"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/foo
+  response:
+    content: '{"canonical_path":"foo","parent_path":null,"default_proj":null,"name":"Foo","aliases":[],"meta":{"notes":"adding
+      localities in bulk","uuid":"51b2031c-6f53-4f47-a0d2-113514e47104","created_at":"2023-03-07T23:34:35.395442+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '257'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:34 GMT
+      etag:
+      - '"e8a402e6-5656-4cf9-ad38-3a26b1e2cb1c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"ea560bf3-6949-4a40-a28f-84363ca4ef7c"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/bar
+  response:
+    content: '{"canonical_path":"bar","parent_path":null,"default_proj":null,"name":"Bar","aliases":["baz"],"meta":{"notes":"adding
+      localities in bulk","uuid":"51b2031c-6f53-4f47-a0d2-113514e47104","created_at":"2023-03-07T23:34:35.395442+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '262'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:34 GMT
+      etag:
+      - '"e8a402e6-5656-4cf9-ad38-3a26b1e2cb1c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding localities in bulk"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '38'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding localities in bulk","uuid":"8e7c63d8-a08b-4cac-bac3-7bc80381d166","created_at":"2023-03-07T23:34:56.869060+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '160'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:55 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "foo", "parent_path": null, "default_proj": null, "name":
+      "Foo", "aliases": null}, {"canonical_path": "bar", "parent_path": null, "default_proj":
+      null, "name": "Bar", "aliases": ["baz"]}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '207'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 8e7c63d8-a08b-4cac-bac3-7bc80381d166
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"foo","parent_path":null,"default_proj":null,"name":"Foo","aliases":[],"meta":{"notes":"adding
+      localities in bulk","uuid":"8e7c63d8-a08b-4cac-bac3-7bc80381d166","created_at":"2023-03-07T23:34:56.869060+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"bar","parent_path":null,"default_proj":null,"name":"Bar","aliases":["baz"],"meta":{"notes":"adding
+      localities in bulk","uuid":"8e7c63d8-a08b-4cac-bac3-7bc80381d166","created_at":"2023-03-07T23:34:56.869060+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '238'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:56 GMT
+      etag:
+      - '"ee8c2dda-2aa9-483e-8df2-9168a3a4822b"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"ee8c2dda-2aa9-483e-8df2-9168a3a4822b"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/foo
+  response:
+    content: '{"canonical_path":"foo","parent_path":null,"default_proj":null,"name":"Foo","aliases":[],"meta":{"notes":"adding
+      localities in bulk","uuid":"8e7c63d8-a08b-4cac-bac3-7bc80381d166","created_at":"2023-03-07T23:34:56.869060+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '257'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:56 GMT
+      etag:
+      - '"9d556314-197a-4847-8aef-ce096f7a2bfa"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"ee8c2dda-2aa9-483e-8df2-9168a3a4822b"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/localities/bar
+  response:
+    content: '{"canonical_path":"bar","parent_path":null,"default_proj":null,"name":"Bar","aliases":["baz"],"meta":{"notes":"adding
+      localities in bulk","uuid":"8e7c63d8-a08b-4cac-bac3-7bc80381d166","created_at":"2023-03-07T23:34:56.869060+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '262'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:34:56 GMT
+      etag:
+      - '"9d556314-197a-4847-8aef-ce096f7a2bfa"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding localities in bulk"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '38'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding localities in bulk","uuid":"69f418c5-f92c-4213-bdd5-39fb9788806f","created_at":"2023-03-07T23:35:21.930047+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '160'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:35:21 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "foo", "parent_path": null, "default_proj": null, "name":
+      "Foo", "aliases": null}, {"canonical_path": "bar", "parent_path": null, "default_proj":
+      null, "name": "Bar", "aliases": ["baz"]}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '207'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 69f418c5-f92c-4213-bdd5-39fb9788806f
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"foo","parent_path":null,"default_proj":null,"name":"Foo","aliases":[],"meta":{"notes":"adding
+      localities in bulk","uuid":"69f418c5-f92c-4213-bdd5-39fb9788806f","created_at":"2023-03-07T23:35:21.930047+00:00","created_by":"pjrule@me.com"}},{"canonical_path":"bar","parent_path":null,"default_proj":null,"name":"Bar","aliases":["baz"],"meta":{"notes":"adding
+      localities in bulk","uuid":"69f418c5-f92c-4213-bdd5-39fb9788806f","created_at":"2023-03-07T23:35:21.930047+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '241'
+      content-type:
+      - application/json
+      date:
+      - Tue, 07 Mar 2023 23:35:21 GMT
+      etag:
+      - '"ffc0da0b-5d58-4c9d-a7e0-c4b62984ad47"'
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 201
+version: 1

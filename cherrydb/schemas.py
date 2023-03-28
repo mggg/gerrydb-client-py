@@ -414,3 +414,37 @@ class View(ViewBase):
         )
         gdf.crs = "epsg:4269"
         return gdf
+
+
+class PlanBase(BaseModel):
+    """Base model for a districting plan."""
+
+    path: CherryPath
+    description: str
+    source_url: AnyUrl | None = None
+    districtr_id: str | None = None
+    daves_id: str | None = None
+
+
+class PlanCreate(PlanBase):
+    """Districting plan definition received on creation."""
+
+    locality: NamespacedCherryPath
+    layer: NamespacedCherryPath
+    assignments: dict[NamespacedCherryPath, str]
+
+
+class Plan(PlanBase):
+    """Rendered districting plan."""
+
+    __cache_name__ = "plan"
+    __cache_policy__ = ObjectCachePolicy.ETAG
+
+    namespace: str
+    locality: Locality
+    layer: GeoLayer
+    meta: ObjectMeta
+    created_at: datetime
+    num_districts: int
+    complete: bool
+    assignments: dict[NamespacedCherryPath, Optional[str]]

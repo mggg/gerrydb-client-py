@@ -1,6 +1,8 @@
 """Fixtures for API tests."""
 import os
+from pathlib import Path
 
+import geopandas as gpd
 import pytest
 
 from cherrydb import CherryDB
@@ -36,4 +38,32 @@ def client_ns(request, client):
 def vcr_config():
     return {
         "filter_headers": [("X-API-Key", "DUMMY")],
+    }
+
+
+@pytest.fixture(scope="session")
+def ia_dataframe():
+    """`GeoDataFrame` of Iowa counties."""
+    shp_path = Path(__file__).resolve().parent / "fixtures" / "tl_2020_19_county20.zip"
+    return gpd.read_file(shp_path).set_index("GEOID20")
+
+
+@pytest.fixture(scope="session")
+def ia_column_meta():
+    """Metadata for selected columns in the Iowa counties fixture."""
+    return {
+        "NAME20": {
+            "path": "name",
+            "description": "2020 Census name",
+            "source_url": "https://www.census.gov/",
+            "column_kind": "identifier",
+            "column_type": "str",
+        },
+        "FUNCSTAT20": {
+            "path": "funcstat",
+            "description": "2020 Census 2020 Census functional status.",
+            "source_url": "https://www.census.gov/",
+            "column_kind": "categorical",
+            "column_type": "str",
+        },
     }
