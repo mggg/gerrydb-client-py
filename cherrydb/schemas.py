@@ -448,3 +448,32 @@ class Plan(PlanBase):
     num_districts: int
     complete: bool
     assignments: dict[NamespacedCherryPath, Optional[str]]
+
+
+class GraphBase(BaseModel):
+    """Base model for a dual graph."""
+
+    path: CherryPath
+    description: str
+
+
+WeightedEdge = tuple[NamespacedCherryPath, NamespacedCherryPath, Optional[dict]]
+
+
+class GraphCreate(GraphBase):
+    """Dual graph definition received on creation."""
+
+    locality: NamespacedCherryPath
+    layer: NamespacedCherryPath
+    edges: list[WeightedEdge]
+
+
+class Graph(GraphBase):
+    """ "Rendered dual graph without node attributes."""
+
+    namespace: str
+    locality: Locality
+    layer: GeoLayer
+    edges: list[WeightedEdge]
+    meta: ObjectMeta
+    created_at: datetime

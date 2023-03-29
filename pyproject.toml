@@ -14,6 +14,7 @@ orjson = "^3.8.6"
 shapely = "^2.0.1"
 python-dateutil = "^2.8.2"
 geopandas = "^0.12.2"
+networkx = "^3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
