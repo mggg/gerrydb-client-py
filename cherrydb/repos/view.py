@@ -13,14 +13,7 @@ from cherrydb.repos.base import (
     parse_etag,
     write_context,
 )
-from cherrydb.schemas import (
-    Geography,
-    GeoLayer,
-    Locality,
-    View,
-    ViewCreate,
-    ViewTemplate,
-)
+from cherrydb.schemas import GeoLayer, Graph, Locality, View, ViewCreate, ViewTemplate
 
 
 class ViewRepo(ETagObjectRepo[View]):
@@ -38,6 +31,7 @@ class ViewRepo(ETagObjectRepo[View]):
         template: Union[str, ViewTemplate],
         locality: Union[str, Locality],
         layer: Union[str, GeoLayer],
+        graph: Optional[Union[str, Graph]] = None,
         valid_at: Optional[datetime] = None,
         proj: Optional[str] = None,
     ) -> View:
@@ -49,6 +43,7 @@ class ViewRepo(ETagObjectRepo[View]):
             template: View template (path) to create the view from.
             locality: Locality (path) to associate the view with.
             layer: Geographic layer (path) to associate the view with.
+            graph: Graph to associate the view with.
             valid_at: Point in time to instantiate the view at.
                 If not specified, the latest data sources are used.
             proj: Projection to use for geographies in the view.
@@ -72,9 +67,13 @@ class ViewRepo(ETagObjectRepo[View]):
                     locality if isinstance(locality, str) else locality.canonical_path
                 ),
                 layer=layer if isinstance(layer, str) else layer.full_path,
+                graph=(
+                    None
+                    if graph is None
+                    else (graph if isinstance(graph, str) else graph.full_path)
+                ),
                 valid_at=valid_at,
                 proj=proj,
-                # TODO: dual graph (optional)
             ).dict(),
             headers={"accept": "application/msgpack"},
         )

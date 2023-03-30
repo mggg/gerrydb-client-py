@@ -19,6 +19,7 @@ from cherrydb.repos import (
     ColumnSetRepo,
     GeographyRepo,
     GeoLayerRepo,
+    GraphRepo,
     LocalityRepo,
     NamespaceRepo,
     PlanRepo,
@@ -32,6 +33,7 @@ from cherrydb.schemas import (
     Geography,
     GeoImport,
     GeoLayer,
+    Graph,
     Locality,
     ObjectMeta,
     ObjectMetaCreate,
@@ -190,6 +192,11 @@ class CherryDB:
         return GeoLayerRepo(schema=GeoLayer, base_url="/layers", session=self)
 
     @property
+    def graphs(self) -> GraphRepo:
+        """Dual graphs."""
+        return GraphRepo(schema=Graph, base_url="/graphs", session=self)
+
+    @property
     def localities(self) -> LocalityRepo:
         """Localities."""
         return LocalityRepo(session=self)
@@ -276,6 +283,11 @@ class WriteContext:
         return GeoLayerRepo(
             schema=GeoLayer, base_url="/layers", session=self.db, ctx=self
         )
+
+    @property
+    def graphs(self) -> GraphRepo:
+        """Dual graphs."""
+        return GraphRepo(schema=Graph, base_url="/graphs", session=self.db, ctx=self)
 
     @property
     def localities(self) -> LocalityRepo:

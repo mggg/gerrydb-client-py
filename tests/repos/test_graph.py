@@ -1,21 +1,20 @@
-"""Integration/VCR tests for districting plans."""
-import pytest
+"""Integration/VCR tests for dual graphs."""
 
 
-def test_plan_repo_create_get__rook(client_with_ia_layer_loc, ia_dataframe):
-    client_ns, layer, locality = client_with_ia_layer_loc
-    with client_ns.context(notes="Uploading a plan for Iowa counties") as ctx:
-        plan = ctx.plans.create(
-            path="ia_one_district_complete",
+def test_graph_repo_create_get__valid(client_with_ia_layer_loc, ia_graph):
+    client_ns, layer, locality, _ = client_with_ia_layer_loc
+    with client_ns.context(notes="Uploading a graph for Iowa counties") as ctx:
+        graph = ctx.graphs.create(
+            path="ia_counties_rook",
             locality=locality,
             layer=layer,
-            description="Test plan for Iowa (one district).",
-            assignments={idx: "1" for idx in ia_dataframe.index},
-            source_url="https://example.com/",
+            description="Naive rook adjacency for Iowa counties.",
+            proj="epsg:26915",
+            graph=ia_graph,
         )
-        assert plan.assignments == {
-            f"/{client_ns.namespace}/{idx}": "1" for idx in ia_dataframe.index
+        saved_edges = {
+            (path_1.split("/")[-1], path_2.split("/")[-1])
+            for path_1, path_2, _ in graph.edges
         }
-        assert plan.complete
-        assert plan.num_districts == 1
-        assert ctx.plans["ia_one_district_complete"] == plan
+        assert saved_edges == set(ia_graph.edges)
+        assert ctx.graphs["ia_counties_rook"] == graph

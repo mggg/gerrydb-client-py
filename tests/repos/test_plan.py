@@ -4,10 +4,11 @@ import pytest
 from cherrydb.exceptions import ResultError
 
 
+@pytest.mark.vcr
 def test_plan_repo_create_get__one_district_complete(
     client_with_ia_layer_loc, ia_dataframe
 ):
-    client_ns, layer, locality = client_with_ia_layer_loc
+    client_ns, layer, locality, _ = client_with_ia_layer_loc
     with client_ns.context(notes="Uploading a plan for Iowa counties") as ctx:
         plan = ctx.plans.create(
             path="ia_one_district_complete",
@@ -25,10 +26,11 @@ def test_plan_repo_create_get__one_district_complete(
         assert ctx.plans["ia_one_district_complete"] == plan
 
 
+@pytest.mark.vcr
 def test_plan_repo_create__one_district_incomplete(
     client_with_ia_layer_loc, ia_dataframe
 ):
-    client_ns, layer, locality = client_with_ia_layer_loc
+    client_ns, layer, locality, _ = client_with_ia_layer_loc
     geos = list(ia_dataframe.index)
     assigned_geos = geos[:50]
     unassigned_geos = geos[50:]
@@ -50,8 +52,9 @@ def test_plan_repo_create__one_district_incomplete(
         assert plan.num_districts == 1
 
 
+@pytest.mark.vcr
 def test_plan_repo_create_all__two_districts(client_with_ia_layer_loc, ia_dataframe):
-    client_ns, layer, locality = client_with_ia_layer_loc
+    client_ns, layer, locality, _ = client_with_ia_layer_loc
     geos = list(ia_dataframe.index)
     dist1_geos = geos[:50]
     dist2_geos = geos[50:]
@@ -79,8 +82,9 @@ def test_plan_repo_create_all__two_districts(client_with_ia_layer_loc, ia_datafr
         assert "ia_two_districts" in [plan.path for plan in ctx.plans.all()]
 
 
+@pytest.mark.vcr
 def test_plan_repo_create__unknown_geos(client_with_ia_layer_loc):
-    client_ns, layer, locality = client_with_ia_layer_loc
+    client_ns, layer, _, _ = client_with_ia_layer_loc
 
     with client_ns.context(notes="creating a county-level locality in Iowa") as ctx:
         county_loc = ctx.localities.create(

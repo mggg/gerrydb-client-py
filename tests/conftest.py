@@ -1,9 +1,11 @@
 """Fixtures for API tests."""
+import json
 import os
 from pathlib import Path
 
 import geopandas as gpd
 import pytest
+from networkx.readwrite import json_graph
 
 from cherrydb import CherryDB
 
@@ -46,6 +48,18 @@ def ia_dataframe():
     """`GeoDataFrame` of Iowa counties."""
     shp_path = Path(__file__).resolve().parent / "fixtures" / "tl_2020_19_county20.zip"
     return gpd.read_file(shp_path).set_index("GEOID20")
+
+
+@pytest.fixture(scope="session")
+def ia_graph():
+    """NetworkX `Graph` of Iowa counties."""
+    graph_path = (
+        Path(__file__).resolve().parent
+        / "fixtures"
+        / "tl_2020_19_county20__rook_epsg26915.json"
+    )
+    with open(graph_path) as graph_fp:
+        return json_graph.adjacency_graph(json.loads(graph_fp.read()))
 
 
 @pytest.fixture(scope="session")
@@ -98,7 +112,10 @@ def client_with_ia_layer_loc(ia_dataframe, ia_column_meta):
             source_url="https://www.census.gov/",
         )
         locality = ctx.localities.create(
-            canonical_path="iowa", name="State of Iowa", aliases=["ia", "19"]
+            canonical_path="iowa",
+            name="State of Iowa",
+            aliases=["ia", "19"],
+            default_proj="epsg:26915",  # UTM zone 15N
         )
         ctx.load_dataframe(
             df=ia_dataframe,
@@ -109,4 +126,4 @@ def client_with_ia_layer_loc(ia_dataframe, ia_column_meta):
             locality=locality,
         )
 
-    return client, layer, locality
+    return client, layer, locality, columns

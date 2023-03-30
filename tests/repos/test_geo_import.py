@@ -4,8 +4,6 @@ import pytest
 # The `GeoImport` object is used for internal tracking, so we don't
 # expose it directly via a repository.
 
-# TODO: Move this into `GeographyRepo` as a con
-
 
 @pytest.mark.skip
 @pytest.mark.vcr
