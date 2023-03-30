@@ -2748,4 +2748,448 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 201
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"cf9d4605-5e53-464e-88a6-a7e6355c2274","created_at":"2023-03-30T00:32:57.617189+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:56 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "ca", "parent_path": null, "default_proj": null, "name":
+      "State of California", "aliases": null}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '117'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - cf9d4605-5e53-464e-88a6-a7e6355c2274
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"cf9d4605-5e53-464e-88a6-a7e6355c2274","created_at":"2023-03-30T00:32:57.617189+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '266'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:56 GMT
+      etag:
+      - '"b87a3b9f-ce5a-4c0d-99e9-33d09e212d22"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"5afd6775-01ab-4461-866d-5e72d28c64d6","created_at":"2023-03-30T00:39:17.300631+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:39:16 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "ca", "parent_path": null, "default_proj": null, "name":
+      "State of California", "aliases": null}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '117'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5afd6775-01ab-4461-866d-5e72d28c64d6
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"5afd6775-01ab-4461-866d-5e72d28c64d6","created_at":"2023-03-30T00:39:17.300631+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '266'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:39:17 GMT
+      etag:
+      - '"a2a5fb21-b05f-48df-8308-1b9574c231ec"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"56bc6d0b-e660-4599-a30a-59fa8dc250f6","created_at":"2023-03-30T00:41:01.108018+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:41:00 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "ca", "parent_path": null, "default_proj": null, "name":
+      "State of California", "aliases": null}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '117'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 56bc6d0b-e660-4599-a30a-59fa8dc250f6
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"56bc6d0b-e660-4599-a30a-59fa8dc250f6","created_at":"2023-03-30T00:41:01.108018+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '266'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:41:00 GMT
+      etag:
+      - '"59e4a59d-27a2-4fa7-b560-d08cef2a1a30"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"91370e94-ed7f-43d3-9fd2-a80749cccd95","created_at":"2023-03-30T00:43:32.943774+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:32 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "ca", "parent_path": null, "default_proj": null, "name":
+      "State of California", "aliases": null}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '117'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 91370e94-ed7f-43d3-9fd2-a80749cccd95
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"91370e94-ed7f-43d3-9fd2-a80749cccd95","created_at":"2023-03-30T00:43:32.943774+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '266'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:32 GMT
+      etag:
+      - '"981359d4-d7c3-43e4-8fe7-7e25799bdf46"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"2a942e1e-f3c6-4889-b99e-ccbd337efcf0","created_at":"2023-03-30T00:45:47.299087+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:46 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "ca", "parent_path": null, "default_proj": null, "name":
+      "State of California", "aliases": null}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '117'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 2a942e1e-f3c6-4889-b99e-ccbd337efcf0
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"2a942e1e-f3c6-4889-b99e-ccbd337efcf0","created_at":"2023-03-30T00:45:47.299087+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '266'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:46 GMT
+      etag:
+      - '"a3679aa3-3c0c-4d5a-b92c-085d4ea92562"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding a locality"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '30'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a locality","uuid":"15021ee8-8896-46f3-801c-a4bbe6d2952e","created_at":"2023-03-30T00:48:11.257536+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '152'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:48:11 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '[{"canonical_path": "ca", "parent_path": null, "default_proj": null, "name":
+      "State of California", "aliases": null}]'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '117'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 15021ee8-8896-46f3-801c-a4bbe6d2952e
+    method: POST
+    uri: http://localhost:8000/api/v1/localities/
+  response:
+    content: '[{"canonical_path":"ca","parent_path":null,"default_proj":null,"name":"State
+      of California","aliases":[],"meta":{"notes":"adding a locality","uuid":"15021ee8-8896-46f3-801c-a4bbe6d2952e","created_at":"2023-03-30T00:48:11.257536+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-length:
+      - '266'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:48:11 GMT
+      etag:
+      - '"be7473c1-1274-4756-b6c8-60c7e14cda0f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
 version: 1

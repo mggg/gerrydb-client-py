@@ -3317,4 +3317,880 @@ interactions:
       - Accept-Encoding
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"440d4429-9ab0-47f6-8b49-886ca4219541","created_at":"2023-03-30T00:32:59.739438+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:58 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "all", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '65'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 440d4429-9ab0-47f6-8b49-886ca4219541
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"all","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"440d4429-9ab0-47f6-8b49-886ca4219541","created_at":"2023-03-30T00:32:59.739438+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '221'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:59 GMT
+      etag:
+      - '"81c97531-a5d1-4533-b1b9-a19a695c6742"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '[{"path":"test_load_dataframe__with_geo__ia_counties","description":"cherrydb-client-py
+      test test_load_dataframe__with_geo__ia_counties","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_load_dataframe__with_geo__ia_counties","uuid":"fa7a0e2f-8580-4ed4-9c1d-8692683704d9","created_at":"2023-03-30T00:32:36.246496+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online","uuid":"2f1b799c-3cd0-4dec-83dc-3bafa9915026","created_at":"2023-03-30T00:32:38.589002+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online_offline","uuid":"cd8433d0-d270-4998-bb6a-1c9768fa56bb","created_at":"2023-03-30T00:32:39.394476+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online","uuid":"351fea8c-84ff-40e0-ba57-76ffc8555160","created_at":"2023-03-30T00:32:39.879304+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"16fc70d0-2415-491e-ab3d-4c4459583eb5","created_at":"2023-03-30T00:32:40.473632+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"0dcaf97a-5cb1-4715-9560-b70fda833d67","created_at":"2023-03-30T00:32:41.078839+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"c7a9ab3a-2480-4604-b198-988a44194d79","created_at":"2023-03-30T00:32:41.823017+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_set_values","description":"cherrydb-client-py
+      test test_column_repo_set_values","public":true,"meta":{"notes":"Test setup
+      for cherrydb-client-py test test_column_repo_set_values","uuid":"810a971a-373e-4d43-a37a-4498b450d323","created_at":"2023-03-30T00:32:42.405732+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"83213d02-e3fb-4abf-bc98-563f758e466c","created_at":"2023-03-30T00:32:46.767199+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online_offline","uuid":"92b814bd-1b76-4eb3-91bb-782b396c1315","created_at":"2023-03-30T00:32:47.969998+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online","uuid":"c3a5375f-2e7b-45ae-a084-bdfd0ea0673d","created_at":"2023-03-30T00:32:49.011833+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online_offline","uuid":"0843632a-4b47-4cb0-b179-d027c3d5c057","created_at":"2023-03-30T00:32:49.818178+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"f4b87948-3b39-455e-ac1f-00efbe971ecf","created_at":"2023-03-30T00:32:50.574174+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online_offline","uuid":"9b2e9799-18a6-4cf0-ae28-2b3fcc5cf466","created_at":"2023-03-30T00:32:51.251644+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online","uuid":"e556034d-9fc0-441a-b783-f78a821e644d","created_at":"2023-03-30T00:32:51.725926+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"e754f4f7-55ea-4ae8-b6ab-62166628c20e","created_at":"2023-03-30T00:32:52.328635+00:00","created_by":"pjrule@me.com"}},{"path":"test_geography_repo_create","description":"cherrydb-client-py
+      test test_geography_repo_create","public":true,"meta":{"notes":"Test setup for
+      cherrydb-client-py test test_geography_repo_create","uuid":"ba46552b-56fa-4c0d-bf77-d1900e7b6a3d","created_at":"2023-03-30T00:32:52.864991+00:00","created_by":"pjrule@me.com"}},{"path":"plan","description":"cherrydb-client-py
+      plan repository tests","public":true,"meta":{"notes":"Test setup for cherrydb-client-py
+      plan repository tests","uuid":"66c93052-c382-4403-b2fb-2baf7bbdfdf1","created_at":"2023-03-30T00:32:56.177281+00:00","created_by":"pjrule@me.com"}},{"path":"test","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"a6d1c626-a74d-4aae-b72c-1f8023e6b03d","created_at":"2023-03-30T00:32:59.051042+00:00","created_by":"pjrule@me.com"}},{"path":"offline","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"fca5eb91-6323-4044-94f1-1199c52bc511","created_at":"2023-03-30T00:32:59.466059+00:00","created_by":"pjrule@me.com"}},{"path":"all","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"440d4429-9ab0-47f6-8b49-886ca4219541","created_at":"2023-03-30T00:32:59.739438+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '1179'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:59 GMT
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"a2c779c5-12fc-4de0-a085-b1d208e481b8","created_at":"2023-03-30T00:39:19.834764+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:39:19 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "all", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '65'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - a2c779c5-12fc-4de0-a085-b1d208e481b8
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"all","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"a2c779c5-12fc-4de0-a085-b1d208e481b8","created_at":"2023-03-30T00:39:19.834764+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '221'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:39:19 GMT
+      etag:
+      - '"0b836e4f-b98f-46cb-b977-8ca1c25e6f1f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '[{"path":"test_load_dataframe__with_geo__ia_counties","description":"cherrydb-client-py
+      test test_load_dataframe__with_geo__ia_counties","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_load_dataframe__with_geo__ia_counties","uuid":"0d42122b-5c9e-4263-8252-50265389162d","created_at":"2023-03-30T00:38:53.397723+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online","uuid":"46d5f458-508f-4715-bb1a-bd3910924274","created_at":"2023-03-30T00:38:55.551052+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online_offline","uuid":"3b3d1a79-0787-4ca2-bbed-b40e6af1c484","created_at":"2023-03-30T00:38:56.353065+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online","uuid":"8d321ae5-2146-46db-8909-6cd2f9323107","created_at":"2023-03-30T00:38:56.852431+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"be6c9a61-4fa3-4e3c-8396-2009c8afe5c1","created_at":"2023-03-30T00:38:57.455874+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"56c3aaa1-d0bb-423d-8a4e-56b5fdecde29","created_at":"2023-03-30T00:38:58.117123+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"d883e218-5d19-4ec0-bdd1-8ba642ca5a9f","created_at":"2023-03-30T00:38:58.842417+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_set_values","description":"cherrydb-client-py
+      test test_column_repo_set_values","public":true,"meta":{"notes":"Test setup
+      for cherrydb-client-py test test_column_repo_set_values","uuid":"abb3a8ea-8bbb-43bf-a95d-24794bec87dd","created_at":"2023-03-30T00:38:59.402115+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"9779037a-491b-4817-ac17-65767a579145","created_at":"2023-03-30T00:39:03.732428+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online_offline","uuid":"a145f861-5563-4b82-8f53-d58757e534db","created_at":"2023-03-30T00:39:04.878612+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online","uuid":"bec9ac21-a475-4dad-a29b-8fe6ace17615","created_at":"2023-03-30T00:39:06.011901+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online_offline","uuid":"a3c2933b-4efa-4149-b3ae-c3bc1840fc8a","created_at":"2023-03-30T00:39:06.886227+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"cceaac3e-b146-4a83-b257-921c96c297a7","created_at":"2023-03-30T00:39:07.616891+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online_offline","uuid":"ff0fc629-240c-4282-aca4-4f671ec24240","created_at":"2023-03-30T00:39:08.324651+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online","uuid":"aaa62f9d-af10-46a1-8b26-948327d1d8a4","created_at":"2023-03-30T00:39:08.796166+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"bf68e3e3-224e-4c01-8d5b-7d8a839c001c","created_at":"2023-03-30T00:39:09.407984+00:00","created_by":"pjrule@me.com"}},{"path":"test_geography_repo_create","description":"cherrydb-client-py
+      test test_geography_repo_create","public":true,"meta":{"notes":"Test setup for
+      cherrydb-client-py test test_geography_repo_create","uuid":"1667216f-b6dd-443a-b69b-54362574f489","created_at":"2023-03-30T00:39:09.990842+00:00","created_by":"pjrule@me.com"}},{"path":"plan","description":"cherrydb-client-py
+      plan repository tests","public":true,"meta":{"notes":"Test setup for cherrydb-client-py
+      plan repository tests","uuid":"2ec0019e-8bb4-4159-84b1-2d2249f9367e","created_at":"2023-03-30T00:39:13.244461+00:00","created_by":"pjrule@me.com"}},{"path":"test","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"bea85397-6963-4e5a-8809-c4c93260020f","created_at":"2023-03-30T00:39:19.183853+00:00","created_by":"pjrule@me.com"}},{"path":"offline","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"0b62bcde-987c-4fe9-b283-e87e075e25c4","created_at":"2023-03-30T00:39:19.597783+00:00","created_by":"pjrule@me.com"}},{"path":"all","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"a2c779c5-12fc-4de0-a085-b1d208e481b8","created_at":"2023-03-30T00:39:19.834764+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '1184'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:39:19 GMT
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"5f8bd119-91ac-4b65-a7a1-f3648c4dad12","created_at":"2023-03-30T00:41:03.259520+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:41:02 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "all", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '65'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 5f8bd119-91ac-4b65-a7a1-f3648c4dad12
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"all","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"5f8bd119-91ac-4b65-a7a1-f3648c4dad12","created_at":"2023-03-30T00:41:03.259520+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '221'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:41:02 GMT
+      etag:
+      - '"3178b51f-37aa-465c-8577-02e097dba9d0"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '[{"path":"test_load_dataframe__with_geo__ia_counties","description":"cherrydb-client-py
+      test test_load_dataframe__with_geo__ia_counties","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_load_dataframe__with_geo__ia_counties","uuid":"71fb18c4-227d-4b88-b640-917f1e97418c","created_at":"2023-03-30T00:40:36.912766+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online","uuid":"839d01b9-74ef-403f-bbac-cec12c01a1fe","created_at":"2023-03-30T00:40:39.119808+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online_offline","uuid":"fc2a1d65-abdd-4b5d-b932-96650f29fcd9","created_at":"2023-03-30T00:40:40.183275+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online","uuid":"d0fafbcf-dee6-4289-8b9d-b41d17d2c5b3","created_at":"2023-03-30T00:40:40.712594+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"3cc77250-7321-462f-8f5f-a6ef8de8b0df","created_at":"2023-03-30T00:40:41.325094+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"11182ddd-2bdc-4c31-a4fd-317667cdeeda","created_at":"2023-03-30T00:40:41.957324+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"e784da6b-b75a-40e6-a1a6-35ab90bd56bf","created_at":"2023-03-30T00:40:42.725977+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_set_values","description":"cherrydb-client-py
+      test test_column_repo_set_values","public":true,"meta":{"notes":"Test setup
+      for cherrydb-client-py test test_column_repo_set_values","uuid":"b59ca23c-b2a1-4fe4-ae48-436b74995ebd","created_at":"2023-03-30T00:40:43.283501+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"a54b182e-7ea3-4851-826e-4e3ff1a5783f","created_at":"2023-03-30T00:40:47.764207+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online_offline","uuid":"0bebc849-272c-4f66-bf91-2151707f2627","created_at":"2023-03-30T00:40:48.934966+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online","uuid":"e990147c-365a-445a-876b-6aa2278731e2","created_at":"2023-03-30T00:40:50.040803+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online_offline","uuid":"ffc3938f-7ac5-4ae6-8cf9-072274df2d98","created_at":"2023-03-30T00:40:50.863149+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"569ee3a7-16ee-43b0-a536-d79aed95f992","created_at":"2023-03-30T00:40:51.617931+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online_offline","uuid":"3b670124-c68f-4aa5-8f5e-e33f4b7782c6","created_at":"2023-03-30T00:40:52.283437+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online","uuid":"c60d943b-c697-43cb-bfbe-447af0706946","created_at":"2023-03-30T00:40:52.786702+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"a1e211d9-122c-4756-a99b-915a1f0bd505","created_at":"2023-03-30T00:40:53.448209+00:00","created_by":"pjrule@me.com"}},{"path":"test_geography_repo_create","description":"cherrydb-client-py
+      test test_geography_repo_create","public":true,"meta":{"notes":"Test setup for
+      cherrydb-client-py test test_geography_repo_create","uuid":"ae4fdaad-9b40-4da5-a018-eb5cfef5d500","created_at":"2023-03-30T00:40:53.987462+00:00","created_by":"pjrule@me.com"}},{"path":"plan","description":"cherrydb-client-py
+      plan repository tests","public":true,"meta":{"notes":"Test setup for cherrydb-client-py
+      plan repository tests","uuid":"a2656ff0-aabb-406c-8ffb-04575a21b3f6","created_at":"2023-03-30T00:40:57.361052+00:00","created_by":"pjrule@me.com"}},{"path":"test","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"d750acbf-6fda-4969-8f3b-14995b104f8a","created_at":"2023-03-30T00:41:02.624859+00:00","created_by":"pjrule@me.com"}},{"path":"offline","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"62653687-e76f-4b01-b157-c48999451c2a","created_at":"2023-03-30T00:41:03.000913+00:00","created_by":"pjrule@me.com"}},{"path":"all","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"5f8bd119-91ac-4b65-a7a1-f3648c4dad12","created_at":"2023-03-30T00:41:03.259520+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '1180'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:41:03 GMT
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"0975e497-ab66-4840-937b-e618559f53db","created_at":"2023-03-30T00:43:35.008730+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:34 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "all", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '65'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 0975e497-ab66-4840-937b-e618559f53db
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"all","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"0975e497-ab66-4840-937b-e618559f53db","created_at":"2023-03-30T00:43:35.008730+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '221'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:34 GMT
+      etag:
+      - '"09d4a122-55ef-4a02-b5f8-026ab418e7ec"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '[{"path":"test_load_dataframe__with_geo__ia_counties","description":"cherrydb-client-py
+      test test_load_dataframe__with_geo__ia_counties","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_load_dataframe__with_geo__ia_counties","uuid":"508575bc-d79b-41c3-85a0-b27453e24d84","created_at":"2023-03-30T00:43:08.704113+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online","uuid":"462b9a16-02f9-44f3-bbdf-1db1b11eca27","created_at":"2023-03-30T00:43:10.881224+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online_offline","uuid":"fe83fcb9-f3f5-45b7-a260-a3fcbbd7ca8d","created_at":"2023-03-30T00:43:12.045500+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online","uuid":"180014b5-b661-4ee8-801d-e43c68100225","created_at":"2023-03-30T00:43:12.818427+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"4a13949e-1645-450c-a3d2-b776943ab8a3","created_at":"2023-03-30T00:43:13.460792+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"0e079905-521a-4b26-81df-99a6ef55f3a6","created_at":"2023-03-30T00:43:14.090144+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"6fbd57d9-172b-4fad-83da-d17da533888f","created_at":"2023-03-30T00:43:14.826973+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_set_values","description":"cherrydb-client-py
+      test test_column_repo_set_values","public":true,"meta":{"notes":"Test setup
+      for cherrydb-client-py test test_column_repo_set_values","uuid":"2a81b6a8-9c2f-4df8-8199-d8f14f3951e4","created_at":"2023-03-30T00:43:15.378860+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"e03bdc5e-f04c-47ca-a611-cd46d0dee6a9","created_at":"2023-03-30T00:43:19.779529+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online_offline","uuid":"8193dc7d-f26b-4b3e-b9db-49f05baac666","created_at":"2023-03-30T00:43:20.949450+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online","uuid":"a3a05f3d-2385-4acc-8657-ab1d8377a9f4","created_at":"2023-03-30T00:43:22.031041+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online_offline","uuid":"813b6221-ab35-4d20-8fc0-fef6bd353b0f","created_at":"2023-03-30T00:43:22.989171+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"c1bfeb6e-72b0-4203-abfd-d63857758b0f","created_at":"2023-03-30T00:43:23.814110+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online_offline","uuid":"8b3fc377-1249-48f9-ba3f-29586616cd1d","created_at":"2023-03-30T00:43:24.525918+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online","uuid":"a777e7b2-ea7a-4da8-a832-6709362cea70","created_at":"2023-03-30T00:43:25.010211+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"4ce7b4bb-144a-4956-8650-1a24d520ee81","created_at":"2023-03-30T00:43:25.610398+00:00","created_by":"pjrule@me.com"}},{"path":"test_geography_repo_create","description":"cherrydb-client-py
+      test test_geography_repo_create","public":true,"meta":{"notes":"Test setup for
+      cherrydb-client-py test test_geography_repo_create","uuid":"57650b82-343b-422c-bba3-90014bfb03eb","created_at":"2023-03-30T00:43:26.157547+00:00","created_by":"pjrule@me.com"}},{"path":"plan","description":"cherrydb-client-py
+      plan repository tests","public":true,"meta":{"notes":"Test setup for cherrydb-client-py
+      plan repository tests","uuid":"19dddf2b-72ea-4e93-a93b-095c0ba9b577","created_at":"2023-03-30T00:43:29.497308+00:00","created_by":"pjrule@me.com"}},{"path":"test","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"ea7438b2-2b04-4c84-aa61-f7116665e687","created_at":"2023-03-30T00:43:34.450407+00:00","created_by":"pjrule@me.com"}},{"path":"offline","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"25046b69-973e-4727-840b-a97a6f69faf9","created_at":"2023-03-30T00:43:34.768820+00:00","created_by":"pjrule@me.com"}},{"path":"all","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"0975e497-ab66-4840-937b-e618559f53db","created_at":"2023-03-30T00:43:35.008730+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '1182'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:34 GMT
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"60a4ffb7-83fb-4d08-b165-3fe5c4efd632","created_at":"2023-03-30T00:45:49.375708+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:48 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "all", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '65'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 60a4ffb7-83fb-4d08-b165-3fe5c4efd632
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"all","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"60a4ffb7-83fb-4d08-b165-3fe5c4efd632","created_at":"2023-03-30T00:45:49.375708+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '221'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:48 GMT
+      etag:
+      - '"3f9de737-f642-433e-b440-40421531e6f4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '[{"path":"test_load_dataframe__with_geo__ia_counties","description":"cherrydb-client-py
+      test test_load_dataframe__with_geo__ia_counties","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_load_dataframe__with_geo__ia_counties","uuid":"1f3b70a7-16dc-4459-a60e-09ea94ce4494","created_at":"2023-03-30T00:45:24.136531+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online","uuid":"9c97d1fe-8119-4083-b09a-e53a56ebdeb9","created_at":"2023-03-30T00:45:26.468517+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online_offline","uuid":"da88234d-af2a-433c-88c5-447b76869bc3","created_at":"2023-03-30T00:45:27.295016+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online","uuid":"89e7e43f-cfcd-4a98-bb16-8b5d9ca3afc4","created_at":"2023-03-30T00:45:27.827964+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"d13a04de-bb92-4971-8dc0-cb42ada7ca76","created_at":"2023-03-30T00:45:28.463570+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"b7cf05e9-d3d6-471a-ad03-b74717e156d8","created_at":"2023-03-30T00:45:29.065430+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"ca570d86-42f3-46ff-8ca8-690e366abf62","created_at":"2023-03-30T00:45:29.800600+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_set_values","description":"cherrydb-client-py
+      test test_column_repo_set_values","public":true,"meta":{"notes":"Test setup
+      for cherrydb-client-py test test_column_repo_set_values","uuid":"bd33707b-d64e-4e60-8bb8-5224496c7722","created_at":"2023-03-30T00:45:30.335541+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"016756c3-60d3-472a-9de6-dc7ed4f13938","created_at":"2023-03-30T00:45:34.673521+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online_offline","uuid":"e181b09d-da46-4a9b-bf39-b44495547d00","created_at":"2023-03-30T00:45:35.795235+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online","uuid":"2651322c-5269-4712-af47-81dc0568b837","created_at":"2023-03-30T00:45:36.764949+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online_offline","uuid":"2ab21ac8-a3c7-4567-a306-803f5453b752","created_at":"2023-03-30T00:45:37.588403+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"785d3f01-ae6c-4fc5-bb05-7f5deb789424","created_at":"2023-03-30T00:45:38.311746+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online_offline","uuid":"56c0385c-f872-40ac-a59b-892449f4c67f","created_at":"2023-03-30T00:45:39.016810+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online","uuid":"f0f085a2-42d7-4e9d-aa98-1e54cc72108c","created_at":"2023-03-30T00:45:39.506599+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"35754796-acea-4e6b-a10e-8347e7aae1c9","created_at":"2023-03-30T00:45:40.081332+00:00","created_by":"pjrule@me.com"}},{"path":"test_geography_repo_create","description":"cherrydb-client-py
+      test test_geography_repo_create","public":true,"meta":{"notes":"Test setup for
+      cherrydb-client-py test test_geography_repo_create","uuid":"250d0439-3237-4ae2-bb60-32ac95416751","created_at":"2023-03-30T00:45:40.659612+00:00","created_by":"pjrule@me.com"}},{"path":"plan","description":"cherrydb-client-py
+      plan repository tests","public":true,"meta":{"notes":"Test setup for cherrydb-client-py
+      plan repository tests","uuid":"3240aee9-d140-4c61-a628-33c3876a756e","created_at":"2023-03-30T00:45:43.980215+00:00","created_by":"pjrule@me.com"}},{"path":"test","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"60b8987e-fb48-4040-801e-fc5b4fd13c2e","created_at":"2023-03-30T00:45:48.782281+00:00","created_by":"pjrule@me.com"}},{"path":"offline","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"48e49f2a-bc6a-4094-a4b8-ac7c49e40109","created_at":"2023-03-30T00:45:49.113573+00:00","created_by":"pjrule@me.com"}},{"path":"all","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"60a4ffb7-83fb-4d08-b165-3fe5c4efd632","created_at":"2023-03-30T00:45:49.375708+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '1183'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:48 GMT
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "adding a namespace"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '31'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding a namespace","uuid":"8dce3a0b-8e1a-4a35-b395-ad908374d984","created_at":"2023-03-30T00:48:13.566264+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '153'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:48:13 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "all", "description": "Test namespace.", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '65'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 8dce3a0b-8e1a-4a35-b395-ad908374d984
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"all","description":"Test namespace.","public":true,"meta":{"notes":"adding
+      a namespace","uuid":"8dce3a0b-8e1a-4a35-b395-ad908374d984","created_at":"2023-03-30T00:48:13.566264+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '221'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:48:13 GMT
+      etag:
+      - '"45233911-078a-4ef6-815c-2dbf8971a1b3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '[{"path":"test_load_dataframe__with_geo__ia_counties","description":"cherrydb-client-py
+      test test_load_dataframe__with_geo__ia_counties","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_load_dataframe__with_geo__ia_counties","uuid":"6212ec2e-01a4-4d83-bbf3-1538294ce56f","created_at":"2023-03-30T00:47:46.183309+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online","uuid":"66cff189-329e-45eb-ad9a-623f0251e40f","created_at":"2023-03-30T00:47:48.805913+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_get__online_offline","uuid":"ef7f9adf-3cd5-4ad8-8a5c-a4baf041e078","created_at":"2023-03-30T00:47:49.866659+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online","uuid":"a61ebd4e-3f30-4171-8128-794dc8dec869","created_at":"2023-03-30T00:47:50.554656+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_all__online_offline","uuid":"cc155ad5-aae1-4e2f-82cf-4621c11f5c88","created_at":"2023-03-30T00:47:51.210951+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"41e0606d-7208-4d7a-9e46-49a3be379955","created_at":"2023-03-30T00:47:51.831255+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_create_update_get__online_offline","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online_offline","uuid":"1dc73f40-770c-4a64-a688-f9af4aae3b60","created_at":"2023-03-30T00:47:52.546043+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_repo_set_values","description":"cherrydb-client-py
+      test test_column_repo_set_values","public":true,"meta":{"notes":"Test setup
+      for cherrydb-client-py test test_column_repo_set_values","uuid":"6b881136-65ee-4ebb-a1e6-d673d52cbff9","created_at":"2023-03-30T00:47:53.121070+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online","uuid":"95eab434-d2c9-4836-ac15-2873d62fb9a8","created_at":"2023-03-30T00:47:57.614735+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_get__online_offline","uuid":"7637ccbd-cdbf-427d-a420-29d2453fe33b","created_at":"2023-03-30T00:47:58.817223+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online","uuid":"45ca59a5-8c69-411a-adad-afdc4d45d0c9","created_at":"2023-03-30T00:48:00.026156+00:00","created_by":"pjrule@me.com"}},{"path":"test_column_set_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_column_set_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_set_repo_create_all__online_offline","uuid":"0757ea89-4440-4b7a-9e0f-54aae00aa95e","created_at":"2023-03-30T00:48:01.029632+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online","uuid":"d331df87-2d4d-4023-bb91-699f84b2645b","created_at":"2023-03-30T00:48:01.881896+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_get__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_get__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_get__online_offline","uuid":"3cb0e94a-262e-481c-8cfc-ed5a8cbb8af0","created_at":"2023-03-30T00:48:02.559788+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online","uuid":"356c10de-c849-46d5-8909-3b8215d37b89","created_at":"2023-03-30T00:48:03.074728+00:00","created_by":"pjrule@me.com"}},{"path":"test_geo_layer_repo_create_all__online_offline","description":"cherrydb-client-py
+      test test_geo_layer_repo_create_all__online_offline","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_geo_layer_repo_create_all__online_offline","uuid":"52a2da0b-4bac-4b94-b6c6-940ee462c3ad","created_at":"2023-03-30T00:48:03.720023+00:00","created_by":"pjrule@me.com"}},{"path":"test_geography_repo_create","description":"cherrydb-client-py
+      test test_geography_repo_create","public":true,"meta":{"notes":"Test setup for
+      cherrydb-client-py test test_geography_repo_create","uuid":"dcfdd1c3-181b-413a-9f58-73c5a6654e0a","created_at":"2023-03-30T00:48:04.314749+00:00","created_by":"pjrule@me.com"}},{"path":"plan","description":"cherrydb-client-py
+      plan repository tests","public":true,"meta":{"notes":"Test setup for cherrydb-client-py
+      plan repository tests","uuid":"9179d3b5-803a-4e96-9cd0-e1838daad8bb","created_at":"2023-03-30T00:48:07.608584+00:00","created_by":"pjrule@me.com"}},{"path":"test","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"111e0879-0ab1-4c84-961d-20581f3ab8e1","created_at":"2023-03-30T00:48:12.967017+00:00","created_by":"pjrule@me.com"}},{"path":"offline","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"5f4dab17-835f-4766-8c13-f4db92ffe6c5","created_at":"2023-03-30T00:48:13.327311+00:00","created_by":"pjrule@me.com"}},{"path":"all","description":"Test
+      namespace.","public":true,"meta":{"notes":"adding a namespace","uuid":"8dce3a0b-8e1a-4a35-b395-ad908374d984","created_at":"2023-03-30T00:48:13.566264+00:00","created_by":"pjrule@me.com"}}]'
+    headers:
+      content-encoding:
+      - gzip
+      content-length:
+      - '1190'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:48:13 GMT
+      server:
+      - uvicorn
+      vary:
+      - Accept-Encoding
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1

@@ -12,7 +12,7 @@ def test_load_dataframe__with_geo__ia_counties(client_ns, ia_dataframe, ia_colum
             source_url="https://www.census.gov/",
         )
         locality = ctx.localities.create(
-            canonical_path="iowa", name="State of Iowa", aliases=["ia", "19"]
+            canonical_path="load_iowa", name="State of Iowa"
         )
         ctx.load_dataframe(
             df=ia_dataframe,

@@ -83,7 +83,7 @@ def ia_column_meta():
     }
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def client_with_ia_layer_loc(ia_dataframe, ia_column_meta):
     """A namespaced client with a `GeoLayer` and `Locality` for Iowa counties."""
     client = CherryDB(

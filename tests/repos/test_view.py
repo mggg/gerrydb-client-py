@@ -50,7 +50,7 @@ def ia_view_with_graph(client_with_ia_layer_loc, ia_graph):
             path="graph_base", members=list(columns.values()), description="Base view."
         )
         graph = ctx.graphs.create(
-            path="ia_counties_rook",
+            path="ia_counties",
             locality=locality,
             layer=layer,
             description="Naive rook adjacency for Iowa counties.",

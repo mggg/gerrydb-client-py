@@ -4635,4 +4635,1366 @@ interactions:
       - uvicorn
     http_version: HTTP/1.1
     status_code: 200
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '94'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"0dcaf97a-5cb1-4715-9560-b70fda833d67","created_at":"2023-03-30T00:32:41.078839+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '216'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:40 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_repo_create_update_get__online", "description": "cherrydb-client-py
+      test test_column_repo_create_update_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '155'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 0dcaf97a-5cb1-4715-9560-b70fda833d67
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"0dcaf97a-5cb1-4715-9560-b70fda833d67","created_at":"2023-03-30T00:32:41.078839+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '374'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:40 GMT
+      etag:
+      - '"42666022-67a3-4a04-ae8c-a8b967d2dfd3"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding and then updating a column"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '46'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a column","uuid":"c28f7efc-ea69-4897-9043-79e735078453","created_at":"2023-03-30T00:32:41.268310+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '168'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_update_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '256'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c28f7efc-ea69-4897-9043-79e735078453
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"c28f7efc-ea69-4897-9043-79e735078453","created_at":"2023-03-30T00:32:41.268310+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:41 GMT
+      etag:
+      - '"4af289ec-1da8-4199-ba59-a8881afc17a1"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["population"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '27'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - c28f7efc-ea69-4897-9043-79e735078453
+    method: PATCH
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/total_pop
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"c28f7efc-ea69-4897-9043-79e735078453","created_at":"2023-03-30T00:32:41.268310+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:41 GMT
+      etag:
+      - '"5b1bd0bb-c8d9-43ba-9885-254b2051f759"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"5b1bd0bb-c8d9-43ba-9885-254b2051f759"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/population
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"c28f7efc-ea69-4897-9043-79e735078453","created_at":"2023-03-30T00:32:41.268310+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:32:41 GMT
+      etag:
+      - '"5b1bd0bb-c8d9-43ba-9885-254b2051f759"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '94'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"56c3aaa1-d0bb-423d-8a4e-56b5fdecde29","created_at":"2023-03-30T00:38:58.117123+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '216'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:38:57 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_repo_create_update_get__online", "description": "cherrydb-client-py
+      test test_column_repo_create_update_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '155'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 56c3aaa1-d0bb-423d-8a4e-56b5fdecde29
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"56c3aaa1-d0bb-423d-8a4e-56b5fdecde29","created_at":"2023-03-30T00:38:58.117123+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '374'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:38:57 GMT
+      etag:
+      - '"557bc6fc-e9c8-433e-88db-5003f71edbe7"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding and then updating a column"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '46'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a column","uuid":"48df081b-2725-4e88-ab54-df16f9fee2f4","created_at":"2023-03-30T00:38:58.307783+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '168'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:38:57 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_update_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '256'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 48df081b-2725-4e88-ab54-df16f9fee2f4
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"48df081b-2725-4e88-ab54-df16f9fee2f4","created_at":"2023-03-30T00:38:58.307783+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:38:57 GMT
+      etag:
+      - '"0f2068a1-0d9d-48da-acee-7393eeaaddc4"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["population"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '27'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 48df081b-2725-4e88-ab54-df16f9fee2f4
+    method: PATCH
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/total_pop
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"48df081b-2725-4e88-ab54-df16f9fee2f4","created_at":"2023-03-30T00:38:58.307783+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:38:57 GMT
+      etag:
+      - '"d53ea62b-1ef3-40fb-a43c-aa159ce8b499"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"d53ea62b-1ef3-40fb-a43c-aa159ce8b499"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/population
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"48df081b-2725-4e88-ab54-df16f9fee2f4","created_at":"2023-03-30T00:38:58.307783+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:38:57 GMT
+      etag:
+      - '"d53ea62b-1ef3-40fb-a43c-aa159ce8b499"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '94'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"11182ddd-2bdc-4c31-a4fd-317667cdeeda","created_at":"2023-03-30T00:40:41.957324+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '216'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:40:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_repo_create_update_get__online", "description": "cherrydb-client-py
+      test test_column_repo_create_update_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '155'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 11182ddd-2bdc-4c31-a4fd-317667cdeeda
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"11182ddd-2bdc-4c31-a4fd-317667cdeeda","created_at":"2023-03-30T00:40:41.957324+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '374'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:40:41 GMT
+      etag:
+      - '"c43ac694-a5e9-4ee3-b23c-d8d50e22373c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding and then updating a column"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '46'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a column","uuid":"79136af5-173c-40c9-9e70-2d645df59914","created_at":"2023-03-30T00:40:42.154673+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '168'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:40:41 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_update_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '256'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 79136af5-173c-40c9-9e70-2d645df59914
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"79136af5-173c-40c9-9e70-2d645df59914","created_at":"2023-03-30T00:40:42.154673+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:40:41 GMT
+      etag:
+      - '"bee5c920-1153-48a2-99f0-0efb66b4c780"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["population"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '27'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 79136af5-173c-40c9-9e70-2d645df59914
+    method: PATCH
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/total_pop
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"79136af5-173c-40c9-9e70-2d645df59914","created_at":"2023-03-30T00:40:42.154673+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:40:41 GMT
+      etag:
+      - '"6a26b622-15d6-42a5-abe3-2029894b342c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"6a26b622-15d6-42a5-abe3-2029894b342c"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/population
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"79136af5-173c-40c9-9e70-2d645df59914","created_at":"2023-03-30T00:40:42.154673+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:40:41 GMT
+      etag:
+      - '"6a26b622-15d6-42a5-abe3-2029894b342c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '94'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"0e079905-521a-4b26-81df-99a6ef55f3a6","created_at":"2023-03-30T00:43:14.090144+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '216'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:13 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_repo_create_update_get__online", "description": "cherrydb-client-py
+      test test_column_repo_create_update_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '155'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 0e079905-521a-4b26-81df-99a6ef55f3a6
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"0e079905-521a-4b26-81df-99a6ef55f3a6","created_at":"2023-03-30T00:43:14.090144+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '374'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:13 GMT
+      etag:
+      - '"72b6f68b-ab76-42c9-a34f-0f92565c3e10"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding and then updating a column"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '46'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a column","uuid":"b0d54cc6-3da6-423f-a22f-04860e0f0f93","created_at":"2023-03-30T00:43:14.282252+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '168'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:13 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_update_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '256'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b0d54cc6-3da6-423f-a22f-04860e0f0f93
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"b0d54cc6-3da6-423f-a22f-04860e0f0f93","created_at":"2023-03-30T00:43:14.282252+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:13 GMT
+      etag:
+      - '"0af6e136-45bd-43ed-9bdc-4c77d4062e62"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["population"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '27'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b0d54cc6-3da6-423f-a22f-04860e0f0f93
+    method: PATCH
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/total_pop
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"b0d54cc6-3da6-423f-a22f-04860e0f0f93","created_at":"2023-03-30T00:43:14.282252+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:13 GMT
+      etag:
+      - '"e2dab049-4f71-478c-b4bb-e682d924a893"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"e2dab049-4f71-478c-b4bb-e682d924a893"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/population
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"b0d54cc6-3da6-423f-a22f-04860e0f0f93","created_at":"2023-03-30T00:43:14.282252+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:43:13 GMT
+      etag:
+      - '"e2dab049-4f71-478c-b4bb-e682d924a893"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '94'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"b7cf05e9-d3d6-471a-ad03-b74717e156d8","created_at":"2023-03-30T00:45:29.065430+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '216'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:28 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_repo_create_update_get__online", "description": "cherrydb-client-py
+      test test_column_repo_create_update_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '155'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b7cf05e9-d3d6-471a-ad03-b74717e156d8
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"b7cf05e9-d3d6-471a-ad03-b74717e156d8","created_at":"2023-03-30T00:45:29.065430+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '374'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:28 GMT
+      etag:
+      - '"cff96d0c-e14d-42cc-941b-10b34ed8072f"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding and then updating a column"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '46'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a column","uuid":"65c7108b-cb74-4307-bb6f-1e0e8ac7aa9b","created_at":"2023-03-30T00:45:29.259591+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '168'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:28 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_update_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '256'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 65c7108b-cb74-4307-bb6f-1e0e8ac7aa9b
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"65c7108b-cb74-4307-bb6f-1e0e8ac7aa9b","created_at":"2023-03-30T00:45:29.259591+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:28 GMT
+      etag:
+      - '"15812724-ca3b-4550-932d-b25de93e0a0c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["population"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '27'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 65c7108b-cb74-4307-bb6f-1e0e8ac7aa9b
+    method: PATCH
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/total_pop
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"65c7108b-cb74-4307-bb6f-1e0e8ac7aa9b","created_at":"2023-03-30T00:45:29.259591+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:28 GMT
+      etag:
+      - '"a44c2cb0-e1ba-4ff1-addb-6d0a2a80fd67"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"a44c2cb0-e1ba-4ff1-addb-6d0a2a80fd67"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/population
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"65c7108b-cb74-4307-bb6f-1e0e8ac7aa9b","created_at":"2023-03-30T00:45:29.259591+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:45:29 GMT
+      etag:
+      - '"a44c2cb0-e1ba-4ff1-addb-6d0a2a80fd67"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: '{"notes": "Test setup for cherrydb-client-py test test_column_repo_create_update_get__online"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '94'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"Test setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"41e0606d-7208-4d7a-9e46-49a3be379955","created_at":"2023-03-30T00:47:51.831255+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '216'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:47:51 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"path": "test_column_repo_create_update_get__online", "description": "cherrydb-client-py
+      test test_column_repo_create_update_get__online", "public": true}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '155'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - 41e0606d-7208-4d7a-9e46-49a3be379955
+    method: POST
+    uri: http://localhost:8000/api/v1/namespaces/
+  response:
+    content: '{"path":"test_column_repo_create_update_get__online","description":"cherrydb-client-py
+      test test_column_repo_create_update_get__online","public":true,"meta":{"notes":"Test
+      setup for cherrydb-client-py test test_column_repo_create_update_get__online","uuid":"41e0606d-7208-4d7a-9e46-49a3be379955","created_at":"2023-03-30T00:47:51.831255+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '374'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:47:51 GMT
+      etag:
+      - '"e76aeed5-1217-4902-81bf-9ee72b549c9c"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"notes": "adding and then updating a column"}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '46'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+    method: POST
+    uri: http://localhost:8000/api/v1/meta/
+  response:
+    content: '{"notes":"adding and then updating a column","uuid":"b1110ea6-e354-40c8-b19d-d2dceb614608","created_at":"2023-03-30T00:47:52.016056+00:00","created_by":"pjrule@me.com"}'
+    headers:
+      content-length:
+      - '168'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:47:51 GMT
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"canonical_path": "total_pop", "namespace": "test_column_repo_create_update_get__online",
+      "description": "2020 Census total population", "source_url": "https://www.census.gov/",
+      "kind": "count", "type": "int", "aliases": ["totpop", "p001001", "p0001001"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '256'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b1110ea6-e354-40c8-b19d-d2dceb614608
+    method: POST
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"b1110ea6-e354-40c8-b19d-d2dceb614608","created_at":"2023-03-30T00:47:52.016056+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '396'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:47:51 GMT
+      etag:
+      - '"49e6bdf7-cf7a-401c-9832-1cf21a2994f5"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 201
+- request:
+    body: '{"aliases": ["population"]}'
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      content-length:
+      - '27'
+      content-type:
+      - application/json
+      host:
+      - localhost:8000
+      user-agent:
+      - cherrydb-client-py
+      x-cherry-meta-id:
+      - b1110ea6-e354-40c8-b19d-d2dceb614608
+    method: PATCH
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/total_pop
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"b1110ea6-e354-40c8-b19d-d2dceb614608","created_at":"2023-03-30T00:47:52.016056+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:47:51 GMT
+      etag:
+      - '"47e30e7f-3144-421e-a11b-26b329c47e2d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
+- request:
+    body: ''
+    headers:
+      X-API-Key:
+      - DUMMY
+      accept:
+      - '*/*'
+      accept-encoding:
+      - gzip, deflate
+      connection:
+      - keep-alive
+      host:
+      - localhost:8000
+      if-none-match:
+      - '"47e30e7f-3144-421e-a11b-26b329c47e2d"'
+      user-agent:
+      - cherrydb-client-py
+    method: GET
+    uri: http://localhost:8000/api/v1/columns/test_column_repo_create_update_get__online/population
+  response:
+    content: '{"canonical_path":"total_pop","namespace":"test_column_repo_create_update_get__online","description":"2020
+      Census total population","source_url":null,"kind":"count","type":"int","aliases":["population","p0001001","p001001","totpop"],"meta":{"notes":"adding
+      and then updating a column","uuid":"b1110ea6-e354-40c8-b19d-d2dceb614608","created_at":"2023-03-30T00:47:52.016056+00:00","created_by":"pjrule@me.com"}}'
+    headers:
+      content-length:
+      - '409'
+      content-type:
+      - application/json
+      date:
+      - Thu, 30 Mar 2023 00:47:51 GMT
+      etag:
+      - '"47e30e7f-3144-421e-a11b-26b329c47e2d"'
+      server:
+      - uvicorn
+    http_version: HTTP/1.1
+    status_code: 200
 version: 1
