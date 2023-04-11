@@ -1,21 +1,20 @@
-"""Tests for base objects and utilities for CherryDB API object repositories."""
+"""Tests for base objects and utilities for GerryDB API object repositories."""
 from dataclasses import dataclass
 from typing import Optional
 
 import httpx
 import pydantic
 import pytest
-
-from cherrydb.client import CherryDB, WriteContext
-from cherrydb.exceptions import OnlineError, ResultError, WriteContextError
-from cherrydb.repos.base import err, online, parse_path, write_context
+from gerrydb.client import GerryDB, WriteContext
+from gerrydb.exceptions import OnlineError, ResultError, WriteContextError
+from gerrydb.repos.base import err, online, parse_path, write_context
 
 
 @dataclass
 class DummyRepo:
     """Dummy repository (no operations)."""
 
-    session: "CherryDB"
+    session: "GerryDB"
     ctx: Optional["WriteContext"] = None
 
 
@@ -28,7 +27,7 @@ class MockResponse:
 
 @pytest.fixture
 def dummy_repo_offline():
-    return DummyRepo(session=CherryDB(host="example.com", key="", offline=True))
+    return DummyRepo(session=GerryDB(host="example.com", key="", offline=True))
 
 
 def test_repos_err_decorator__http():

@@ -5,17 +5,16 @@ from pathlib import Path
 
 import geopandas as gpd
 import pytest
+from gerrydb import GerryDB
 from networkx.readwrite import json_graph
-
-from cherrydb import CherryDB
 
 
 @pytest.fixture
 def client():
-    # Requires a running CherryDB server.
-    return CherryDB(
-        host=os.environ.get("CHERRY_TEST_SERVER", "localhost:8000"),
-        key=os.environ.get("CHERRY_TEST_API_KEY"),
+    # Requires a running GerryDB server.
+    return GerryDB(
+        host=os.environ.get("GERRYDB_TEST_SERVER", "localhost:8000"),
+        key=os.environ.get("GERRYDB_TEST_API_KEY"),
     )
 
 
@@ -24,11 +23,11 @@ def client_ns(request, client):
     """Creates a test-level namespace and associates it with a client."""
     test_name = request.node.name.replace("[", "__").replace("]", "")
     with client.context(
-        notes=f"Test setup for cherrydb-client-py test {request.node.name}"
+        notes=f"Test setup for gerrydb-client-py test {request.node.name}"
     ) as ctx:
         ctx.namespaces.create(
             path=test_name,
-            description=f"cherrydb-client-py test {request.node.name}",
+            description=f"gerrydb-client-py test {request.node.name}",
             public=True,
         )
 
@@ -86,17 +85,17 @@ def ia_column_meta():
 @pytest.fixture(scope="session")
 def client_with_ia_layer_loc(ia_dataframe, ia_column_meta):
     """A namespaced client with a `GeoLayer` and `Locality` for Iowa counties."""
-    client = CherryDB(
-        host=os.environ.get("CHERRY_TEST_SERVER", "localhost:8000"),
-        key=os.environ.get("CHERRY_TEST_API_KEY"),
+    client = GerryDB(
+        host=os.environ.get("GERRYDB_TEST_SERVER", "localhost:8000"),
+        key=os.environ.get("GERRYDB_TEST_API_KEY"),
     )
 
     with client.context(
-        notes=f"Test setup for cherrydb-client-py plan repository tests",
+        notes=f"Test setup for gerrydb-client-py plan repository tests",
     ) as ctx:
         ctx.namespaces.create(
             path="plan",
-            description="cherrydb-client-py plan repository tests",
+            description="gerrydb-client-py plan repository tests",
             public=True,
         )
 

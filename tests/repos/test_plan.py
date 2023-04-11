@@ -1,7 +1,6 @@
 """Integration/VCR tests for districting plans."""
 import pytest
-
-from cherrydb.exceptions import ResultError
+from gerrydb.exceptions import ResultError
 
 
 @pytest.mark.vcr

@@ -1,4 +1,4 @@
-name: CherryDB client tests
+name: GerryDB client tests
 on: [push, pull_request]
 jobs:
   run:

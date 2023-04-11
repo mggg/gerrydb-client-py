@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "cherrydb"
+name = "gerrydb"
 version = "0.1.0"
 description = ""
 authors = ["Parker J. Rule <parker.rule@tufts.edu>"]

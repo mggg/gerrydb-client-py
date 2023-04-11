@@ -1,7 +1,6 @@
 """Integration/VCR tests for localities."""
 import pytest
-
-from cherrydb.schemas import LocalityCreate
+from gerrydb.schemas import LocalityCreate
 
 
 @pytest.mark.vcr
