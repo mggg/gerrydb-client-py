@@ -1,17 +1,10 @@
 """Internal cache operations for CherryDB."""
 import sqlite3
-from dataclasses import dataclass
-from datetime import datetime, timezone
 from os import PathLike
-from typing import Generic, Optional, TypeVar, Union
-from uuid import UUID
+from typing import TypeVar, Union
 
-import orjson as json
-import shapely.wkb
-from dateutil.parser import parse as ts_parse
-
-from cherrydb.exceptions import CacheInitError, CacheObjectError, CachePolicyError
-from cherrydb.schemas import BaseModel, Geography, ObjectCachePolicy
+from cherrydb.exceptions import CacheInitError
+from cherrydb.schemas import BaseModel
 
 _REQUIRED_TABLES = {"cache_meta", "view"}
 _CACHE_SCHEMA_VERSION = "0"
@@ -41,6 +34,10 @@ class CherryCache:
         else:
             self._assert_clean()
 
+    def _commit(self) -> bool:
+        """Commits the cache transaction."""
+        self._conn.execute("COMMIT")
+
     def _tables(self) -> set[str]:
         """Fetches a list of user-defined tables in the cache database."""
         # see https://www.sqlitetutorial.net/sqlite-show-tables/
@@ -50,15 +47,29 @@ class CherryCache:
         ).fetchall()
         return {table[0] for table in tables}
 
+    def _assert_clean(self) -> None:
+        """Asserts that the cache's schema matches the current schema version.
+        Raises:
+            CacheInitError: If the cache is invalid.
+        """
+        table_diff = _REQUIRED_TABLES - self._tables()
+        if table_diff:
+            missing_tables = ", ".join(table_diff)
+            raise CacheInitError(f"Invalid cache: missing tables {missing_tables}.")
+
+        schema_version = self._conn.execute(
+            "SELECT value FROM cache_meta WHERE key='schema_version'"
+        ).fetchone()
+        if schema_version is None:
+            raise CacheInitError("Invalid cache: no schema version in cache metadata.")
+        if schema_version[0] != _CACHE_SCHEMA_VERSION:
+            raise CacheInitError(
+                f"Invalid cache: expected schema version {_CACHE_SCHEMA_VERSION}, "
+                f"but got schema version {schema_version[0]}."
+            )
+
     def _init_db(self) -> None:
         """Initializes CherryDB cache tables."""
-        # Use a big cache (128 MB) and WAL mode.
-        # Performance tips: https://news.ycombinator.com/item?id=26108042
-        self._conn.execute("PRAGMA cache_size = -128000")
-        self._conn.execute("PRAGMA temp_store = 2")
-        self._conn.execute("PRAGMA journal_mode = 'WAL'")
-        self._conn.execute("PRAGMA synchronous = 1")
-
         self._conn.execute(
             """CREATE TABLE cache_meta(
                 key   TEXT PRIMARY KEY NOT NULL,
@@ -66,50 +77,16 @@ class CherryCache:
             )"""
         )
         self._conn.execute(
-            """CREATE TABLE object_meta(
-                meta_id BLOB PRIMARY KEY,
-                data    TEXT NOT NULL
-            )"""
-        )
-        self._conn.execute(
-            """CREATE TABLE object(
-                type       TEXT NOT NULL,
-                path       TEXT NOT NULL, 
-                namespace  TEXT NOT NULL,
-                data       TEXT NOT NULL,
-                meta_id    BLOB,
-                etag       BLOB,
-                valid_from TEXT,
-                cached_at  TEXT NOT NULL,
-                FOREIGN KEY(meta_id) REFERENCES object_meta(meta_id),
-                UNIQUE(type, path, namespace, etag),
-                UNIQUE(type, path, namespace, valid_from)
-            )"""
-        )
-        self._conn.execute(
-            """CREATE TABLE object_alias(
-                type            TEXT NOT NULL,
-                namespace       TEXT NOT NULL,
-                canonical_path  TEXT NOT NULL, 
-                alias_path      TEXT NOT NULL, 
-                UNIQUE(type, namespace, canonical_path, alias_path),
-                PRIMARY KEY(type, namespace, alias_path)
-            )"""
-        )
-        self._conn.execute(
-            """CREATE TABLE collection(
-                type      TEXT NOT NULL,
-                namespace TEXT NOT NULL,
-                etag      BLOB,
-                valid_at  TEXT,
-                cached_at TEXT NOT NULL,
-                UNIQUE(type, namespace, etag, valid_at)
+            """CREATE TABLE view(
+                namespace        TEXT NOT NULL,
+                path             TEXT NOT NULL,
+                geopackage_uuid  TEXT NOT NULL,
+                cached_at        TEXT NOT NULL,
+                UNIQUE(namespace, path)
             )"""
         )
         self._conn.execute(
             "INSERT INTO cache_meta (key, value) VALUES ('schema_version', ?)",
             _CACHE_SCHEMA_VERSION,
         )
-        for ext in self.extensions.values():
-            ext(self._conn).init_db()
         self._conn.commit()
