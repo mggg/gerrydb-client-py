@@ -9,3 +9,16 @@ from cherrydb.repos.namespace import NamespaceRepo
 from cherrydb.repos.plan import PlanRepo
 from cherrydb.repos.view import ViewRepo
 from cherrydb.repos.view_template import ViewTemplateRepo
+
+__all__ = [
+    "ColumnRepo",
+    "ColumnSetRepo",
+    "GeoLayerRepo",
+    "GeographyRepo",
+    "GraphRepo",
+    "LocalityRepo",
+    "NamespaceRepo",
+    "PlanRepo",
+    "ViewRepo",
+    "ViewTemplateRepo",
+]

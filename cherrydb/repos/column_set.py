@@ -3,18 +3,17 @@ from typing import Optional, Union
 
 from cherrydb.exceptions import RequestError
 from cherrydb.repos.base import (
-    ETagObjectRepo,
+    ObjectRepo,
     err,
     namespaced,
     online,
-    parse_etag,
     parse_path,
     write_context,
 )
 from cherrydb.schemas import Column, ColumnSet, ColumnSetCreate
 
 
-class ColumnSetRepo(ETagObjectRepo[ColumnSet]):
+class ColumnSetRepo(ObjectRepo[ColumnSet]):
     """Repository for column sets."""
 
     @err("Failed to create column set")
@@ -70,9 +69,4 @@ class ColumnSetRepo(ETagObjectRepo[ColumnSet]):
         )
         response.raise_for_status()
 
-        obj = self.schema(**response.json())
-        obj_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=obj, path=obj.path, namespace=namespace, etag=obj_etag
-        )
-        return obj
+        return self.schema(**response.json())

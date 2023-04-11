@@ -2,21 +2,19 @@
 from datetime import datetime
 from typing import Optional, Union
 
-import msgpack
-import shapely.wkb
-
-from cherrydb.repos.base import (
-    ETagObjectRepo,
-    err,
-    namespaced,
-    online,
-    parse_etag,
-    write_context,
+from cherrydb.repos.base import ObjectRepo, namespaced, online, write_context
+from cherrydb.schemas import (
+    GeoLayer,
+    Graph,
+    Locality,
+    View,
+    ViewCreate,
+    ViewMeta,
+    ViewTemplate,
 )
-from cherrydb.schemas import GeoLayer, Graph, Locality, View, ViewCreate, ViewTemplate
 
 
-class ViewRepo(ETagObjectRepo[View]):
+class ViewRepo(ObjectRepo[View]):
     """Repository for views."""
 
     # @err("Failed to create view")
@@ -75,17 +73,17 @@ class ViewRepo(ETagObjectRepo[View]):
                 valid_at=valid_at,
                 proj=proj,
             ).dict(),
-            headers={"accept": "application/msgpack"},
         )
         response.raise_for_status()
+        meta = ViewMeta(**response.json())
+        response = self.ctx.client.post(
+            f"{self.base_url}/{namespace}/{path}",
+        )
+        print("content length:", len(response.content))
+        with open("view.gpkg", "wb") as fp:
+            fp.write(response.content)
 
-        raw_view = msgpack.loads(response.content)
-        for geography in raw_view["geographies"]:
-            for key in ("geography", "internal_point"):
-                geography[key] = (
-                    None if geography is None else shapely.wkb.loads(geography[key])
-                )
-        return View(**raw_view)
+        return meta
 
     @namespaced
     @online
@@ -102,14 +100,6 @@ class ViewRepo(ETagObjectRepo[View]):
         """
         response = self.session.client.get(
             f"{self.base_url}/{namespace}/{path}",
-            headers={"accept": "application/msgpack"},
         )
         response.raise_for_status()
-
-        raw_view = msgpack.loads(response.content)
-        for geography in raw_view["geographies"]:
-            for key in ("geography", "internal_point"):
-                geography[key] = (
-                    None if geography is None else shapely.wkb.loads(geography[key])
-                )
-        return View(**raw_view)
+        return ViewMeta(**response.json())

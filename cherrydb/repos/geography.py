@@ -9,14 +9,7 @@ from shapely import Point
 from shapely.geometry.base import BaseGeometry
 
 from cherrydb.exceptions import RequestError
-from cherrydb.repos.base import (
-    NAMESPACE_ERR,
-    TimestampObjectRepo,
-    err,
-    online,
-    parse_etag,
-    write_context,
-)
+from cherrydb.repos.base import NAMESPACE_ERR, ObjectRepo, err, online, write_context
 from cherrydb.schemas import Geography, GeographyCreate, GeoImport
 
 if TYPE_CHECKING:
@@ -125,18 +118,8 @@ class GeoImporter:
             content=msgpack.dumps(_serialize_geos(geographies)),
             headers={"content-type": "application/msgpack"},
         )
-        geos_etag = parse_etag(response)
         response.raise_for_status()
-
-        response_geos = _parse_geo_response(response)
-        for geo in response_geos:
-            self.repo.session.cache.insert(
-                obj=geo,
-                path=geo.path,
-                namespace=geo.namespace,
-                etag=geos_etag,
-                valid_from=geo.valid_from,
-            )
+        return _parse_geo_response(response)
 
 
 @dataclass
@@ -201,21 +184,11 @@ class AsyncGeoImporter:
                 "content-type": "application/msgpack",
             },
         )
-        geos_etag = parse_etag(response)
         response.raise_for_status()
-
-        response_geos = _parse_geo_response(response)
-        for geo in response_geos:
-            self.repo.session.cache.insert(
-                obj=geo,
-                path=geo.path,
-                namespace=geo.namespace,
-                etag=geos_etag,
-                valid_from=geo.valid_from,
-            )
+        return _parse_geo_response(response)
 
 
-class GeographyRepo(TimestampObjectRepo[Geography]):
+class GeographyRepo(ObjectRepo[Geography]):
     """Repository for geographies."""
 
     @write_context

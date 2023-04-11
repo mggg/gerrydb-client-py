@@ -21,10 +21,6 @@ class ResultError(ClientError):
     """Raised when a query result cannot be loaded."""
 
 
-class OnlineError(ClientError):
-    """Raised when an operation cannot be performed offline."""
-
-
 class WriteContextError(CherryError):
     """Raised when an operation requires a write context."""
 
@@ -35,11 +31,3 @@ class CacheError(CherryError):
 
 class CacheInitError(CacheError):
     """Raised when a CherryDB cache cannot be initialized."""
-
-
-class CacheObjectError(CacheError):
-    """Raised when a schema has not been registered with the cache."""
-
-
-class CachePolicyError(CacheError):
-    """Raised when an cache operation does not match an object's cache policy."""

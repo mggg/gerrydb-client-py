@@ -12,7 +12,7 @@ def column(pop_column_meta):
 
 
 @pytest.mark.vcr
-def test_column_repo_create_get__online(client_ns, column):
+def test_column_repo_create_get(client_ns, column):
     with client_ns.context(notes="adding a column") as ctx:
         col = ctx.columns.create(**column)
 
@@ -24,17 +24,7 @@ def test_column_repo_create_get__online(client_ns, column):
 
 
 @pytest.mark.vcr
-def test_column_repo_create_get__online_offline(client_ns, column):
-    with client_ns.context(notes="adding a column") as ctx:
-        col = ctx.columns.create(**column)
-
-    client_ns.offline = True
-    assert client_ns.columns["total_pop"] == col
-    assert client_ns.columns["totpop"] == col
-
-
-@pytest.mark.vcr
-def test_column_repo_create_all__online(client_ns, column):
+def test_column_repo_create_all(client_ns, column):
     with client_ns.context(notes="adding a column") as ctx:
         ctx.columns.create(**column)
 
@@ -42,31 +32,11 @@ def test_column_repo_create_all__online(client_ns, column):
 
 
 @pytest.mark.vcr
-def test_column_repo_create_all__online_offline(client_ns, column):
-    with client_ns.context(notes="adding a column") as ctx:
-        ctx.columns.create(**column)
-    client_ns.columns.all()  # Populate cache.
-
-    client_ns.offline = True
-    assert "total_pop" in [col.path for col in client_ns.columns.all()]
-
-
-@pytest.mark.vcr
-def test_column_repo_create_update_get__online(client_ns, column):
+def test_column_repo_create_update_get(client_ns, column):
     with client_ns.context(notes="adding and then updating a column") as ctx:
         ctx.columns.create(**column)
         updated_col = ctx.columns.update("total_pop", aliases=["population"])
 
-    assert client_ns.columns["population"] == updated_col
-
-
-@pytest.mark.vcr
-def test_column_repo_create_update_get__online_offline(client_ns, column):
-    with client_ns.context(notes="adding and then updating a column") as ctx:
-        ctx.columns.create(**column)
-        updated_col = ctx.columns.update("total_pop", aliases=["population"])
-
-    client_ns.offline = True
     assert client_ns.columns["population"] == updated_col
 
 

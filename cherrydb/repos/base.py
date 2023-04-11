@@ -1,16 +1,11 @@
 """Base objects and utilities for CherryDB API object repositories."""
-import uuid
-from abc import ABC
 from dataclasses import dataclass
-from datetime import datetime
 from functools import wraps
-from http import HTTPStatus
-from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar, Union
+from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar
 
 import httpx
 import pydantic
 
-from cherrydb.cache import CacheCollectionResult, CacheResult
 from cherrydb.exceptions import (
     OnlineError,
     RequestError,
@@ -26,10 +21,6 @@ if TYPE_CHECKING:
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
 
 NAMESPACE_ERR = "No namespace specified for all() query, and no default available."
-
-
-class ObjectRepo(ABC):
-    """A repository for a generic CherryDB object."""
 
 
 def err(message: str) -> Callable:
@@ -117,25 +108,6 @@ def write_context(func: Callable) -> Callable:
     return write_context_wrapper
 
 
-def match_etag(
-    result: Optional[Union[CacheResult, CacheCollectionResult]]
-) -> dict[str, str]:
-    """Generates an `If-None-Match` header from a cache result."""
-    if result is None or result.etag is None:
-        return None
-    etag_uuid = uuid.UUID(bytes=result.etag)
-    return {"If-None-Match": f'"{etag_uuid}"'}
-
-
-def parse_etag(response: httpx.Response) -> Optional[bytes]:
-    """Parses the `ETag` header from a response, if available."""
-    return (
-        uuid.UUID(response.headers["ETag"].strip('"')).bytes
-        if "ETag" in response.headers
-        else None
-    )
-
-
 def normalize_path(path: str) -> str:
     """Normalizes a path (removes leading, trailing, and duplicate slashes)."""
     return "/".join(seg for seg in path.lower().split("/") if seg)
@@ -154,8 +126,8 @@ def parse_path(path: str) -> Tuple[str, str]:
 
 
 @dataclass(frozen=True)
-class ETagObjectRepo(Generic[SchemaType]):
-    """A repository for a generic ETag-versioned, namespaced CherryDB object."""
+class ObjectRepo(Generic[SchemaType]):
+    """A repository for a generic namespaced CherryDB object."""
 
     schema: BaseModel
     base_url: str
@@ -169,32 +141,9 @@ class ETagObjectRepo(Generic[SchemaType]):
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)
 
-        cached = self.session.cache.all(obj=self.schema, namespace=namespace)
-        if self.session.offline:
-            return [] if cached is None else list(cached.result.values())
-
-        response = self.session.client.get(
-            f"{self.base_url}/{namespace}", headers=match_etag(cached)
-        )
-        if response.status_code == HTTPStatus.NOT_MODIFIED:
-            return list(cached.result.values())
+        response = self.session.client.get(f"{self.base_url}/{namespace}")
         response.raise_for_status()
-
-        objs = [self.schema(**obj) for obj in response.json()]
-        obj_etag = parse_etag(response)
-        for obj in objs:
-            self.session.cache.insert(
-                obj=obj,
-                path=obj.path,
-                namespace=namespace,
-                autocommit=False,
-                etag=obj_etag,
-            )
-        self.session.cache.collect(
-            obj=self.schema, namespace=namespace, etag=obj_etag, autocommit=False
-        )
-        self.session.cache.commit()
-        return objs
+        return [self.schema(**obj) for obj in response.json()]
 
     @err("Failed to load object")
     @namespaced
@@ -206,107 +155,10 @@ class ETagObjectRepo(Generic[SchemaType]):
                 or if no namespace is specified.
         """
         path = normalize_path(path)
-        cached = self.session.cache.get(obj=self.schema, path=path, namespace=namespace)
-        if self.session.offline:
-            return None if cached is None else cached.result
 
-        response = self.session.client.get(
-            f"{self.base_url}/{namespace}/{path}", headers=match_etag(cached)
-        )
-        if response.status_code == HTTPStatus.NOT_MODIFIED:
-            return cached.result
+        response = self.session.client.get(f"{self.base_url}/{namespace}/{path}")
         response.raise_for_status()
-
-        obj = self.schema(**response.json())
-        obj_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=obj, path=obj.path, namespace=namespace, etag=obj_etag
-        )
-
-        return obj
-
-    def __getitem__(self, path: str) -> Optional[SchemaType]:
-        if path.startswith("/"):
-            namespace, path_in_namespace = parse_path(path)
-            return self.get(path=path_in_namespace, namespace=namespace)
-        return self.get(path=path)
-
-
-# TODO: add `at` parameters?
-@dataclass(frozen=True)
-class TimestampObjectRepo(Generic[SchemaType]):
-    """A repository for a generic ETag-versioned, namespaced CherryDB object."""
-
-    schema: BaseModel
-    base_url: str
-    session: "CherryDB"
-    ctx: Optional["WriteContext"] = None
-
-    @err("Failed to load objects")
-    def all(self, namespace: Optional[str] = None) -> list[SchemaType]:
-        """Gets all objects in a namespace."""
-        namespace = self.session.namespace if namespace is None else namespace
-        if namespace is None:
-            raise RequestError(NAMESPACE_ERR)
-
-        cached = self.session.cache.all(obj=self.schema, namespace=namespace)
-        if self.session.offline:
-            return [] if cached is None else list(cached.result.values())
-
-        response = self.session.client.get(
-            f"{self.base_url}/{namespace}", headers=match_etag(cached)
-        )
-        if response.status_code == HTTPStatus.NOT_MODIFIED:
-            return list(cached.result.values())
-        response.raise_for_status()
-
-        objs = [self.schema(**obj) for obj in response.json()]
-        # TODO: restore caching
-        """
-        obj_etag = parse_etag(response)
-        for obj in objs:
-            self.session.cache.insert(
-                obj=obj,
-                path=obj.path,
-                namespace=namespace,
-                autocommit=False,
-                etag=obj_etag,
-            )
-        self.session.cache.collect(
-            obj=self.schema, namespace=namespace, etag=obj_etag, autocommit=False
-        )
-        self.session.cache.commit()
-        """
-        return objs
-
-    @err("Failed to load object")
-    @namespaced
-    def get(self, path: str, namespace: Optional[str] = None) -> Optional[SchemaType]:
-        """Gets an object by path.
-
-        Raises:
-            RequestError: If the object cannot be read on the server side,
-                or if no namespace is specified.
-        """
-        path = normalize_path(path)
-        cached = self.session.cache.get(obj=self.schema, path=path, namespace=namespace)
-        if self.session.offline:
-            return None if cached is None else cached.result
-
-        response = self.session.client.get(
-            f"{self.base_url}/{namespace}/{path}", headers=match_etag(cached)
-        )
-        if response.status_code == HTTPStatus.NOT_MODIFIED:
-            return cached.result
-        response.raise_for_status()
-
-        obj = self.schema(**response.json())
-        obj_etag = parse_etag(response)
-        # TODO: restore caching
-        # self.session.cache.insert(
-        #    obj=obj, path=obj.path, namespace=namespace, etag=obj_etag
-        # )
-        return obj
+        return self.schema(**response.json())
 
     def __getitem__(self, path: str) -> Optional[SchemaType]:
         if path.startswith("/"):

@@ -1,25 +1,14 @@
 """Tests for base objects and utilities for CherryDB API object repositories."""
-import uuid
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Optional
 
 import httpx
 import pydantic
 import pytest
 
-from cherrydb.cache import CacheResult
 from cherrydb.client import CherryDB, WriteContext
 from cherrydb.exceptions import OnlineError, ResultError, WriteContextError
-from cherrydb.repos.base import (
-    err,
-    match_etag,
-    online,
-    parse_etag,
-    parse_path,
-    write_context,
-)
-from cherrydb.schemas import BaseModel
+from cherrydb.repos.base import err, online, parse_path, write_context
 
 
 @dataclass
@@ -76,28 +65,6 @@ def test_repos_write_context_decorator__no_write_context(dummy_repo_offline):
 
     with pytest.raises(WriteContextError):
         fn(dummy_repo_offline)
-
-
-def test_repos_match_etag__present():
-    etag = uuid.uuid4()
-    result = CacheResult(result=BaseModel(), cached_at=datetime.now(), etag=etag.bytes)
-    assert match_etag(result) == {"If-None-Match": f'"{etag}"'}
-
-
-def test_repos_match_etag__absent():
-    result = CacheResult(result=BaseModel(), cached_at=datetime.now())
-    assert match_etag(result) is None
-
-
-def test_repos_parse_etag__present():
-    etag = uuid.uuid4()
-    response = MockResponse(headers={"ETag": f'"{etag}"'})
-    assert parse_etag(response) == etag.bytes
-
-
-def test_repos_etag__absent():
-    response = MockResponse(headers={})
-    assert parse_etag(response) is None
 
 
 def test_repos_parse_path__valid():

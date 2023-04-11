@@ -24,14 +24,6 @@ NamespacedCherryPath = constr(regex=r"[a-z0-9/][a-z0-9-_/]*")
 NATIVE_PROJ = pyproj.CRS("EPSG:4269")
 
 
-class ObjectCachePolicy(str, Enum):
-    """A schema's single-object caching policy."""
-
-    ETAG = "etag"
-    TIMESTAMP = "timestamp"
-    NONE = "none"
-
-
 class ColumnKind(str, Enum):
     """Meaning of a column."""
 
@@ -133,10 +125,6 @@ class LocalityPatch(BaseModel):
 class Locality(LocalityBase):
     """A locality returned by the database."""
 
-    __cache_name__ = "locality"
-    __cache_policy__ = ObjectCachePolicy.ETAG
-    __cache_aliased__ = True
-
     aliases: list[CherryPath]
     meta: ObjectMeta
 
@@ -160,9 +148,6 @@ class NamespaceCreate(NamespaceBase):
 
 class Namespace(NamespaceBase):
     """A namespace returned by the database."""
-
-    __cache_name__ = "namespace"
-    __cache_policy__ = ObjectCachePolicy.ETAG
 
     meta: ObjectMeta
 
@@ -195,10 +180,6 @@ class ColumnPatch(BaseModel):
 
 class Column(ColumnBase):
     """A column returned by the database."""
-
-    __cache_name__ = "column"
-    __cache_policy__ = ObjectCachePolicy.ETAG
-    __cache_aliased__ = True
 
     aliases: list[CherryPath]
     meta: ObjectMeta
@@ -247,9 +228,6 @@ class GeoSetCreate(BaseModel):
 class GeoLayer(GeoLayerBase):
     """Geographic layer metadata returned by the database."""
 
-    __cache_name__ = "geo_layer"
-    __cache_policy__ = ObjectCachePolicy.ETAG
-
     meta: ObjectMeta
     namespace: str
 
@@ -265,8 +243,6 @@ class GeoImportBase(BaseModel):
 
 class GeoImport(GeoImportBase):
     """Geographic unit import metadata returned by the database."""
-
-    __cache_name__ = "geo_import"
 
     uuid: str
     namespace: str
@@ -297,9 +273,6 @@ class GeographyCreate(BaseModel):
 class Geography(GeographyBase):
     """Geographic unit data returned by the database."""
 
-    __cache_name__ = "geography"
-    __cache_policy__ = ObjectCachePolicy.TIMESTAMP
-
     meta: ObjectMeta
     namespace: str
     valid_from: datetime
@@ -325,9 +298,6 @@ class ColumnSetCreate(ColumnSetBase):
 
 class ColumnSet(ColumnSetBase):
     """Logical column grouping returned by the database."""
-
-    __cache_name__ = "column_set"
-    __cache_policy__ = ObjectCachePolicy.ETAG
 
     meta: ObjectMeta
     namespace: str
@@ -362,9 +332,6 @@ class ViewTemplatePatch(ViewTemplateBase):
 class ViewTemplate(ViewTemplateBase):
     """View template returned by the database."""
 
-    __cache_name__ = "view_template"
-    __cache_policy__ = ObjectCachePolicy.TIMESTAMP
-
     namespace: str
     members: list[Union[Column, ColumnSet]]
     meta: ObjectMeta
@@ -397,9 +364,6 @@ class PlanCreate(PlanBase):
 class Plan(PlanBase):
     """Rendered districting plan."""
 
-    __cache_name__ = "plan"
-    __cache_policy__ = ObjectCachePolicy.ETAG
-
     namespace: str
     locality: Locality
     layer: GeoLayer
@@ -429,16 +393,12 @@ class GraphCreate(GraphBase):
     edges: list[WeightedEdge]
 
 
-class Graph(GraphBase):
-    """Rendered dual graph without node attributes."""
-
-    __cache_name__ = "graph"
-    __cache_policy__ = ObjectCachePolicy.ETAG
+class GraphMeta(GraphBase):
+    """Dual graph metadata."""
 
     namespace: str
     locality: Locality
     layer: GeoLayer
-    edges: list[WeightedEdge]
     meta: ObjectMeta
     created_at: datetime
 
@@ -446,6 +406,12 @@ class Graph(GraphBase):
     def full_path(self):
         """The path of the geography, including its namespace."""
         return f"/{self.namespace}/{self.path}"
+
+
+class Graph(GraphMeta):
+    """Rendered dual graph without node attributes."""
+
+    edges: list[WeightedEdge]
 
 
 class ViewBase(BaseModel):
@@ -464,6 +430,19 @@ class ViewCreate(ViewBase):
 
     valid_at: Optional[datetime] = None
     proj: Optional[str] = None
+
+
+class ViewMeta(ViewBase):
+    """View metadata."""
+
+    namespace: str
+    template: ViewTemplate
+    locality: Locality
+    layer: GeoLayer
+    meta: ObjectMeta
+    valid_at: datetime
+    proj: Optional[str]
+    graph: Optional[GraphMeta]
 
 
 class View(ViewBase):

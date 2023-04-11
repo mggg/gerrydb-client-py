@@ -3,15 +3,7 @@ from dataclasses import dataclass
 from http import HTTPStatus
 from typing import TYPE_CHECKING, Optional
 
-from cherrydb.repos.base import (
-    ObjectRepo,
-    err,
-    match_etag,
-    normalize_path,
-    online,
-    parse_etag,
-    write_context,
-)
+from cherrydb.repos.base import ObjectRepo, err, normalize_path, online, write_context
 from cherrydb.schemas import Locality, LocalityCreate, LocalityPatch
 
 if TYPE_CHECKING:
@@ -28,30 +20,9 @@ class LocalityRepo(ObjectRepo):
     @err("Failed to load localities")
     def all(self) -> list[Locality]:
         """Gets all localities."""
-        cached = self.session.cache.all(obj=Locality, namespace="")
-        if self.session.offline:
-            return [] if cached is None else list(cached.result.values())
-
-        response = self.session.client.get("/localities/", headers=match_etag(cached))
-        if response.status_code == HTTPStatus.NOT_MODIFIED:
-            return list(cached.result.values())
+        response = self.session.client.get("/localities/")
         response.raise_for_status()
-
-        locs = [Locality(**loc) for loc in response.json()]
-        loc_etag = parse_etag(response)
-        for loc in locs:
-            self.session.cache.insert(
-                obj=loc,
-                path=loc.canonical_path,
-                namespace="",
-                autocommit=False,
-                etag=loc_etag,
-            )
-        self.session.cache.collect(
-            obj=Locality, namespace="", etag=loc_etag, autocommit=False
-        )
-        self.session.cache.commit()
-        return locs
+        return [Locality(**loc) for loc in response.json()]
 
     @err("Failed to load locality")
     def get(self, path: str) -> Optional[Locality]:
@@ -61,24 +32,9 @@ class LocalityRepo(ObjectRepo):
             RequestError: If the locality cannot be read on the server side.
         """
         path = normalize_path(path)
-        cached = self.session.cache.get(obj=Locality, path=path, namespace="")
-        if self.session.offline:
-            return None if cached is None else cached.result
-
-        response = self.session.client.get(
-            f"/localities/{path}", headers=match_etag(cached), follow_redirects=True
-        )
-        if response.status_code == HTTPStatus.NOT_MODIFIED:
-            return cached.result
+        response = self.session.client.get(f"/localities/{path}", follow_redirects=True)
         response.raise_for_status()
-
-        loc = Locality(**response.json())
-        loc_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
-        )
-
-        return loc
+        return Locality(**response.json())
 
     @err("Failed to create locality")
     @write_context
@@ -125,12 +81,7 @@ class LocalityRepo(ObjectRepo):
         )
         response.raise_for_status()
 
-        loc = Locality(**response.json()[0])
-        loc_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
-        )
-        return loc
+        return Locality(**response.json()[0])
 
     @err("Failed to create localities")
     @write_context
@@ -157,13 +108,7 @@ class LocalityRepo(ObjectRepo):
         )
         response.raise_for_status()
 
-        locs = [Locality(**loc) for loc in response.json()]
-        loc_etag = parse_etag(response)
-        for loc in locs:
-            self.session.cache.insert(
-                obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
-            )
-        return locs
+        return [Locality(**loc) for loc in response.json()]
 
     @err("Failed to update locality")
     @write_context
@@ -189,12 +134,7 @@ class LocalityRepo(ObjectRepo):
         )
         response.raise_for_status()
 
-        loc = Locality(**response.json())
-        loc_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=loc, path=loc.canonical_path, namespace="", etag=loc_etag
-        )
-        return loc
+        return Locality(**response.json())
 
     def __getitem__(self, path: str) -> Optional[Locality]:
         return self.get(path=path)

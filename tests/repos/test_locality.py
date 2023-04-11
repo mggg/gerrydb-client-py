@@ -5,7 +5,7 @@ from cherrydb.schemas import LocalityCreate
 
 
 @pytest.mark.vcr
-def test_locality_repo_create_get__online(client):
+def testlocality_repo_create_get(client):
     name = "Commonwealth of Massachusetts"
     with client.context(notes="adding a locality") as ctx:
         loc = ctx.localities.create(name=name, canonical_path="ma")
@@ -16,7 +16,7 @@ def test_locality_repo_create_get__online(client):
 
 
 @pytest.mark.vcr
-def test_locality_repo_create_bulk__online(client):
+def test_locality_repo_create_bulk(client):
     with client.context(notes="adding localities in bulk") as ctx:
         locs = ctx.localities.create_bulk(
             [
@@ -30,47 +30,9 @@ def test_locality_repo_create_bulk__online(client):
 
 
 @pytest.mark.vcr
-def test_locality_repo_create_get__offline(client):
-    name = "State of California"
-    with client.context(notes="adding a locality") as ctx:
-        loc = ctx.localities.create(name=name, canonical_path="ca")
-
-    client.offline = True
-    assert client.localities["ca"] == loc
-
-
-@pytest.mark.vcr
-def test_locality_repo_create_all__online(client):
+def test_locality_repo_create_all(client):
     name = "State of Vermont"
     with client.context(notes="adding a locality") as ctx:
         ctx.localities.create(name=name, canonical_path="vt")
 
     assert name in [loc.name for loc in client.localities.all()]
-
-
-@pytest.mark.vcr
-def test_locality_repo_create_all__online_offline(client):
-    name = "State of New Hampshire"
-    with client.context(notes="adding a locality") as ctx:
-        ctx.localities.create(name=name, canonical_path="nh")
-    client.localities.all()  # Populate cache.
-
-    client.offline = True
-    assert name in [loc.name for loc in client.localities.all()]
-
-
-@pytest.mark.vcr
-def test_locality_repo_create_update_get__online_offline(client):
-    name = "State of Maryland"
-    aliases = ["maryland"]
-
-    with client.context(notes="adding and then updating a locality") as ctx:
-        loc = ctx.localities.create(name=name, canonical_path="md")
-        assert loc.aliases == []
-
-        updated_loc = ctx.localities.update("md", aliases=aliases)
-        assert updated_loc.name == name
-        assert updated_loc.aliases == aliases
-
-    client.offline = True
-    assert client.localities["md"].aliases == aliases

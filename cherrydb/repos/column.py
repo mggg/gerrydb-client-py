@@ -4,14 +4,7 @@ from typing import Any, Optional, Union
 import httpx
 import numpy as np
 
-from cherrydb.repos.base import (
-    ETagObjectRepo,
-    err,
-    namespaced,
-    online,
-    parse_etag,
-    write_context,
-)
+from cherrydb.repos.base import ObjectRepo, err, namespaced, online, write_context
 from cherrydb.schemas import (
     Column,
     ColumnCreate,
@@ -23,7 +16,7 @@ from cherrydb.schemas import (
 )
 
 
-class ColumnRepo(ETagObjectRepo[Column]):
+class ColumnRepo(ObjectRepo[Column]):
     """Repository for columns."""
 
     @err("Failed to create column")
@@ -78,12 +71,7 @@ class ColumnRepo(ETagObjectRepo[Column]):
         )
         response.raise_for_status()
 
-        obj = self.schema(**response.json())
-        obj_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=obj, path=obj.canonical_path, namespace=namespace, etag=obj_etag
-        )
-        return obj
+        return self.schema(**response.json())
 
     @err("Failed to update column")
     @namespaced
@@ -113,12 +101,7 @@ class ColumnRepo(ETagObjectRepo[Column]):
         )
         response.raise_for_status()
 
-        col = Column(**response.json())
-        col_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=col, path=col.canonical_path, namespace=namespace, etag=col_etag
-        )
-        return col
+        return Column(**response.json())
 
     @err("Failed to set column values")
     @namespaced

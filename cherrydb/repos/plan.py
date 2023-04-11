@@ -1,18 +1,11 @@
 """Repository for districting plans."""
 from typing import Optional, Union
 
-from cherrydb.repos.base import (
-    ETagObjectRepo,
-    err,
-    namespaced,
-    online,
-    parse_etag,
-    write_context,
-)
+from cherrydb.repos.base import ObjectRepo, err, namespaced, online, write_context
 from cherrydb.schemas import Geography, GeoLayer, Locality, Plan, PlanCreate
 
 
-class PlanRepo(ETagObjectRepo[Plan]):
+class PlanRepo(ObjectRepo[Plan]):
     """Repository for districting plans."""
 
     @err("Failed to create districting plan")
@@ -73,11 +66,4 @@ class PlanRepo(ETagObjectRepo[Plan]):
         )
         response.raise_for_status()
 
-        obj = self.schema(**response.json())
-        obj_etag = parse_etag(response)
-        """
-        self.session.cache.insert(
-            obj=obj, path=obj.path, namespace=namespace, etag=obj_etag
-        )
-        """
-        return obj
+        return self.schema(**response.json())

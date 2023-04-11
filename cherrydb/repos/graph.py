@@ -1,20 +1,13 @@
 """Repository for dual graphs."""
-from typing import Optional, Union
+from typing import Optional
 
 import networkx as nx
 
-from cherrydb.repos.base import (
-    ETagObjectRepo,
-    err,
-    namespaced,
-    online,
-    parse_etag,
-    write_context,
-)
+from cherrydb.repos.base import ObjectRepo, err, namespaced, online, write_context
 from cherrydb.schemas import GeoLayer, Graph, GraphCreate, Locality
 
 
-class GraphRepo(ETagObjectRepo[Graph]):
+class GraphRepo(ObjectRepo[Graph]):
     """Repository for dual graphs."""
 
     @err("Failed to create dual graph")
@@ -75,12 +68,4 @@ class GraphRepo(ETagObjectRepo[Graph]):
             ).dict(),
         )
         response.raise_for_status()
-
-        obj = self.schema(**response.json())
-        obj_etag = parse_etag(response)
-        """
-        self.session.cache.insert(
-            obj=obj, path=obj.path, namespace=namespace, etag=obj_etag
-        )
-        """
-        return obj
+        return self.schema(**response.json())

@@ -1,17 +1,8 @@
 """Repository for namespaces."""
 from dataclasses import dataclass
-from http import HTTPStatus
 from typing import TYPE_CHECKING, Optional
 
-from cherrydb.repos.base import (
-    ObjectRepo,
-    err,
-    match_etag,
-    normalize_path,
-    online,
-    parse_etag,
-    write_context,
-)
+from cherrydb.repos.base import ObjectRepo, err, normalize_path, online, write_context
 from cherrydb.schemas import Namespace, NamespaceCreate
 
 if TYPE_CHECKING:
@@ -26,7 +17,6 @@ class NamespaceRepo(ObjectRepo):
     ctx: Optional["WriteContext"] = None
 
     @err("Failed to load namespaces")
-    @online
     def all(self) -> list[Namespace]:
         """Gets all accessible namespaces."""
         # Due to our use of a namespace-oriented RBAC model, namespace
@@ -46,27 +36,9 @@ class NamespaceRepo(ObjectRepo):
             RequestError: If the namespace cannot be read on the server side.
         """
         path = normalize_path(path)
-        cached = self.session.cache.get(obj=Namespace, path=path, namespace=path)
-        if self.session.offline:
-            return None if cached is None else cached.result
-
-        response = self.session.client.get(
-            f"/namespaces/{path}", headers=match_etag(cached)
-        )
-        if response.status_code == HTTPStatus.NOT_MODIFIED:
-            return cached.result
+        response = self.session.client.get(f"/namespaces/{path}")
         response.raise_for_status()
-
-        namespace = Namespace(**response.json())
-        namespace_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=namespace,
-            path=namespace.path,
-            namespace=namespace.path,
-            etag=namespace_etag,
-        )
-
-        return namespace
+        return Namespace(**response.json())
 
     @err("Failed to create namespace")
     @write_context
@@ -107,15 +79,7 @@ class NamespaceRepo(ObjectRepo):
         )
         response.raise_for_status()
 
-        namespace = Namespace(**response.json())
-        namespace_etag = parse_etag(response)
-        self.session.cache.insert(
-            obj=namespace,
-            path=namespace.path,
-            namespace=namespace.path,
-            etag=namespace_etag,
-        )
-        return namespace
+        return Namespace(**response.json())
 
     def __getitem__(self, path: str) -> Optional[Namespace]:
         return self.get(path=path)
