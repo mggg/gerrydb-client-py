@@ -35,3 +35,7 @@ class CacheError(GerryDBError):
 
 class CacheInitError(CacheError):
     """Raised when a GerryDB cache cannot be initialized."""
+
+
+class ViewLoadError(GerryDBError):
+    """Raised when a view cannot be loaded (e.g. from a GeoPackage)."""

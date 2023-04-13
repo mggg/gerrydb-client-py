@@ -4,17 +4,14 @@ This file should be kept in sync with the server-side version.
 """
 from datetime import datetime
 from enum import Enum
-from typing import Any, Callable, Optional, Union
+from typing import Any, Optional, Union
 
-import geopandas as gpd
-import networkx as nx
 import pyproj
 from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import constr
 from shapely.geometry import Point
 from shapely.geometry.base import BaseGeometry
-from shapely.ops import transform
 
 UserEmail = constr(max_length=254)
 
@@ -443,91 +440,3 @@ class ViewMeta(ViewBase):
     valid_at: datetime
     proj: Optional[str]
     graph: Optional[GraphMeta]
-
-
-class View(ViewBase):
-    """Rendered view."""
-
-    namespace: str
-    template: ViewTemplate
-    locality: Locality
-    layer: GeoLayer
-    meta: ObjectMeta
-    valid_at: datetime
-    proj: Optional[str]
-    geographies: list[Geography]
-    values: dict[str, list]  # keys are columns, values are in order of `geographies`
-    graph: Optional[Graph]
-    plans: list[Plan]
-
-    def to_df(self) -> gpd.GeoDataFrame:
-        """Converts the view to a GeoDataFrame."""
-        gdf = (
-            gpd.GeoDataFrame.from_dict(
-                {
-                    **{
-                        "/".join(key.split("/")[2:]): values
-                        for key, values in self.values.items()
-                    },
-                    "path": [geo.path for geo in self.geographies],
-                    "geometry": [geo.geography for geo in self.geographies],
-                },
-                orient="index",
-            )
-            .transpose()
-            .sort_values(by=["path"])
-            .set_index("path")
-        )
-        gdf.crs = "epsg:4269"
-        if self.proj is not None:
-            gdf = gdf.to_crs(self.proj)
-        if self.locality.default_proj is not None:
-            gdf = gdf.to_crs(self.locality.default_proj)
-
-        return gdf
-
-    def to_graph(self, geometry: bool = False) -> nx.Graph:
-        """Converts a view to a NetworkX graph."""
-        proj_crs_candidates = [
-            self.graph.proj,
-            self.proj,
-            self.locality.default_proj,
-            "epsg:4269",
-        ]
-        proj_crs = next(crs for crs in proj_crs_candidates if crs is not None)
-        project = pyproj.Transformer.from_crs(
-            NATIVE_PROJ, pyproj.CRS(proj_crs), always_xy=True
-        ).transform
-
-        graph = nx.Graph()
-        col_names = {col: "/".join(col.split("/")[2:]) for col in self.values}
-        for idx, geo in enumerate(self.geographies):
-            attrs = {
-                col_names[col]: col_values[idx]
-                for col, col_values in self.values.items()
-            }
-            if geometry and geo.geography is not None:
-                projected_geo = transform(project, geo.geography)
-                attrs["area"] = projected_geo.area
-                attrs["geometry"] = projected_geo
-            if geometry and geo.internal_point is not None:
-                attrs["internal_point"] = transform(project, geo.internal_point)
-
-            # TODO: is it faster to add in bulk?
-            graph.add_node(geo.path, **attrs)
-
-        graph.add_edges_from(
-            (
-                "/".join(geo_path_1.split("/")[2:]),
-                "/".join(geo_path_2.split("/")[2:]),
-                weights,
-            )
-            for geo_path_1, geo_path_2, weights in self.graph.edges
-        )
-        return graph
-
-    def to_partitions(
-        self, updaters: Optional[dict[str, Callable]] = None
-    ) -> dict[str, Any]:
-        """Converts a view's complete plans to GerryChain `Partition` objects."""
-        graph = self.graph()

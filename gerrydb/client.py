@@ -3,6 +3,7 @@ import asyncio
 import os
 from dataclasses import dataclass
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any, Optional, Union
 
 import geopandas as gpd
@@ -38,7 +39,7 @@ from gerrydb.schemas import (
     ObjectMeta,
     ObjectMetaCreate,
     Plan,
-    View,
+    ViewMeta,
     ViewTemplate,
 )
 
@@ -52,8 +53,10 @@ class GerryDB:
     cache: GerryCache
     namespace: Optional[str]
     offline: bool
-    _base_url: str
     timeout: int
+
+    _base_url: str
+    _temp_dir: Optional[TemporaryDirectory]
 
     def __init__(
         self,
@@ -100,7 +103,8 @@ class GerryDB:
             raise ConfigError("No host specified for API key.")
 
         if host is not None and key is not None:
-            self.cache = GerryCache(":memory:")
+            self._temp_dir = TemporaryDirectory()
+            self.cache = GerryCache(":memory:", Path(self._temp_dir.name))
         else:
             GERRYDB_ROOT = Path(os.getenv("GERRYDB_ROOT", DEFAULT_GERRYDB_ROOT))
             try:
@@ -136,11 +140,17 @@ class GerryDB:
                         f"in configuration at {GERRYDB_ROOT.resolve()}."
                     )
 
+            profile_cache_dir = Path(GERRYDB_ROOT / "caches" / profile)
             try:
-                Path(GERRYDB_ROOT / "caches").mkdir(exist_ok=True)
+                profile_cache_dir.mkdir(parents=True, exist_ok=True)
             except IOError as ex:
                 raise ConfigError("Failed to create cache directory.") from ex
-            self.cache = GerryCache(GERRYDB_ROOT / "caches" / f"{profile}.db")
+
+            self._temp_dir = None
+            self.cache = GerryCache(
+                database=GERRYDB_ROOT / "caches" / f"{profile}.db",
+                data_dir=profile_cache_dir,
+            )
 
             host = config["host"]
             key = config["key"]
@@ -214,7 +224,7 @@ class GerryDB:
     @property
     def views(self) -> ViewRepo:
         """Views."""
-        return ViewRepo(schema=View, base_url="/views", session=self)
+        return ViewRepo(schema=ViewMeta, base_url="/views", session=self)
 
     @property
     def view_templates(self) -> ViewTemplateRepo:
@@ -307,7 +317,7 @@ class WriteContext:
     @property
     def views(self) -> ViewRepo:
         """Views."""
-        return ViewRepo(schema=View, base_url="/views", session=self.db, ctx=self)
+        return ViewRepo(schema=ViewMeta, base_url="/views", session=self.db, ctx=self)
 
     @property
     def view_templates(self) -> ViewTemplateRepo:
