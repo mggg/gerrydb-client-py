@@ -5,8 +5,9 @@ from pathlib import Path
 
 import geopandas as gpd
 import pytest
-from gerrydb import GerryDB
 from networkx.readwrite import json_graph
+
+from gerrydb import GerryDB
 
 
 @pytest.fixture

@@ -1,7 +1,8 @@
 """Integration/VCR tests for columns."""
 import pytest
-from gerrydb.schemas import ColumnKind, ColumnType
 from shapely import box
+
+from gerrydb.schemas import ColumnKind, ColumnType
 
 
 @pytest.fixture

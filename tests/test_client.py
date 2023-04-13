@@ -3,6 +3,7 @@ import os
 from unittest import mock
 
 import pytest
+
 from gerrydb.client import ConfigError, GerryDB
 
 

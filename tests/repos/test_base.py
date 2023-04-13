@@ -5,6 +5,7 @@ from typing import Optional
 import httpx
 import pydantic
 import pytest
+
 from gerrydb.client import GerryDB, WriteContext
 from gerrydb.exceptions import OnlineError, ResultError, WriteContextError
 from gerrydb.repos.base import err, online, parse_path, write_context
