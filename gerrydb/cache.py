@@ -5,7 +5,7 @@ import sqlite3
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
-from typing import TypeVar, Union
+from typing import Optional, TypeVar, Union
 
 from gerrydb.schemas import BaseModel, ViewMeta
 
@@ -86,7 +86,7 @@ class GerryCache:
 
         return gpkg_path
 
-    def get_view_gpkg(self, namespace: str, path: str) -> Path | None:
+    def get_view_gpkg(self, namespace: str, path: str) -> Optional[Path]:
         """Returns the path to a view's cached GeoPackage, if available."""
         render_id = self._conn.execute(
             "SELECT render_id FROM view WHERE namespace = ? AND path = ?",

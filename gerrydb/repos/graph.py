@@ -1,5 +1,5 @@
 """Repository for dual graphs."""
-from typing import Optional
+from typing import Optional, Union
 
 import networkx as nx
 
@@ -25,11 +25,11 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
         path: str,
         namespace: Optional[str] = None,
         *,
-        locality: str | Locality,
-        layer: str | GeoLayer,
+        locality: Union[str, Locality],
+        layer: Union[str, GeoLayer],
         graph: nx.Graph,
         description: str,
-        proj: str | None = None,
+        proj: Optional[str] = None,
     ) -> Graph:
         """Imports a dual graph from a NetworkX graph.
 

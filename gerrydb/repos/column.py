@@ -37,8 +37,8 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         column_kind: ColumnKind,
         column_type: ColumnType,
         description: str,
-        source_url: str | None = None,
-        aliases: list[str] | None = None,
+        source_url: Optional[str] = None,
+        aliases: Optional[list[str]] = None,
     ) -> Column:
         """Creates a tabular data column.
 

@@ -23,8 +23,8 @@ class GeoLayerRepo(NamespacedObjectRepo[GeoLayer]):
         path: str,
         namespace: Optional[str] = None,
         *,
-        description: str | None = None,
-        source_url: str | None = None,
+        description: Optional[str] = None,
+        source_url: Optional[str] = None,
     ) -> GeoLayer:
         """Creates a geographic layer.
 

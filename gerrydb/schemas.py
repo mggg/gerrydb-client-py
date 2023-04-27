@@ -83,7 +83,7 @@ class NamespaceGroup(str, Enum):
 class ObjectMetaBase(BaseModel):
     """Base model for object metadata."""
 
-    notes: str | None
+    notes: Optional[str]
 
 
 class ObjectMetaCreate(ObjectMetaBase):
@@ -102,15 +102,15 @@ class LocalityBase(BaseModel):
     """Base model for locality metadata."""
 
     canonical_path: GerryPath
-    parent_path: GerryPath | None
-    default_proj: str | None
+    parent_path: Optional[GerryPath]
+    default_proj: Optional[str]
     name: str
 
 
 class LocalityCreate(LocalityBase):
     """Locality metadata received on creation."""
 
-    aliases: list[GerryPath] | None
+    aliases: Optional[list[GerryPath]]
 
 
 class LocalityPatch(BaseModel):
@@ -158,7 +158,7 @@ class ColumnBase(BaseModel):
     canonical_path: GerryPath
     namespace: str
     description: str
-    source_url: AnyUrl | None
+    source_url: Optional[AnyUrl]
     kind: ColumnKind
     type: ColumnType
 
@@ -166,7 +166,7 @@ class ColumnBase(BaseModel):
 class ColumnCreate(ColumnBase):
     """Column metadata received on creation."""
 
-    aliases: list[GerryPath] | None
+    aliases: Optional[list[GerryPath]]
 
 
 class ColumnPatch(BaseModel):
@@ -208,8 +208,8 @@ class GeoLayerBase(BaseModel):
     """Base model for geographic layer metadata."""
 
     path: GerryPath
-    description: str | None
-    source_url: AnyUrl | None
+    description: Optional[str]
+    source_url: Optional[AnyUrl]
 
 
 class GeoLayerCreate(GeoLayerBase):
@@ -345,9 +345,9 @@ class PlanBase(BaseModel):
 
     path: GerryPath
     description: str
-    source_url: AnyUrl | None = None
-    districtr_id: str | None = None
-    daves_id: str | None = None
+    source_url: Optional[AnyUrl] = None
+    districtr_id: Optional[str] = None
+    daves_id: Optional[str] = None
 
 
 class PlanCreate(PlanBase):

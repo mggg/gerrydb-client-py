@@ -23,13 +23,13 @@ class PlanRepo(NamespacedObjectRepo[Plan]):
         path: str,
         namespace: Optional[str] = None,
         *,
-        locality: str | Locality,
-        layer: str | GeoLayer,
+        locality: Union[str, Locality],
+        layer: Union[str, GeoLayer],
         assignments: dict[Union[Geography, str], int],
         description: str,
-        source_url: str | None = None,
-        districtr_id: str | None = None,
-        daves_id: str | None = None,
+        source_url: Optional[str] = None,
+        districtr_id: Optional[str] = None,
+        daves_id: Optional[str] = None,
     ) -> Plan:
         """Creates a districting plan.
 

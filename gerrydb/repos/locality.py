@@ -43,9 +43,9 @@ class LocalityRepo(ObjectRepo):
         canonical_path: str,
         *,
         name: str,
-        parent_path: str | None = None,
-        default_proj: str | None = None,
-        aliases: list[str] | None = None,
+        parent_path: Optional[str] = None,
+        default_proj: Optional[str] = None,
+        aliases: Optional[list[str]] = None,
     ) -> Locality:
         """Creates a locality.
 
