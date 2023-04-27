@@ -1,4 +1,6 @@
 """Internal cache operations for GerryDB."""
+import gzip
+import pickle
 import sqlite3
 from datetime import datetime
 from os import PathLike
@@ -9,11 +11,11 @@ from gerrydb.schemas import BaseModel, ViewMeta
 
 from .exceptions import CacheInitError
 
-_REQUIRED_TABLES = {"cache_meta", "view"}
+_REQUIRED_TABLES = {"cache_meta", "graph", "view"}
 _CACHE_SCHEMA_VERSION = "0"
 CACHE_EXTENSIONS = (
     "gpkg",  # view archive
-    "pkl",  # graph (derived from view archive)
+    "pkl.gz",  # graph (derived from view archive)
 )
 
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
@@ -121,7 +123,7 @@ class GerryCache:
         table_diff = _REQUIRED_TABLES - self._tables()
         if table_diff:
             missing_tables = ", ".join(table_diff)
-            raise CacheInitError(f"Invalid cache: missing tables {missing_tables}.")
+            raise CacheInitError(f"Invalid cache: missing table(s) {missing_tables}.")
 
         schema_version = self._conn.execute(
             "SELECT value FROM cache_meta WHERE key='schema_version'"
@@ -149,6 +151,15 @@ class GerryCache:
                 render_id        TEXT NOT NULL,
                 cached_at        TEXT NOT NULL,
                 UNIQUE(namespace, path)
+            )"""
+        )
+        self._conn.execute(
+            """CREATE TABLE graph(
+                render_id   TEXT    NOT NULL REFERENCES view(render_id),
+                plans       INTEGER NOT NULL, 
+                geometry    INTEGER NOT NULL, 
+                cached_at   TEXT    NOT NULL,
+                UNIQUE(render_id, plans, geometry)
             )"""
         )
         self._conn.execute(

@@ -3,7 +3,7 @@ import json
 import sqlite3
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Union
+from typing import Callable, Generator, Optional, Union
 
 import geopandas as gpd
 import networkx as nx
@@ -20,6 +20,7 @@ from gerrydb.repos.base import (
     write_context,
 )
 from gerrydb.schemas import (
+    Geography,
     GeoLayer,
     Graph,
     GraphMeta,
@@ -41,13 +42,35 @@ _EXPECTED_META_KEYS = {
 }
 _EXPECTED_TABLES = {
     "gerrydb_geo_meta",
-    "gerrydb_geo_meta_xref",
+    "gerrydb_geo_attrs",
     "gerrydb_view_meta",
 }
+# by flag (see https://www.geopackage.org/spec/#gpb_format)
+_GPKG_ENVELOPE_BYTES = {
+    0: 0,
+    1: 32,
+    2: 48,
+    3: 48,
+    4: 64,
+}
+
+try:
+    import gerrychain
+except ImportError:
+    gerrychain = None
 
 
 def _load_gpkg_geometry(geom: bytes) -> BaseGeometry:
-    pass  # TODO
+    """Loads a geometry from a raw GeoPackage WKB blob."""
+    # header format: https://www.geopackage.org/spec/#gpb_format
+    envelope_flag = (geom[3] & 0b00001110) >> 1
+    try:
+        envelope_bytes = _GPKG_ENVELOPE_BYTES[envelope_flag]
+    except KeyError:
+        raise ValueError("Invalid GeoPackage geometry: bad envelope flag.")
+
+    wkb_offset = envelope_bytes + 8
+    return shapely.wkb.loads(geom[wkb_offset:])
 
 
 class View:
@@ -92,7 +115,7 @@ class View:
         if missing_tables:
             raise ViewLoadError(
                 "Cannot load view. Does the GeoPackage have GerryDB "
-                f"extensions? (missing tables: {', '.join(missing_tables)})"
+                f"extensions? (missing table(s): {', '.join(missing_tables)})"
             )
 
         meta_rows = conn.execute("SELECT key, value FROM gerrydb_view_meta").fetchall()
@@ -131,32 +154,69 @@ class View:
 
     def to_graph(self, plans: bool = True, geometry: bool = False) -> nx.Graph:
         """Loads the view as a NetworkX graph."""
-        raw_node_areas = self._conn.execute(
-            "SELECT path, area FROM gerrydb_graph_node_area"
-        ).fetchall()
-        node_areas = {row[0]: row[1] for row in raw_node_areas}
-
         raw_cols = self._conn.execute(
             "SELECT name from pragma_table_info(?)",
             (self.path,),
         ).fetchall()
         excluded_cols = {"fid"} if geometry else {"fid", "geography"}
         columns = [row[0] for row in raw_cols if row[0] not in excluded_cols]
+        prefixed_columns = [f"{self.path}.{col}" for col in columns]
+
+        join_clauses = [
+            (
+                "JOIN gerrydb_graph_node_area ON "
+                f"{self.path}.path = gerrydb_graph_node_area.path"
+            )
+        ]
+        columns.append("area")
+        prefixed_columns.append("gerrydb_graph_node_area.area")
+
+        if plans:
+            # Join plan assignment columns.
+            raw_plan_cols = self._conn.execute(
+                "SELECT name from pragma_table_info('gerrydb_plan_assignment')",
+            ).fetchall()
+
+            plan_columns = [row[0] for row in raw_plan_cols]
+            columns += plan_columns
+            prefixed_columns += [
+                f"gerrydb_plan_assignment.{col}" for col in plan_columns
+            ]
+            join_clauses.append(
+                "JOIN gerrydb_plan_assignment "
+                f"ON {self.path}.path =  gerrydb_plan_assignment.path"
+            )
+
+        if geometry:
+            # Join geographic layers: add internal points.
+            columns.append("internal_point")
+            prefixed_columns.append(f"{self.path}__internal_points.internal_point")
+            join_clauses.append(
+                f"JOIN {self.path}__internal_points "
+                f"ON {self.path}.path =  {self.path}__internal_points.path"
+            )
+
+        query = f"SELECT {', '.join(prefixed_columns)} FROM {self.path} "
+        query += " ".join(join_clauses)
 
         # Load nodes with selected attributes.
         graph = nx.Graph()
-        for row in self._conn.execute(f"SELECT {', '.join(columns)} FROM {self.path}"):
+        for row in self._conn.execute(query):
             node_attrs = dict(zip(columns, row))
             path = node_attrs["path"]
-            node_attrs["area"] = node_areas[path]
             del node_attrs["path"]
             if geometry:
                 node_attrs["geometry"] = (
                     None
                     if node_attrs["geography"] is None
-                    else shapely.wkb.loads(node_attrs["geography"])
+                    else _load_gpkg_geometry(node_attrs["geography"])
                 )
                 del node_attrs["geography"]
+                node_attrs["internal_point"] = (
+                    None
+                    if node_attrs["internal_point"] is None
+                    else _load_gpkg_geometry(node_attrs["internal_point"])
+                )
             graph.add_node(path, **node_attrs)
 
         # Load edges with weights (attributes).
@@ -167,7 +227,50 @@ class View:
             (edge[0], edge[1], json.loads(edge[2])) for edge in raw_edges
         )
 
+        # Self-check: make sure the generated query didn't lose any nodes.
+        node_count = self._conn.execute(f"SELECT COUNT(*) FROM {self.path}").fetchone()
+        assert node_count[0] == len(graph)
+
         return graph
+
+    def to_chain(
+        self,
+        updaters: Optional[dict[str, Callable]] = None,
+        autotally: bool = True,
+        geo_graph: bool = False,
+    ) -> tuple[nx.Graph, dict[str, "gerrychain.Partition"]]:
+        """Converts a view's complete plans to GerryChain `Partition` objects."""
+        if gerrychain is None:
+            raise ImportError("GerryChain must be installed to load partitions.")
+
+        graph = self.graph(plans=True, geometry=geo_graph)
+        return graph, {}  # TODO
+
+    @property
+    def geographies(self) -> Generator[Geography, None, None]:
+        """Yields geographies in the view."""
+        raw_geo_meta = self._conn.execute(
+            "SELECT meta_id, value FROM gerrydb_geo_meta"
+        ).fetchone()
+        geo_meta = {row[0]: ObjectMeta(**json.loads(row[1])) for row in raw_geo_meta}
+
+        raw_geos = self._conn.execute(
+            f"""SELECT {self.path}.path, geography, internal_point, meta_id, valid_from
+            FROM {self.path}
+            JOIN {self.path}__internal_points
+            ON {self.path}.path = {self.path}__internal_points.path
+            JOIN gerrydb_geo_meta
+            ON {self.path}.path = gerrydb_geo_attrs.path
+            """
+        )
+        for geo_row in raw_geos:
+            yield Geography(
+                path=geo_row[0],
+                geography=_load_gpkg_geometry(geo_row[1]),
+                internal_point=_load_gpkg_geometry(geo_row[2]),
+                meta=geo_meta[geo_row[3]],
+                valid_from=geo_row[4],
+            )
 
 
 class ViewRepo(NamespacedObjectRepo[ViewMeta]):
@@ -232,19 +335,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         )
         response.raise_for_status()
         view_meta = ViewMeta(**response.json())
-
-        gpkg_response = self.ctx.client.post(
-            f"{self.base_url}/{namespace}/{path}",
-        )
-        gpkg_response.raise_for_status()
-        gpkg_render_id = gpkg_response.headers["X-GerryDB-View-Render-ID"]
-
-        gpkg_path = self.session.cache.upsert_view_gpkg(
-            namespace=view_meta.namespace,
-            path=view_meta.path,
-            render_id=gpkg_render_id,
-            content=gpkg_response.content,
-        )
+        gpkg_path = self._get(path=view_meta.path, namespace=view_meta.namespace)
         return View.from_gpkg(gpkg_path)
 
     @namespaced
@@ -264,18 +355,28 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
             namespace=normalize_path(namespace), path=normalize_path(path)
         )
         if gpkg_path is None:
-            # Generate a new render (assuming the view exists).
-            gpkg_response = self.ctx.client.post(
-                f"{self.base_url}/{namespace}/{path}",
-            )
-            gpkg_response.raise_for_status()
-            gpkg_render_id = gpkg_response.headers["X-GerryDB-Render-ID"]
-
-            gpkg_path = self.session.cache.upsert_view_gpkg(
-                namespace=normalize_path(namespace),
-                path=normalize_path(path),
-                render_id=gpkg_render_id,
-                content=gpkg_response.content,
-            )
-
+            gpkg_path = self._get(path, namespace)
         return View.from_gpkg(gpkg_path)
+
+    def _get(self, path: str, namespace: str) -> Path:
+        """Downloads view data as a GeoPackage."""
+        # Generate a new render (assuming the view exists).
+        gpkg_response = self.session.client.post(
+            f"{self.base_url}/{namespace}/{path}",
+        )
+        if gpkg_response.status_code >= 400:
+            gpkg_response.raise_for_status()
+        if gpkg_response.next_request is not None:
+            # Redirect to Google Cloud Storage (probably).
+            gpkg_response = self.session.client.get(gpkg_response.next_request.url)
+            gpkg_response.raise_for_status()
+            gpkg_render_id = gpkg_response.headers["x-goog-meta-gerrydb-view-render-id"]
+        else:
+            gpkg_render_id = gpkg_response.headers["x-gerrydb-view-render-id"]
+
+        return self.session.cache.upsert_view_gpkg(
+            namespace=normalize_path(namespace),
+            path=normalize_path(path),
+            render_id=gpkg_render_id,
+            content=gpkg_response.content,
+        )
