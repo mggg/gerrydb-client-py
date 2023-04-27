@@ -266,6 +266,7 @@ class View:
         return {
             col: gerrychain.Partition(graph=graph, assignment=col, updaters=updaters)
             for col in plan_columns
+            if col != "path"
         }
 
     @property
