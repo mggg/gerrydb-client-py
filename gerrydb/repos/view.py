@@ -165,29 +165,33 @@ class View:
         prefixed_columns = [f"{self.path}.{col}" for col in columns]
 
         join_clauses = [
-            (
-                "JOIN gerrydb_graph_node_area ON "
-                f"{self.path}.path = gerrydb_graph_node_area.path"
-            )
+            # (
+            #    "JOIN gerrydb_graph_node_area ON "
+            #    f"{self.path}.path = gerrydb_graph_node_area.path"
+            # )
         ]
-        columns.append("area")
-        prefixed_columns.append("gerrydb_graph_node_area.area")
+        # columns.append("area")
+        # prefixed_columns.append("gerrydb_graph_node_area.area")
 
         if plans:
             # Join plan assignment columns.
-            raw_plan_cols = self._conn.execute(
-                "SELECT name from pragma_table_info('gerrydb_plan_assignment')",
-            ).fetchall()
+            try:
+                raw_plan_cols = self._conn.execute(
+                    "SELECT name from pragma_table_info('gerrydb_plan_assignment')",
+                ).fetchall()
+                join_clauses.append(
+                    "JOIN gerrydb_plan_assignment "
+                    f"ON {self.path}.path =  gerrydb_plan_assignment.path"
+                )
+            except sqlite3.OperationalError:
+                # No plans table.
+                raw_plan_cols = []
 
             plan_columns = [row[0] for row in raw_plan_cols]
             columns += plan_columns
             prefixed_columns += [
                 f"gerrydb_plan_assignment.{col}" for col in plan_columns
             ]
-            join_clauses.append(
-                "JOIN gerrydb_plan_assignment "
-                f"ON {self.path}.path =  gerrydb_plan_assignment.path"
-            )
 
         if geometry:
             # Join geographic layers: add internal points.
