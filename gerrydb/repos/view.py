@@ -20,6 +20,8 @@ from gerrydb.repos.base import (
     write_context,
 )
 from gerrydb.schemas import (
+    Column,
+    ColumnKind,
     Geography,
     GeoLayer,
     Graph,
@@ -154,6 +156,17 @@ class View:
 
         return gpd.GeoDataFrame(gdf)
 
+    def _plan_cols(self) -> list[str]:
+        """Gets plan identifiers in the GeoPackage."""
+        try:
+            raw_plan_cols = self._conn.execute(
+                "SELECT name from pragma_table_info('gerrydb_plan_assignment')",
+            ).fetchall()
+            return [row[0] for row in raw_plan_cols]
+        except sqlite3.OperationalError:
+            # No plans table.
+            return []
+
     def to_graph(self, plans: bool = True, geometry: bool = False) -> nx.Graph:
         """Loads the view as a NetworkX graph."""
         raw_cols = self._conn.execute(
@@ -175,23 +188,16 @@ class View:
 
         if plans:
             # Join plan assignment columns.
-            try:
-                raw_plan_cols = self._conn.execute(
-                    "SELECT name from pragma_table_info('gerrydb_plan_assignment')",
-                ).fetchall()
+            plan_columns = self._plan_cols()
+            if plan_columns:
                 join_clauses.append(
                     "JOIN gerrydb_plan_assignment "
                     f"ON {self.path}.path =  gerrydb_plan_assignment.path"
                 )
-            except sqlite3.OperationalError:
-                # No plans table.
-                raw_plan_cols = []
-
-            plan_columns = [row[0] for row in raw_plan_cols]
-            columns += plan_columns
-            prefixed_columns += [
-                f"gerrydb_plan_assignment.{col}" for col in plan_columns
-            ]
+                columns += plan_columns
+                prefixed_columns += [
+                    f"gerrydb_plan_assignment.{col}" for col in plan_columns
+                ]
 
         if geometry:
             # Join geographic layers: add internal points.
@@ -244,13 +250,24 @@ class View:
         updaters: Optional[dict[str, Callable]] = None,
         autotally: bool = True,
         geo_graph: bool = False,
-    ) -> tuple[nx.Graph, dict[str, "gerrychain.Partition"]]:
+    ) -> dict[str, "gerrychain.Partition"]:
         """Converts a view's complete plans to GerryChain `Partition` objects."""
         if gerrychain is None:
             raise ImportError("GerryChain must be installed to load partitions.")
 
         graph = self.graph(plans=True, geometry=geo_graph)
-        return graph, {}  # TODO
+
+        updaters = {"cut_edges": gerrychain.updaters.cut_edges}
+        if autotally:
+            for member in self.template.members:
+                if isinstance(member, Column) and member.kind == ColumnKind.COUNT:
+                    updaters[member.path] = gerrychain.updaters.Tally(member.path)
+
+        plan_columns = self._plan_cols()
+        return {
+            col: gerrychain.Partition(graph=graph, assignment=col, updaters=updaters)
+            for col in plan_columns
+        }
 
     @property
     def geographies(self) -> Generator[Geography, None, None]:
