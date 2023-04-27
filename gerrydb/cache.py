@@ -109,15 +109,11 @@ class GerryCache:
     def _tables(self) -> set[str]:
         """Fetches a list of user-defined tables in the cache database."""
         # see https://www.sqlitetutorial.net/sqlite-show-tables/
-        try:
-            tables = self._conn.execute(
-                """SELECT name FROM sqlite_schema
-                WHERE type ='table' AND name NOT LIKE 'sqlite_%';"""
-            ).fetchall()
-            return {table[0] for table in tables}
-        except sqlite3.OperationalError:
-            # The `sqlite_schema` table may not exist yet.
-            return set()
+        tables = self._conn.execute(
+            """SELECT name FROM sqlite_master
+            WHERE type ='table' AND name NOT LIKE 'sqlite_%';"""
+        ).fetchall()
+        return {table[0] for table in tables}
 
     def _assert_clean(self) -> None:
         """Asserts that the cache's schema matches the current schema version.

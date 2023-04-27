@@ -110,7 +110,7 @@ class View:
 
         # TODO: Disabled for Colab demo -- reenable.
         # tables = conn.execute(
-        #   "SELECT name FROM sqlite_schema WHERE "
+        #   "SELECT name FROM sqlite_master WHERE "
         #   "type ='table' AND name NOT LIKE 'sqlite_%'"
         # ).fetchall()
         # missing_tables = _EXPECTED_TABLES - set(table[0] for table in tables)
