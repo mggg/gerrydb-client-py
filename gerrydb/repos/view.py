@@ -110,17 +110,16 @@ class View:
         """Loads a view from a GeoPackage."""
         conn = sqlite3.connect(path)
 
-        # TODO: Disabled for Colab demo -- reenable.
-        # tables = conn.execute(
-        #   "SELECT name FROM sqlite_master WHERE "
-        #   "type ='table' AND name NOT LIKE 'sqlite_%'"
-        # ).fetchall()
-        # missing_tables = _EXPECTED_TABLES - set(table[0] for table in tables)
-        # if missing_tables:
-        #    raise ViewLoadError(
-        #        "Cannot load view. Does the GeoPackage have GerryDB "
-        #        f"extensions? (missing table(s): {', '.join(missing_tables)})"
-        #    )
+        tables = conn.execute(
+            "SELECT name FROM sqlite_master WHERE "
+            "type ='table' AND name NOT LIKE 'sqlite_%'"
+        ).fetchall()
+        missing_tables = _EXPECTED_TABLES - set(table[0] for table in tables)
+        if missing_tables:
+            raise ViewLoadError(
+                "Cannot load view. Does the GeoPackage have GerryDB "
+                f"extensions? (missing table(s): {', '.join(missing_tables)})"
+            )
 
         meta_rows = conn.execute("SELECT key, value FROM gerrydb_view_meta").fetchall()
         raw_meta = {row[0]: json.loads(row[1]) for row in meta_rows}
