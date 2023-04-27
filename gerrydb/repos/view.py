@@ -254,7 +254,7 @@ class View:
         if gerrychain is None:
             raise ImportError("GerryChain must be installed to load partitions.")
 
-        graph = self.graph(plans=True, geometry=geo_graph)
+        graph = self.to_graph(plans=True, geometry=geo_graph)
 
         updaters = {"cut_edges": gerrychain.updaters.cut_edges}
         if autotally:
