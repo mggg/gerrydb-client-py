@@ -2,9 +2,6 @@
 
 ## Background
 
-### Who is this for?
-This document is intended as a reference for anyone who wants to ...
-
 ### What is GerryDB?
 GerryDB is a lightweight redistricting and voting analytics platform developed internally at MGGG.  We intend it to replace legacy redistricting GIS workflows ...
 
@@ -12,6 +9,9 @@ GerryDB is _not_ a general-purpose GIS platform like [ArcGIS](https://www.arcgis
 
 
 ### What is in GerryDB?
+MGGG's production instance currently contains 2010 and 2020 U.S. Census [P.L. 94-171](https://www.census.gov/programs-surveys/decennial-census/about/rdo/summary-files.html) data on most key Census units. [todo]
+
+### How do I access GerryDB?
 
 
 ## Core concepts
@@ -27,7 +27,7 @@ This bundling of geospatial data, tabular data, graph data, and metadata is insp
 ### Localities and geographic layers
 We consider districting problems with respect to a particular place: we might be interested in Massachusetts' State Senate districts or Chicago's city council wards. However, the precise boundaries of these places can shift over time: cities sometimes [annex unincorporated land](https://en.wikipedia.org/wiki/Municipal_annexation_in_the_United_States), for instance. For this reason, it is useful to have an abstract definition of a place that is not tied to a fixed boundary. In GerryDB, these abstract definitions are called _localities_. At a minimum, GerryDB contains locality definitions for all states, territories, and county or county equivalents referenced in the U.S. Census 2010 and 2020 county shapefiles.
 
-Geographic layers are collections of geographic units that make localities concrete. For instance, GerryDB contains layer definitions from the U.S. Census central spine, which is a sequence of nesting geographic units. (In order from most to least granular, the units on the central spine are blocks, block groups, tracts, and counties.) We can associate units in a layer with a locality. For instance, we might build the city of Boston out of 2010 Census tracts, 2020 Census blocks, or 2022 city precincts. The city boundary induced by these units need not line up exactly, but each set of units approximates some Platonic ideal Boston.
+Geographic layers are collections of geographic units that make localities concrete. For instance, GerryDB contains layer definitions from the U.S. Census central spine, which is a sequence of nesting geographic units. (In order from most to least granular, the units on the central spine are blocks, block groups, tracts, and counties.) We can associate units in a layer with a locality. For instance, we might build the city of Boston out of 2010 Census tracts, 2020 Census blocks, or 2022 city precincts. The city boundary induced by these units need not line up exactly, but each set of units approximates some Platonic ideal of Boston.
 
 
 ### Columns and column sets
@@ -48,6 +48,13 @@ Most data in GerryDB exists within a [_namespace_](https://en.wikipedia.org/wiki
 GerryDB is primarily exposed to end users by a Python client library. This library communicates via a REST API with a [PostGIS](https://postgis.net/)-based server; the client library is also responsible for caching view data to performance an avoid excess calls to the server. Finally, the client library converts between GerryDB's internal format for rendered view data and more common formats: it supports loading view data as GeoPandas `GeoDataFrame` objects, [NetworkX](https://networkx.org/) graphs, and GerryChain `Partition` objects.
 
 ### Installing and configuring the client
+By default, GerryDB caches view data in the `.gerrydb` directory in your home directory. The `config` file in this directory contains API credentials.
+```
+[default]
+host = "cherrydb-meta-prod-7bvdnucjva-uk.a.run.app"
+key = "<YOUR API KEY HERE>"
+```
+
 
 ### Viewing views
 
