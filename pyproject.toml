@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "gerrydb"
 version = "0.1.0"
-description = ""
+description = "Client library for GerryDB."
 authors = ["Parker J. Rule <parker.rule@tufts.edu>"]
 
 [tool.poetry.dependencies]
