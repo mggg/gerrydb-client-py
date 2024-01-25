@@ -209,7 +209,7 @@ class GerryDB:
     @property
     def localities(self) -> LocalityRepo:
         """Localities."""
-        return LocalityRepo(schema=None, base_url=None, session=self)
+        return LocalityRepo(session=self)
 
     @property
     def namespaces(self) -> NamespaceRepo:
@@ -302,7 +302,7 @@ class WriteContext:
     @property
     def localities(self) -> LocalityRepo:
         """Localities."""
-        return LocalityRepo(schema=None, base_url=None, session=self.db, ctx=self)
+        return LocalityRepo(session=self.db, ctx=self)
 
     @property
     def namespaces(self) -> NamespaceRepo:
