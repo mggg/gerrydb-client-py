@@ -11,7 +11,6 @@ from gerrydb.repos.base import (
 )
 from gerrydb.schemas import Namespace, NamespaceCreate
 
-
 if TYPE_CHECKING:
     from gerrydb.client import GerryDB, WriteContext
 
@@ -84,9 +83,8 @@ class NamespaceRepo(NamespacedObjectRepo):
                 path=path, public=public, description=description
             ).dict(),
         )
-
         response.raise_for_status()
-        
+
         return Namespace(**response.json())
 
     def __getitem__(self, path: str) -> Optional[Namespace]:
