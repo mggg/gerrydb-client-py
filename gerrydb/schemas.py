@@ -15,7 +15,8 @@ from shapely.geometry.base import BaseGeometry
 
 UserEmail = constr(max_length=254)
 
-GerryPath = constr(regex=r"[a-z0-9][a-z0-9-_/]*")
+# constr is a constrained string, so this is some path that needs to satisfy this regex
+GerryPath = constr(regex=r"[a-z0-9][a-z0-9-_/]*") # must start with lowercase or digit, then followed by any lowercase, digit, hyphen, underscore, slash
 NamespacedGerryPath = constr(regex=r"[a-z0-9/][a-z0-9-_/]*")
 
 NATIVE_PROJ = pyproj.CRS("EPSG:4269")
