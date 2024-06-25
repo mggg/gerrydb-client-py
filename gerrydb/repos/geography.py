@@ -64,6 +64,7 @@ def _parse_geo_response(response: httpx.Response) -> list[Geography]:
     response_geos = []
     for response_geo in msgpack.loads(response.content):
         response_geo["geography"] = shapely.wkb.loads(response_geo["geography"])
+        response_geo["internal_point"] = shapely.wkb.loads(response_geo["internal_point"])
         response_geos.append(Geography(**response_geo))
     return response_geos
 

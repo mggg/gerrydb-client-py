@@ -31,7 +31,8 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
         description: str,
         proj: Optional[str] = None,
     ) -> Graph:
-        """Imports a dual graph from a NetworkX graph.
+        """
+        Imports a dual graph from a NetworkX graph.
 
         Args:
             path: A short identifier for the graph (e.g. `iowa_counties_rook`).
@@ -49,7 +50,8 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
                 or if the parameters fail validation.
 
         Returns:
-            The new districting plan.
+            The new districting plan in the form of a gerrydb `Graph` schema
+            object.
         """
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
