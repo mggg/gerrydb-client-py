@@ -1,4 +1,5 @@
 """Repository for dual graphs."""
+
 from typing import Optional, Union
 
 import networkx as nx
@@ -30,6 +31,7 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
         graph: nx.Graph,
         description: str,
         proj: Optional[str] = None,
+        timeout: int = 1200,
     ) -> Graph:
         """
         Imports a dual graph from a NetworkX graph.
@@ -74,6 +76,7 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
                 ],
                 proj=proj,
             ).dict(),
+            timeout=timeout,
         )
         response.raise_for_status()
         return self.schema(**response.json())

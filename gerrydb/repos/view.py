@@ -1,5 +1,7 @@
 """Repository for views."""
+
 import json
+import re
 import sqlite3
 from datetime import datetime
 from pathlib import Path
@@ -32,6 +34,12 @@ from gerrydb.schemas import (
     ViewMeta,
     ViewTemplate,
 )
+
+import logging
+
+
+logger = logging.getLogger()
+
 
 _EXPECTED_META_KEYS = {
     "namespace",
@@ -244,7 +252,7 @@ class View:
 
         return graph
 
-    def to_chain(
+    def to_partition_dict(
         self,
         updaters: Optional[dict[str, Callable]] = None,
         autotally: bool = True,
@@ -356,7 +364,14 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
                 proj=proj,
             ).dict(),
         )
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            logger.info(
+                f"Failed to create view. Details: {response.json().get('detail', 'No details provided.')}"
+            )
+            logger.debug(response.json())
+            raise e
         view_meta = ViewMeta(**response.json())
         gpkg_path = self._get(path=view_meta.path, namespace=view_meta.namespace)
         return View.from_gpkg(gpkg_path)
@@ -367,6 +382,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         self,
         path: str,
         namespace: Optional[str] = None,
+        request_timeout: int = 1200,
     ) -> View:
         """Gets a view.
 
@@ -378,15 +394,18 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
             namespace=normalize_path(namespace), path=normalize_path(path)
         )
         if gpkg_path is None:
-            gpkg_path = self._get(path, namespace)
+            gpkg_path = self._get(path, namespace, request_timeout)
         return View.from_gpkg(gpkg_path)
 
-    def _get(self, path: str, namespace: str) -> Path:
+    def _get(self, path: str, namespace: str, request_timeout: int = 1200) -> Path:
         """Downloads view data as a GeoPackage."""
         # Generate a new render (assuming the view exists).
+        # These can take a long time to render depending on the size of the view.
         gpkg_response = self.session.client.post(
             f"{self.base_url}/{namespace}/{path}",
+            timeout=request_timeout,
         )
+
         if gpkg_response.status_code >= 400:
             gpkg_response.raise_for_status()
         if gpkg_response.next_request is not None:

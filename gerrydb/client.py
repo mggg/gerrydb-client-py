@@ -1,4 +1,5 @@
 """GerryDB session management."""
+
 import asyncio
 import os
 from dataclasses import dataclass
@@ -390,7 +391,16 @@ class WriteContext:
                     path: (geo, internal_points[path]) for path, geo in geos.items()
                 }
 
-            asyncio.run(_load_geos(self.geo, geos, namespace, batch_size, max_conns))
+            try:
+                asyncio.run(
+                    _load_geos(self.geo, geos, namespace, batch_size, max_conns)
+                )
+
+            except Exception as e:
+                if str(e) == "Cannot create geographies that already exist.":
+                    # TODO: Make this error more specific maybe?
+                    raise e
+                raise e
 
         asyncio.run(
             _load_column_values(self.columns, df, columns, batch_size, max_conns)

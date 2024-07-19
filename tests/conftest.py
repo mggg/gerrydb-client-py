@@ -1,4 +1,5 @@
 """Fixtures for API tests."""
+
 import json
 import os
 from pathlib import Path
@@ -23,14 +24,18 @@ def client():
 def client_ns(request, client):
     """Creates a test-level namespace and associates it with a client."""
     test_name = request.node.name.replace("[", "__").replace("]", "")
-    with client.context(
-        notes=f"Test setup for gerrydb-client-py test {request.node.name}"
-    ) as ctx:
-        ctx.namespaces.create(
-            path=test_name,
-            description=f"gerrydb-client-py test {request.node.name}",
-            public=True,
-        )
+    try:
+        with client.context(
+            notes=f"Test setup for gerrydb-client-py test {request.node.name}"
+        ) as ctx:
+            ctx.namespaces.create(
+                path=test_name,
+                description=f"gerrydb-client-py test {request.node.name}",
+                public=True,
+            )
+
+    except Exception:
+        pass
 
     client.namespace = test_name
     return client

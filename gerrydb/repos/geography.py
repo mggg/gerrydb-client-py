@@ -1,4 +1,5 @@
 """Repository for geographies."""
+
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional, Tuple, Union
 
@@ -7,6 +8,7 @@ import msgpack
 import shapely.wkb
 from shapely import Point
 from shapely.geometry.base import BaseGeometry
+import json
 
 from gerrydb.exceptions import RequestError
 from gerrydb.repos.base import (
@@ -23,6 +25,13 @@ if TYPE_CHECKING:
 
 GeoValType = Union[None, BaseGeometry, Tuple[Optional[BaseGeometry], Optional[Point]]]
 GeosType = dict[Union[str, Geography], GeoValType]
+
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+)
+logger = logging.getLogger(__name__)
 
 
 def _importer_params(ctx: "WriteContext", namespace: str) -> dict[str, Any]:
@@ -64,7 +73,9 @@ def _parse_geo_response(response: httpx.Response) -> list[Geography]:
     response_geos = []
     for response_geo in msgpack.loads(response.content):
         response_geo["geography"] = shapely.wkb.loads(response_geo["geography"])
-        response_geo["internal_point"] = shapely.wkb.loads(response_geo["internal_point"])
+        response_geo["internal_point"] = shapely.wkb.loads(
+            response_geo["internal_point"]
+        )
         response_geos.append(Geography(**response_geo))
     return response_geos
 
@@ -182,15 +193,40 @@ class AsyncGeoImporter:
 
     async def _send(self, geographies: GeosType, method: str) -> list[Geography]:
         """Creates or updates one or more geographies."""
+
+        geos = _serialize_geos(geographies)
+        serialized_data = msgpack.dumps(geos)
+
         response = await self.client.request(
             method,
             f"{self.repo.base_url}/{self.namespace}",
-            content=msgpack.dumps(_serialize_geos(geographies)),
+            content=serialized_data,
             headers={
                 "accept": "application/msgpack",
                 "content-type": "application/msgpack",
             },
         )
+        if response.status_code == 422:
+            json_content = json.loads(response.content)
+            logger.info(
+                f"422 for Request: {method},\n\tAt: {self.repo.base_url}/{self.namespace}\n\tBody: {json_content}"
+            )
+
+            if (
+                json_content.get("detail", None)
+                == "Object creation failed. Reason: Cannot create geographies that already exist."
+            ):
+                raise RequestError("Cannot create geographies that already exist.")
+
+            elif (
+                json_content.get("detail", None)
+                == "Object creation failed. Reason: Cannot create geographies with duplicate paths."
+            ):
+
+                raise RequestError(
+                    json_content["detail"] + " " + str(json_content["paths"])
+                )
+
         response.raise_for_status()
         return _parse_geo_response(response)
 

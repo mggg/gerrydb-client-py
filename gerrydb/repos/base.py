@@ -1,4 +1,5 @@
 """Base objects and utilities for GerryDB API object repositories."""
+
 from dataclasses import dataclass
 from functools import wraps
 from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar
@@ -103,9 +104,22 @@ def write_context(func: Callable) -> Callable:
     return write_context_wrapper
 
 
-def normalize_path(path: str) -> str:
-    """Normalizes a path (removes leading, trailing, and duplicate slashes)."""
-    return "/".join(seg for seg in path.lower().split("/") if seg)
+def normalize_path(path: str, case_sensitive_uid: bool = False) -> str:
+    """Normalizes a path (removes leading, trailing, and duplicate slashes, and
+    lowercases the path if `case_sensitive` is `False`).
+
+    Some paths, such as paths containing GEOIDs, are case-sensitive in the last
+    segment. In these cases, `case_sensitive` should be set to `True`.
+    """
+    if case_sensitive_uid:
+        path_list = path.strip().split("/")
+        return "/".join(
+            seg.lower() if i < len(path_list) - 1 else seg
+            for i, seg in enumerate(path_list)
+            if seg
+        )
+
+    return "/".join(seg for seg in path.strip().lower().split("/") if seg)
 
 
 def parse_path(path: str) -> Tuple[str, str]:
@@ -153,7 +167,7 @@ class NamespacedObjectRepo(Generic[SchemaType]):
             RequestError: If the object cannot be read on the server side,
                 or if no namespace is specified.
         """
-        path = normalize_path(path)
+        path = normalize_path(path, case_sensitive_uid="geometries" in self.base_url)
 
         response = self.session.client.get(f"{self.base_url}/{namespace}/{path}")
         response.raise_for_status()

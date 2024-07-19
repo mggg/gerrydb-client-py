@@ -1,4 +1,5 @@
 """Repository for columns."""
+
 from typing import Any, Optional, Union
 
 import httpx
@@ -20,6 +21,10 @@ from gerrydb.schemas import (
     ColumnValue,
     Geography,
 )
+
+import logging
+
+log = logging.getLogger()
 
 
 class ColumnRepo(NamespacedObjectRepo[Column]):
@@ -200,6 +205,10 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
                 for geo, value in values.items()
             ],
         )
+
+        if response.status_code != 204:
+            log.debug(f"For {path_or_col} returned {response}")
+
         response.raise_for_status()
 
         if ephemeral_client:

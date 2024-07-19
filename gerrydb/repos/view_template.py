@@ -1,4 +1,5 @@
 """Repository for view templates."""
+
 from typing import Collection, Optional, Union
 
 from gerrydb.repos.base import (
