@@ -1,7 +1,9 @@
 """Internal cache operations for GerryDB."""
+
 import gzip
 import pickle
 import sqlite3
+import os
 from datetime import datetime
 from os import PathLike
 from pathlib import Path
@@ -28,7 +30,10 @@ class GerryCache:
     data_dir: Path
 
     def __init__(
-        self, database: Union[str, PathLike, sqlite3.Connection], data_dir: Path
+        self,
+        database: Union[str, PathLike, sqlite3.Connection],
+        data_dir: Path,
+        max_size_gb: float = 20,
     ):
         """Loads or initializes a cache."""
         if isinstance(database, sqlite3.Connection):
@@ -47,6 +52,7 @@ class GerryCache:
             self._assert_clean()
 
         self.data_dir = data_dir
+        self.max_size_gb = max_size_gb
 
     def upsert_view_gpkg(
         self, namespace: str, path: str, render_id: str, content: bytes
@@ -58,7 +64,9 @@ class GerryCache:
         """
         gpkg_path = self.data_dir / f"{render_id}.gpkg"
         with open(gpkg_path, "wb") as gpkg_fp:
-            gpkg_fp.write(content)
+            bytes_written = gpkg_fp.write(content)
+
+        kb_written = bytes_written // 1024 + 1  # always round up to nearest kb
 
         with self._conn:
             # Register the new render.
@@ -78,11 +86,43 @@ class GerryCache:
 
             self._conn.execute(
                 (
-                    "INSERT INTO view (namespace, path, render_id, cached_at) "
-                    "VALUES (?, ?, ?, ?)"
+                    "INSERT INTO view (namespace, path, render_id, cached_at, file_size_kb) "
+                    "VALUES (?, ?, ?, ?, ?)"
                 ),
-                (namespace, path, render_id, datetime.now().isoformat()),
+                (namespace, path, render_id, datetime.now().isoformat(), kb_written),
             )
+
+            db_cursor = self._conn.cursor()
+
+            db_cursor.execute("SELECT SUM(file_size_kb) FROM view")
+            total_db_size = db_cursor.fetchone()[0]
+
+            print(total_db_size)
+            print(f"max_size: {self.max_size_gb * 1024 * 1024}")
+
+            while total_db_size > self.max_size_gb * 1024 * 1024:
+                db_cursor.execute("SELECT * FROM view ORDER BY cached_at ASC LIMIT 1")
+                oldest = db_cursor.fetchone()
+                oldest_namespace, oldest_path, oldest_render_id = (
+                    oldest[0],
+                    oldest[1],
+                    oldest[2],
+                )
+                print(f"Found oldest render: {oldest_namespace}, {oldest_path}")
+                print(oldest)
+                total_db_size -= oldest[4]
+                db_cursor.execute(
+                    "DELETE FROM view WHERE namespace = ? AND path = ?",
+                    (oldest_namespace, oldest_path),
+                )
+
+                print(f"The new db size is", total_db_size)
+                print(f"Now deleting the render file: {oldest_render_id}.gpkg")
+
+                try:
+                    os.remove(self.data_dir / f"{oldest_render_id}.gpkg")
+                except FileNotFoundError:
+                    print(f"Could not find the render file: {oldest_render_id}.gpkg")
 
         return gpkg_path
 
@@ -146,19 +186,21 @@ class GerryCache:
         )
         self._conn.execute(
             """CREATE TABLE view(
-                namespace        TEXT NOT NULL,
-                path             TEXT NOT NULL,
-                render_id        TEXT NOT NULL,
-                cached_at        TEXT NOT NULL,
+                namespace        TEXT       NOT NULL,
+                path             TEXT       NOT NULL,
+                render_id        TEXT       NOT NULL,
+                cached_at        TIMESTAMP  NOT NULL,
+                file_size_kb     BIGINTEGER NOT NULL,
                 UNIQUE(namespace, path)
             )"""
         )
         self._conn.execute(
             """CREATE TABLE graph(
-                render_id   TEXT    NOT NULL REFERENCES view(render_id),
-                plans       INTEGER NOT NULL, 
-                geometry    INTEGER NOT NULL, 
-                cached_at   TEXT    NOT NULL,
+                render_id      TEXT       NOT NULL REFERENCES view(render_id),
+                plans          INTEGER    NOT NULL, 
+                geometry       INTEGER    NOT NULL, 
+                cached_at      TIMESTAMP  NOT NULL,
+                file_size_kb   BIGINTEGER NOT NULL,
                 UNIQUE(render_id, plans, geometry)
             )"""
         )

@@ -67,6 +67,7 @@ class GerryDB:
         namespace: Optional[str] = None,
         offline: bool = False,
         timeout: int = 180,
+        cache_max_size_gb: float = 20,
     ):
         """Creates a GerryDB session.
 
@@ -105,7 +106,9 @@ class GerryDB:
 
         if host is not None and key is not None:
             self._temp_dir = TemporaryDirectory()
-            self.cache = GerryCache(":memory:", Path(self._temp_dir.name))
+            self.cache = GerryCache(
+                ":memory:", Path(self._temp_dir.name), max_size_gb=cache_max_size_gb
+            )
         else:
             GERRYDB_ROOT = Path(os.getenv("GERRYDB_ROOT", DEFAULT_GERRYDB_ROOT))
             try:
@@ -151,6 +154,7 @@ class GerryDB:
             self.cache = GerryCache(
                 database=GERRYDB_ROOT / "caches" / f"{profile}.db",
                 data_dir=profile_cache_dir,
+                max_size_gb=cache_max_size_gb,
             )
 
             host = config["host"]
