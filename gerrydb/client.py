@@ -11,8 +11,6 @@ import geopandas as gpd
 import httpx
 import pandas as pd
 import tomlkit
-from shapely import Point
-from shapely.geometry.base import BaseGeometry
 
 from gerrydb.cache import GerryCache
 from gerrydb.exceptions import ConfigError
@@ -368,6 +366,8 @@ class WriteContext:
         Args:
             db: GerryDB client instance.
             df: DataFrame to import column values and geographies from.
+                The df MUST be indexed by the geoid or the import will not
+                work correctly.
             columns: Mapping between column names in `df` and GerryDB column metadata.
                 Only columns included in the mapping will be imported.
             create_geo: Determines whether to create geographies from the DataFrame.
@@ -405,10 +405,50 @@ class WriteContext:
                     # TODO: Make this error more specific maybe?
                     raise e
                 raise e
+        else:
+            if locality is None or layer is None:
+                raise ValueError(
+                    "Locality and layer must be provided if create_geo is False."
+                )
 
-        asyncio.run(
-            _load_column_values(self.columns, df, columns, batch_size, max_conns)
-        )
+            locality_path = ""
+            layer_path = ""
+
+            if isinstance(locality, Locality):
+                locality_path = locality.canonical_path
+            else:
+                locality_path = locality
+            if isinstance(layer, GeoLayer):
+                layer_path = layer.path
+            else:
+                layer_path = layer
+
+            known_paths = set(self.db.geo.all_paths(locality_path, layer_path))
+            df_paths = set(df.index)
+
+            if df_paths - known_paths == df_paths:
+                raise ValueError(
+                    f"The index of the dataframe does not appear to match any geographies in the namespace "
+                    f"which have the following geoid format: '{list(known_paths)[0] if len(known_paths) > 0 else None}'. "
+                    f"Please ensure that the index of the dataframe matches the format of the geoid."
+                )
+
+            if df_paths - known_paths != set():
+                raise ValueError(
+                    f"Failure in load_dataframe. Tried to import geographies for layer "
+                    f"'{layer_path}' and locality '{locality_path}', but the following geographies "
+                    f"do not exist in the namespace "
+                    f"'{self.db.namespace}': {df_paths - known_paths}"
+                )
+
+            if known_paths - df_paths != set():
+                raise ValueError(
+                    f"Failure in load_dataframe. Tried to import geographies for layer "
+                    f"'{layer_path}' and locality '{locality_path}', but the passed dataframe "
+                    f"does not contain the following geographies: "
+                    f"{known_paths - df_paths}. "
+                    f"Please provide values for these geographies in the dataframe."
+                )
 
         if create_geo and locality is not None and layer is not None:
             self.geo_layers.map_locality(
@@ -416,6 +456,10 @@ class WriteContext:
                 locality=locality,
                 geographies=[f"/{namespace}/{key}" for key in df.index],
             )
+
+        asyncio.run(
+            _load_column_values(self.columns, df, columns, batch_size, max_conns)
+        )
 
 
 # based on https://stackoverflow.com/a/61478547
@@ -466,13 +510,20 @@ async def _load_column_values(
 
     val_batches: list[tuple[Column, dict[str, Any]]] = []
     for col_name, col_meta in columns.items():
+        # This only works because the df is indexed by geography path.
         col_vals = list(dict(df[col_name]).items())
         for idx in range(0, len(df), batch_size):
             val_batches.append((col_meta, dict(col_vals[idx : idx + batch_size])))
 
     async with httpx.AsyncClient(**params) as client:
         tasks = [
-            repo.async_set_values(col, col.namespace, values=batch, client=client)
+            repo.async_set_values(
+                path=col.path,
+                namespace=col.namespace,
+                col=col,
+                values=batch,
+                client=client,
+            )
             for col, batch in val_batches
         ]
         results = await gather_batch(tasks, max_conns)

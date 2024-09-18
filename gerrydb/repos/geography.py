@@ -17,6 +17,7 @@ from gerrydb.repos.base import (
     err,
     online,
     write_context,
+    namespaced,
 )
 from gerrydb.schemas import Geography, GeographyCreate, GeoImport
 
@@ -257,3 +258,14 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         return AsyncGeoImporter(repo=self, namespace=namespace, max_conns=max_conns)
 
     # TODO: get()
+    @namespaced
+    @online
+    @err("Failed to load geographies")
+    def all_paths(self, fips: str, layer_name: str) -> list[str]:
+        response = self.session.client.get(
+            f"/__list_geo/{self.session.namespace}/{fips}/{layer_name}"
+        )
+        response.raise_for_status()
+        response_json = response.json()
+
+        return response_json

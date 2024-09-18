@@ -120,15 +120,18 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
     @online
     def set_values(
         self,
-        path_or_col: Union[Column, str],
+        path: Optional[str],
         namespace: Optional[str] = None,
         *,
+        col: Optional[Column] = None,
         values: dict[Union[str, Geography], Any],
     ) -> None:
         """Sets the values of a column on a collection of geographies.
 
         Args:
-            path_or_col: Short identifier for the column or a `Column` metadata object.
+            path: Short identifier for the column. Only this or `col` should be provided.
+            col: `Column` metadata object. If the `path` is not provided, the column's
+                path will be used.
             namespace: Namespace of the column (used when `path_or_col` is a raw path).
             values:
                 A mapping from geography paths or `Geography` metadata objects
@@ -137,7 +140,14 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Raises:
             RequestError: If the values cannot be set on the server side.
         """
-        path = path_or_col.path if isinstance(path_or_col, Column) else path_or_col
+
+        assert path is None or isinstance(path, str)
+        assert col is None or isinstance(col, Column)
+
+        if path is None and col is None:
+            raise ValueError("Either `path` or `col` must be provided.")
+
+        path = col.path if col is not None else path
 
         response = self.ctx.client.put(
             f"{self.base_url}/{namespace}/{path}",
@@ -163,16 +173,19 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
     @online
     async def async_set_values(
         self,
-        path_or_col: Union[Column, str],
+        path: Optional[str],
         namespace: Optional[str] = None,
         *,
+        col: Optional[Column] = None,
         values: dict[Union[str, Geography], Any],
         client: Optional[httpx.AsyncClient] = None,
     ) -> None:
         """Asynchronously sets the values of a column on a collection of geographies.
 
         Args:
-            path_or_col: Short identifier for the column or a `Column` metadata object.
+            path: Short identifier for the column. Only this or `col` should be provided.
+            col: `Column` metadata object. If the `path` is not provided, the column's
+                path will be used.
             namespace: Namespace of the column (used when `path_or_col` is a raw path).
             values:
                 A mapping from geography paths or `Geography` metadata objects
@@ -183,7 +196,13 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Raises:
             RequestError: If the values cannot be set on the server side.
         """
-        path = path_or_col.path if isinstance(path_or_col, Column) else path_or_col
+        assert path is None or isinstance(path, str)
+        assert col is None or isinstance(col, Column)
+
+        if path is None and col is None:
+            raise ValueError("Either `path` or `col` must be provided.")
+
+        path = col.path if col is not None else path
 
         ephemeral_client = client is None
         if ephemeral_client:
@@ -191,23 +210,24 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             params["transport"] = httpx.AsyncHTTPTransport(retries=1)
             client = httpx.AsyncClient(**params)
 
+        json = [
+            ColumnValue(
+                path=(
+                    f"/{geo.namespace}/{geo.path}"
+                    if isinstance(geo, Geography)
+                    else geo
+                ),
+                value=_coerce(value),
+            ).dict()
+            for geo, value in values.items()
+        ]
         response = await client.put(
             f"{self.base_url}/{namespace}/{path}",
-            json=[
-                ColumnValue(
-                    path=(
-                        f"/{geo.namespace}/{geo.path}"
-                        if isinstance(geo, Geography)
-                        else geo
-                    ),
-                    value=_coerce(value),
-                ).dict()
-                for geo, value in values.items()
-            ],
+            json=json,
         )
 
         if response.status_code != 204:
-            log.debug(f"For {path_or_col} returned {response}")
+            log.debug(f"For path = {path} and col = {col} returned {response}")
 
         response.raise_for_status()
 
