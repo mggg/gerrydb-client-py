@@ -1,4 +1,5 @@
 """Tests for views."""
+
 import pytest
 
 

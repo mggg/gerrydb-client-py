@@ -1,4 +1,5 @@
 """Integration/VCR tests for columns."""
+
 import pytest
 from shapely import box
 

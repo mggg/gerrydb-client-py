@@ -1,4 +1,5 @@
 """Tests for GerryDB's local caching layer."""
+
 import uuid
 from datetime import datetime, timedelta, timezone
 

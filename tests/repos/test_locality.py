@@ -1,4 +1,5 @@
 """Integration/VCR tests for localities."""
+
 import pytest
 
 from gerrydb.schemas import LocalityCreate

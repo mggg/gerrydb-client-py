@@ -1,4 +1,5 @@
 """Repository for geographic layers."""
+
 from typing import Optional, Union
 
 from gerrydb.repos.base import (
@@ -69,9 +70,11 @@ class GeoLayerRepo(NamespacedObjectRepo[GeoLayer]):
         response = self.ctx.client.put(
             f"{self.base_url}/{layer.namespace}/{layer.path}",
             params={
-                "locality": locality.canonical_path
-                if isinstance(locality, Locality)
-                else locality
+                "locality": (
+                    locality.canonical_path
+                    if isinstance(locality, Locality)
+                    else locality
+                )
             },
             json=GeoSetCreate(
                 paths=[

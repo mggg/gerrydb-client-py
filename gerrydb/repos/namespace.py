@@ -1,4 +1,5 @@
 """Repository for namespaces."""
+
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
@@ -86,7 +87,7 @@ class NamespaceRepo(NamespacedObjectRepo):
         )
 
         response.raise_for_status()
-        
+
         return Namespace(**response.json())
 
     def __getitem__(self, path: str) -> Optional[Namespace]:

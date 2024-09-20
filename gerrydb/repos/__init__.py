@@ -1,4 +1,5 @@
 """GerryDB API object repositories."""
+
 from gerrydb.repos.column import ColumnRepo
 from gerrydb.repos.column_set import ColumnSetRepo
 from gerrydb.repos.geo_layer import GeoLayerRepo

@@ -1,4 +1,5 @@
 """Tests for GerryDB session management."""
+
 import os
 from unittest import mock
 

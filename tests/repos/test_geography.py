@@ -1,4 +1,5 @@
 """Integration/VCR tests for columns."""
+
 from shapely import box
 
 
