@@ -11,6 +11,7 @@ from gerrydb.repos.base import (
     namespaced,
     online,
     write_context,
+    normalize_path,
 )
 from gerrydb.schemas import (
     Column,
@@ -68,6 +69,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Returns:
             Metadata for the new column.
         """
+        path = normalize_path(path)
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
             json=ColumnCreate(
@@ -106,8 +108,9 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Returns:
             The updated column.
         """
+        clean_path = normalize_path(f"{self.base_url}/{namespace}/{path}")
         response = self.ctx.client.patch(
-            f"{self.base_url}/{namespace}/{path}",
+            clean_path,
             json=ColumnPatch(aliases=aliases).dict(),
         )
         response.raise_for_status()
@@ -164,9 +167,10 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             raise ValueError("Either `path` or `col` must be provided.")
 
         path = col.path if col is not None else path
+        clean_path = normalize_path(f"{self.base_url}/{namespace}/{path}")
 
         response = self.ctx.client.put(
-            f"{self.base_url}/{namespace}/{path}",
+            clean_path,
             json=[
                 ColumnValue(
                     path=(
@@ -219,6 +223,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             raise ValueError("Either `path` or `col` must be provided.")
 
         path = col.path if col is not None else path
+        clean_path = normalize_path(f"{self.base_url}/{namespace}/{path}")
 
         ephemeral_client = client is None
         if ephemeral_client:
@@ -238,7 +243,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             for geo, value in values.items()
         ]
         response = await client.put(
-            f"{self.base_url}/{namespace}/{path}",
+            clean_path,
             json=json,
         )
 

@@ -7,7 +7,13 @@ from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar
 import httpx
 import pydantic
 
-from gerrydb.exceptions import OnlineError, RequestError, ResultError, WriteContextError
+from gerrydb.exceptions import (
+    OnlineError,
+    RequestError,
+    ResultError,
+    WriteContextError,
+    GerryPathError,
+)
 from gerrydb.schemas import BaseModel
 
 if TYPE_CHECKING:
@@ -104,6 +110,14 @@ def write_context(func: Callable) -> Callable:
     return write_context_wrapper
 
 
+INVALID_PATH_SUBSTRINGS = set(
+    {
+        "..",
+        " ",
+    }
+)
+
+
 def normalize_path(path: str, case_sensitive_uid: bool = False) -> str:
     """Normalizes a path (removes leading, trailing, and duplicate slashes, and
     lowercases the path if `case_sensitive` is `False`).
@@ -111,6 +125,12 @@ def normalize_path(path: str, case_sensitive_uid: bool = False) -> str:
     Some paths, such as paths containing GEOIDs, are case-sensitive in the last
     segment. In these cases, `case_sensitive` should be set to `True`.
     """
+    for item in INVALID_PATH_SUBSTRINGS:
+        if item in path:
+            raise GerryPathError(
+                f"Invalid path: '{path}'. Please remove the following substring: '{item}'"
+            )
+
     if case_sensitive_uid:
         path_list = path.strip().split("/")
         return "/".join(
