@@ -114,6 +114,22 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
 
         return Column(**response.json())
 
+    @err("Failed to retrieve column names")
+    @online
+    def all(self) -> list[str]:
+        response = self.session.client.get(f"/columns/{self.session.namespace}")
+        response.raise_for_status()
+
+        return [Column(**item) for item in response.json()]
+
+    @err("Failed to retrieve column")
+    @online
+    def get(self, path: str) -> Column:
+        path = normalize_path(path)
+        response = self.session.client.get(f"/columns/{self.session.namespace}/{path}")
+        response.raise_for_status()
+        return Column(**response.json())
+
     @err("Failed to set column values")
     @namespaced
     @write_context
