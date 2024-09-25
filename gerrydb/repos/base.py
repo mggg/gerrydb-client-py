@@ -110,10 +110,14 @@ def write_context(func: Callable) -> Callable:
     return write_context_wrapper
 
 
+# These characters are most likely to appear in the resource_id part of
+# a path (typically the last segment). Exclusion of these characters
+# prevents ogr2ogr fails and helps protect against malicious code injection.
 INVALID_PATH_SUBSTRINGS = set(
     {
         "..",
         " ",
+        ";",
     }
 )
 

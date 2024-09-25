@@ -139,7 +139,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
     @online
     def set_values(
         self,
-        path: Optional[str],
+        path: Optional[str] = None,
         namespace: Optional[str] = None,
         *,
         col: Optional[Column] = None,
@@ -149,6 +149,8 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
 
         Args:
             path: Short identifier for the column. Only this or `col` should be provided.
+                If both are provided, the path attribute of `col` will be used in place
+                of the passed `path` argument.
             col: `Column` metadata object. If the `path` is not provided, the column's
                 path will be used.
             namespace: Namespace of the column (used when `path_or_col` is a raw path).
@@ -159,7 +161,6 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Raises:
             RequestError: If the values cannot be set on the server side.
         """
-
         assert path is None or isinstance(path, str)
         assert col is None or isinstance(col, Column)
 
@@ -193,7 +194,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
     @online
     async def async_set_values(
         self,
-        path: Optional[str],
+        path: Optional[str] = None,
         namespace: Optional[str] = None,
         *,
         col: Optional[Column] = None,
@@ -204,6 +205,8 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
 
         Args:
             path: Short identifier for the column. Only this or `col` should be provided.
+                If both are provided, the path attribute of `col` will be used in place
+                of the passed `path` argument.
             col: `Column` metadata object. If the `path` is not provided, the column's
                 path will be used.
             namespace: Namespace of the column (used when `path_or_col` is a raw path).
