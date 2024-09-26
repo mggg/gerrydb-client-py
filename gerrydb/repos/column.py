@@ -127,7 +127,8 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
 
     @err("Failed to retrieve column")
     @online
-    def get(self, path: str) -> Column:
+    @namespaced
+    def get(self, path: str, namespace: str = None) -> Column:
         path = normalize_path(path)
         response = self.session.client.get(f"/columns/{self.session.namespace}/{path}")
         response.raise_for_status()

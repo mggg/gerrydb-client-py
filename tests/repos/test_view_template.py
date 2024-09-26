@@ -13,5 +13,5 @@ def test_view_template_repo_create_get__online_columns_only(
         view_template = ctx.view_templates.create(
             path="pops", members=[pop_col, vap_col], description="Population view."
         )
-        print(view_template)
+        # print(view_template)
         # TODO: more evaluation here.

@@ -47,4 +47,6 @@ def test_column_repo_set_values(client_ns, column):
         col = ctx.columns.create(**column)
         with ctx.geo.bulk() as geo_ctx:
             geo_ctx.create({str(idx): box(0, 0, 1, 1) for idx in range(n)})
-        ctx.columns.set_values(col, values={str(idx): idx for idx in range(n)})
+        ctx.columns.set_values(
+            path=col.path, values={str(idx): idx for idx in range(n)}
+        )
