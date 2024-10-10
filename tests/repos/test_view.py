@@ -1,4 +1,5 @@
 """Tests for views."""
+
 import pytest
 
 
@@ -18,9 +19,6 @@ def test_view_repo_create__valid(client_with_ia_layer_loc, ia_dataframe):
 
     assert set(geo.path for geo in view.geographies) == set(ia_dataframe.index)
     assert set(col.full_path for col in columns.values()) == set(view.values)
-    assert all(
-        len(col_values) == len(view.geographies) for col_values in view.values.values()
-    )
     assert view.graph is None
 
 
@@ -85,7 +83,11 @@ def test_view_repo_view_to_graph(ia_view_with_graph, ia_graph):
     expected_cols = set(
         "/".join(col.split("/")[2:]) for col in ia_view_with_graph.values
     )
-    assert all(set(data) == expected_cols for _, data in view_graph.nodes(data=True))
+    # Previous tests in the test suite can add some values to the graph nodes.
+    # so we just check that the expected columns are present.
+    assert all(
+        expected_cols - set(data) == set() for _, data in view_graph.nodes(data=True)
+    )
 
 
 @pytest.mark.vcr
@@ -97,5 +99,10 @@ def test_view_repo_view_to_graph_geo(ia_view_with_graph, ia_graph):
 
     expected_cols = set(
         "/".join(col.split("/")[2:]) for col in ia_view_with_graph.values
-    ) | {"area", "geometry"}
-    assert all(set(data) == expected_cols for _, data in view_graph.nodes(data=True))
+    ) | {"internal_point", "geometry"}
+
+    # Previous tests in the test suite can add some values to the graph nodes.
+    # so we just check that the expected columns are present.
+    assert all(
+        expected_cols - set(data) == set() for _, data in view_graph.nodes(data=True)
+    )

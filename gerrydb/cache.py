@@ -97,9 +97,6 @@ class GerryCache:
             db_cursor.execute("SELECT SUM(file_size_kb) FROM view")
             total_db_size = db_cursor.fetchone()[0]
 
-            print(total_db_size)
-            print(f"max_size: {self.max_size_gb * 1024 * 1024}")
-
             while total_db_size > self.max_size_gb * 1024 * 1024:
                 db_cursor.execute("SELECT * FROM view ORDER BY cached_at ASC LIMIT 1")
                 oldest = db_cursor.fetchone()

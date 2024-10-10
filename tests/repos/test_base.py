@@ -1,4 +1,5 @@
 """Tests for base objects and utilities for GerryDB API object repositories."""
+
 from dataclasses import dataclass
 from typing import Optional
 

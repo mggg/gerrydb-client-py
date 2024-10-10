@@ -37,5 +37,13 @@ class CacheInitError(CacheError):
     """Raised when a GerryDB cache cannot be initialized."""
 
 
+class CacheObjectError(CacheError):
+    """Raised when the cache cannot load an object."""
+
+
 class ViewLoadError(GerryDBError):
     """Raised when a view cannot be loaded (e.g. from a GeoPackage)."""
+
+
+class GerryPathError(GerryDBError):
+    """Raised when an invalid path is provided. Generally, this means invalid characters are present"""

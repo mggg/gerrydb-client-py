@@ -1,4 +1,5 @@
 """Fixtures for repository tests."""
+
 import pytest
 
 

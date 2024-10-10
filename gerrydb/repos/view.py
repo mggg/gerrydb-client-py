@@ -1,7 +1,7 @@
 """Repository for views."""
 
 import json
-import re
+import io
 import sqlite3
 from datetime import datetime
 from pathlib import Path
@@ -73,6 +73,9 @@ except ImportError:
 def _load_gpkg_geometry(geom: bytes) -> BaseGeometry:
     """Loads a geometry from a raw GeoPackage WKB blob."""
     # header format: https://www.geopackage.org/spec/#gpb_format
+    if geom == None:
+        raise ValueError("Invalid GeoPackage geometry: empty geometry.")
+
     envelope_flag = (geom[3] & 0b00001110) >> 1
     try:
         envelope_bytes = _GPKG_ENVELOPE_BYTES[envelope_flag]
@@ -116,7 +119,14 @@ class View:
     @classmethod
     def from_gpkg(cls, path: Path) -> "View":
         """Loads a view from a GeoPackage."""
-        conn = sqlite3.connect(path)
+        if isinstance(path, io.BytesIO):
+            path.seek(0)
+            conn = sqlite3.connect(
+                "file:cached_view?mode=memory&cache=shared", uri=True
+            )
+            conn.executescript(path.read().decode("utf-8"))
+        else:
+            conn = sqlite3.connect(path)
 
         tables = conn.execute(
             "SELECT name FROM sqlite_master WHERE "
@@ -283,25 +293,46 @@ class View:
         raw_geo_meta = self._conn.execute(
             "SELECT meta_id, value FROM gerrydb_geo_meta"
         ).fetchone()
-        geo_meta = {row[0]: ObjectMeta(**json.loads(row[1])) for row in raw_geo_meta}
+        geo_meta = {raw_geo_meta[0]: ObjectMeta(**json.loads(raw_geo_meta[1]))}
 
         raw_geos = self._conn.execute(
             f"""SELECT {self.path}.path, geography, internal_point, meta_id, valid_from
             FROM {self.path}
             JOIN {self.path}__internal_points
             ON {self.path}.path = {self.path}__internal_points.path
-            JOIN gerrydb_geo_meta
+            JOIN gerrydb_geo_attrs
             ON {self.path}.path = gerrydb_geo_attrs.path
             """
         )
         for geo_row in raw_geos:
-            yield Geography(
-                path=geo_row[0],
-                geography=_load_gpkg_geometry(geo_row[1]),
-                internal_point=_load_gpkg_geometry(geo_row[2]),
-                meta=geo_meta[geo_row[3]],
-                valid_from=geo_row[4],
-            )
+            if geo_row[2] is not None:
+                yield Geography(
+                    path=geo_row[0],
+                    geography=_load_gpkg_geometry(geo_row[1]),
+                    internal_point=_load_gpkg_geometry(geo_row[2]),
+                    meta=geo_meta[geo_row[3]],
+                    namespace=self.namespace,
+                    valid_from=geo_row[4],
+                )
+            else:
+                yield Geography(
+                    path=geo_row[0],
+                    geography=_load_gpkg_geometry(geo_row[1]),
+                    meta=geo_meta[geo_row[3]],
+                    namespace=self.namespace,
+                    valid_from=geo_row[4],
+                )
+
+    @property
+    def values(self) -> list[str]:
+        raw_paths = self._conn.execute(f"""PRAGMA table_info({self.path})""")
+        raw_paths = self.to_df().columns
+
+        ret = []
+        for item in raw_paths:
+            if item not in ["geometry"]:
+                ret.append(f"/{self.namespace}/{item}")
+        return ret
 
 
 class ViewRepo(NamespacedObjectRepo[ViewMeta]):

@@ -1,4 +1,5 @@
 """Integration/VCR tests for geographic import metadata."""
+
 import pytest
 
 # The `GeoImport` object is used for internal tracking, so we don't

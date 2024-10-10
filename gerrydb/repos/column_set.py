@@ -1,4 +1,5 @@
 """Repository for column sets."""
+
 from typing import Optional, Union
 
 from gerrydb.exceptions import RequestError

@@ -1,4 +1,5 @@
 """Integration/VCR tests for districting plans."""
+
 import pytest
 
 from gerrydb.exceptions import ResultError

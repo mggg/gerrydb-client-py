@@ -1,4 +1,5 @@
 """Integration/VCR tests for namespaces."""
+
 import pytest
 
 

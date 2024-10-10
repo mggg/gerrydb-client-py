@@ -2,6 +2,7 @@
 
 This file should be kept in sync with the server-side version.
 """
+
 from datetime import datetime
 from enum import Enum
 from typing import Any, Optional, Union
@@ -16,7 +17,9 @@ from shapely.geometry.base import BaseGeometry
 UserEmail = constr(max_length=254)
 
 # constr is a constrained string, so this is some path that needs to satisfy this regex
-GerryPath = constr(regex=r"[a-z0-9][a-z0-9-_/]*") # must start with lowercase or digit, then followed by any lowercase, digit, hyphen, underscore, slash
+GerryPath = constr(
+    regex=r"[a-z0-9][a-z0-9-_/]*"
+)  # must start with lowercase or digit, then followed by any lowercase, digit, hyphen, underscore, slash
 NamespacedGerryPath = constr(regex=r"[a-z0-9/][a-z0-9-_/]*")
 
 NATIVE_PROJ = pyproj.CRS("EPSG:4269")
