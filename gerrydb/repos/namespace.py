@@ -9,6 +9,7 @@ from gerrydb.repos.base import (
     normalize_path,
     online,
     write_context,
+    normalize_path,
 )
 from gerrydb.schemas import Namespace, NamespaceCreate
 
@@ -79,6 +80,7 @@ class NamespaceRepo(NamespacedObjectRepo):
         Returns:
             The new namespace.
         """
+        path = normalize_path(path, path_length=1)
         response = self.ctx.client.post(
             "/namespaces/",
             json=NamespaceCreate(
