@@ -45,6 +45,10 @@ from gerrydb.schemas import (
     ViewTemplate,
 )
 
+import logging
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 DEFAULT_GERRYDB_ROOT = Path(os.path.expanduser("~")) / ".gerrydb"
 
 
@@ -67,7 +71,7 @@ class GerryDB:
         key: Optional[str] = None,
         namespace: Optional[str] = None,
         offline: bool = False,
-        timeout: int = 180,
+        timeout: int = 600,
         cache_max_size_gb: float = 20,
     ):
         """Creates a GerryDB session.

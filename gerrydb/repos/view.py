@@ -394,6 +394,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
                 valid_at=valid_at,
                 proj=proj,
             ).dict(),
+            timeout=10000,
         )
         try:
             response.raise_for_status()
