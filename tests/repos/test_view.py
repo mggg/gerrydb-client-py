@@ -8,7 +8,7 @@ def test_view_repo_create__valid(client_with_ia_layer_loc, ia_dataframe):
     client_ns, layer, locality, columns = client_with_ia_layer_loc
     with client_ns.context(notes="Creating a view template and view for Iowa") as ctx:
         view_template = ctx.view_templates.create(
-            path="valid_test", members=list(columns.values()), description="Base view."
+            path="valid_test", columns=list(columns.values()), description="Base view."
         )
         view = ctx.views.create(
             path="ia_valid_test",
@@ -29,7 +29,7 @@ def ia_view(client_with_ia_layer_loc):
     client_ns, layer, locality, columns = client_with_ia_layer_loc
     with client_ns.context(notes="Creating a view template and view for Iowa") as ctx:
         view_template = ctx.view_templates.create(
-            path="base", members=list(columns.values()), description="Base view."
+            path="base", columns=list(columns.values()), description="Base view."
         )
         return ctx.views.create(
             path="ia_base",
@@ -45,7 +45,7 @@ def ia_view_with_graph(client_with_ia_layer_loc, ia_graph):
     client_ns, layer, locality, columns = client_with_ia_layer_loc
     with client_ns.context(notes="Creating a view template and view for Iowa") as ctx:
         view_template = ctx.view_templates.create(
-            path="graph_base", members=list(columns.values()), description="Base view."
+            path="graph_base", columns=list(columns.values()), description="Base view."
         )
         graph = ctx.graphs.create(
             path="ia_counties",

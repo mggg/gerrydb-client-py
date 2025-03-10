@@ -11,7 +11,7 @@ def test_view_template_repo_create_get__online_columns_only(
         pop_col = ctx.columns.create(**pop_column_meta)
         vap_col = ctx.columns.create(**vap_column_meta)
         view_template = ctx.view_templates.create(
-            path="pops", members=[pop_col, vap_col], description="Population view."
+            path="pops", columns=[pop_col, vap_col], description="Population view."
         )
         # print(view_template)
         # TODO: more evaluation here.

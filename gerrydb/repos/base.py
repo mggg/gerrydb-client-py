@@ -122,7 +122,9 @@ INVALID_PATH_SUBSTRINGS = set(
 )
 
 
-def normalize_path(path: str, case_sensitive_uid: bool = False) -> str:
+def normalize_path(
+    path: str, case_sensitive_uid: bool = False, path_length: Optional[int] = None
+) -> str:
     """Normalizes a path (removes leading, trailing, and duplicate slashes, and
     lowercases the path if `case_sensitive` is `False`).
 
@@ -132,18 +134,36 @@ def normalize_path(path: str, case_sensitive_uid: bool = False) -> str:
     for item in INVALID_PATH_SUBSTRINGS:
         if item in path:
             raise GerryPathError(
-                f"Invalid path: '{path}'. Please remove the following substring: '{item}'"
+                f"Invalid path: '{path}'. Please remove or replace the following substring "
+                f"wherever it occurs: '{item}'"
             )
 
     if case_sensitive_uid:
-        path_list = path.strip().split("/")
+        # Don't make a list with empty things. So substrings like "///" don't
+        # cause issues
+        path_list = [seg for seg in path.strip().split("/") if seg]
+
+        if path_length is not None and len(path_list) != path_length:
+            raise GerryPathError(
+                f"Invalid path: '{path}'. This path has {len(path_list)} segment(s), but "
+                f"should have {path_length}"
+            )
+
         return "/".join(
             seg.lower() if i < len(path_list) - 1 else seg
             for i, seg in enumerate(path_list)
             if seg
         )
 
-    return "/".join(seg for seg in path.strip().lower().split("/") if seg)
+    path_list = [seg for seg in path.strip().lower().split("/") if seg]
+
+    if path_length is not None and len(path_list) != path_length:
+        raise GerryPathError(
+            f"Invalid path: '{path}'. This path has {len(path_list)} segment(s), but "
+            f"should have {path_length}."
+        )
+
+    return "/".join(path_list)
 
 
 def parse_path(path: str) -> Tuple[str, str]:

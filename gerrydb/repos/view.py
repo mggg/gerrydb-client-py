@@ -394,6 +394,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
                 valid_at=valid_at,
                 proj=proj,
             ).dict(),
+            timeout=10000,
         )
         try:
             response.raise_for_status()
@@ -422,7 +423,8 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
                 if the parameters fail validation, or if no namespace is provided.
         """
         gpkg_path = self.session.cache.get_view_gpkg(
-            namespace=normalize_path(namespace), path=normalize_path(path)
+            namespace=normalize_path(namespace, path_length=1),
+            path=normalize_path(path),
         )
         if gpkg_path is None:
             gpkg_path = self._get(path, namespace, request_timeout)
@@ -448,7 +450,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
             gpkg_render_id = gpkg_response.headers["x-gerrydb-view-render-id"]
 
         return self.session.cache.upsert_view_gpkg(
-            namespace=normalize_path(namespace),
+            namespace=normalize_path(namespace, path_length=1),
             path=normalize_path(path),
             render_id=gpkg_render_id,
             content=gpkg_response.content,
