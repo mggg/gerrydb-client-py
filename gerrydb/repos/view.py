@@ -36,6 +36,7 @@ from gerrydb.schemas import (
 )
 
 import logging
+import time
 
 
 logger = logging.getLogger()
@@ -119,6 +120,8 @@ class View:
     @classmethod
     def from_gpkg(cls, path: Path) -> "View":
         """Loads a view from a GeoPackage."""
+        logger.debug("in view.from_gpkg")
+        start = time.perf_counter()
         if isinstance(path, io.BytesIO):
             path.seek(0)
             conn = sqlite3.connect(
@@ -146,7 +149,10 @@ class View:
             raise ViewLoadError(
                 f"Cannot load view metadata. (missing keys: {', '.join(missing_keys)})"
             )
-        return cls(meta=ViewMeta(**raw_meta), gpkg_path=path, conn=conn)
+        ret = cls(meta=ViewMeta(**raw_meta), gpkg_path=path, conn=conn)
+        end = time.perf_counter()
+        logger.debug(f"Time to convert gpkg: {end - start}")
+        return ret
 
     def to_df(
         self, plans: bool = False, internal_points: bool = False
@@ -194,14 +200,7 @@ class View:
         columns = [row[0] for row in raw_cols if row[0] not in excluded_cols]
         prefixed_columns = [f"{self.path}.{col}" for col in columns]
 
-        join_clauses = [
-            # (
-            #    "JOIN gerrydb_graph_node_area ON "
-            #    f"{self.path}.path = gerrydb_graph_node_area.path"
-            # )
-        ]
-        # columns.append("area")
-        # prefixed_columns.append("gerrydb_graph_node_area.area")
+        join_clauses = []
 
         if plans:
             # Join plan assignment columns.
@@ -377,6 +376,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         Returns:
             The new view.
         """
+        start = time.perf_counter()
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
             json=ViewCreate(
@@ -399,13 +399,21 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         try:
             response.raise_for_status()
         except Exception as e:
+            logger.error(f"{e}")
+            # print(response)
             logger.info(
                 f"Failed to create view. Details: {response.json().get('detail', 'No details provided.')}"
             )
-            logger.debug(response.json())
+            # logger.debug(response.json())
             raise e
+        end = time.perf_counter()
+        logger.debug(f"Time to create view: {end - start}")
+        start = time.perf_counter()
         view_meta = ViewMeta(**response.json())
+        logger.debug(f"Time to parse view: {time.perf_counter() - start}")
+        start = time.perf_counter()
         gpkg_path = self._get(path=view_meta.path, namespace=view_meta.namespace)
+        logger.debug(f"Time to get gpkg_path: {time.perf_counter() - start}")
         return View.from_gpkg(gpkg_path)
 
     @namespaced
