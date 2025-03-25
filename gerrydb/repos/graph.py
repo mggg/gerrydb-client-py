@@ -9,8 +9,8 @@ from datetime import datetime
 
 from gerrydb.repos.base import (
     NamespacedObjectRepo,
-    err,
     namespaced,
+    normalize_path,
     online,
     write_context,
 )
@@ -26,10 +26,13 @@ from gerrydb.schemas import (
     BaseGeometry,
 )
 import time
+import logging
 from pathlib import Path
 import json
 import networkx as nx
 import shapely
+
+log = logging.getLogger()
 
 try:
     import gerrychain
@@ -102,6 +105,7 @@ class DBGraph:
     ):
         self.namespace = meta.namespace
         self.path = meta.path
+        self.full_path = f"/{self.namespace}/{self.path}"
         self.locality = meta.locality
         self.layer = meta.layer
         self.meta = meta.meta
@@ -112,9 +116,8 @@ class DBGraph:
         self._conn = conn
 
         # Actually load the graph.
-        self.graph = self.to_networkx(
-            self._gpkg_path, include_geometries=include_geometries
-        )
+        print("INCLUDE GEOMETRIES", include_geometries)
+        self.graph = self.to_networkx(include_geometries=include_geometries)
 
     @classmethod
     def from_gpkg(
@@ -220,7 +223,7 @@ class DBGraph:
 class GraphRepo(NamespacedObjectRepo[Graph]):
     """Repository for dual graphs."""
 
-    @err("Failed to create dual graph")
+    # @err("Failed to create dual graph")
     @namespaced
     @write_context
     @online
@@ -235,7 +238,7 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
         description: str,
         proj: Optional[str] = None,
         timeout: int = 1200,
-    ) -> Graph:
+    ) -> DBGraph:
         """
         Imports a dual graph from a NetworkX graph.
 
@@ -281,27 +284,72 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
             ).dict(),
             timeout=timeout,
         )
-        response.raise_for_status()
-        return self.schema(**response.json())
 
-    # @namespaced
-    # @online
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            log.error(f"{e}")
+            log.info(
+                f"Failed to create graph. Details: {response.json().get('detail', 'No details provided.')}"
+            )
+
+        graph_meta = self.schema(**response.json())
+
+        gpkg_path = self._get(path=graph_meta.path, namespace=graph_meta.namespace)
+        print("THE PATH IS", gpkg_path)
+        return DBGraph.from_gpkg(gpkg_path)
+
+    def _get(self, path: str, namespace: str, request_timeout: int = 1200) -> Path:
+        """Downloads view data as a GeoPackage."""
+        # Generate a new render (assuming the view exists).
+        # These can take a long time to render depending on the size of the view.
+        gpkg_response = self.session.client.post(
+            f"{self.base_url}/{namespace}/{path}",
+            timeout=request_timeout,
+        )
+        print("THE GPKG RESPONSE IS", gpkg_response)
+        print(gpkg_response.headers)
+
+        if gpkg_response.status_code >= 400:
+            gpkg_response.raise_for_status()
+        if gpkg_response.next_request is not None:
+            # Redirect to Google Cloud Storage (probably).
+            gpkg_response = self.session.client.get(gpkg_response.next_request.url)
+            gpkg_response.raise_for_status()
+            gpkg_render_id = gpkg_response.headers[
+                "x-goog-meta-gerrydb-graph-render-id"
+            ]
+        else:
+            gpkg_render_id = gpkg_response.headers["x-gerrydb-graph-render-id"]
+
+        return self.session.cache.upsert_graph_gpkg(
+            namespace=normalize_path(namespace, path_length=1),
+            path=normalize_path(path),
+            render_id=gpkg_render_id,
+            content=gpkg_response.content,
+        )
+
+    @namespaced
+    @online
     def get(
         self,
         path: str,
         namespace: Optional[str] = None,
         request_timeout: int = 1200,
-    ) -> Graph:
+    ) -> DBGraph:
         """Gets a graph.
 
         Raises:
             RequestError: If the graph cannot be retrieved on the server side,
                 if the parameters fail validation, or if no namespace is provided.
         """
-        # gpkg_path = self.session.cache.get_graph_gpkg(
-        #     namespace=normalize_path(namespace, path_length=1),
-        #     path=normalize_path(path),
-        # )
-        # if gpkg_path is None:
-        #     gpkg_path = self._get(path, namespace, request_timeout)
-        return DBGraph.from_gpkg(path)
+        print("IN GET")
+        print("The namespace is", namespace)
+        gpkg_path = self.session.cache.get_graph_gpkg(
+            namespace=normalize_path(namespace, path_length=1),
+            path=normalize_path(path),
+        )
+        if gpkg_path is None:
+            gpkg_path = self._get(path, namespace, request_timeout)
+        print("THE PATH IS", gpkg_path)
+        return DBGraph.from_gpkg(gpkg_path)

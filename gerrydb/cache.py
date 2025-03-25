@@ -54,6 +54,68 @@ class GerryCache:
         self.data_dir = data_dir
         self.max_size_gb = max_size_gb
 
+    def upsert_graph_gpkg(
+        self, namespace: str, path: str, render_id: str, content: bytes
+    ) -> Path:
+        gpkg_path = self.data_dir / f"{render_id}.gpkg"
+        with open(gpkg_path, "wb") as gpkg_fp:
+            bytes_written = gpkg_fp.write(content)
+
+        with self._conn:
+            prev_render_id = self._conn.execute(
+                "SELECT render_id FROM graph WHERE namespace = ? AND path = ?",
+                (namespace, path),
+            ).fetchone()
+            if prev_render_id is not None:
+                self._conn.execute(
+                    "DELETE FROM graph WHERE namespace = ? AND path = ?",
+                    (namespace, path),
+                )
+                print("The previous render id is", prev_render_id)
+                for ext in CACHE_EXTENSIONS:
+                    Path(self.data_dir / f"{prev_render_id[0]}.{ext}").unlink(
+                        missing_ok=True
+                    )
+
+            self._conn.execute(
+                (
+                    "INSERT INTO graph (namespace, render_id, path, cached_at, file_size_kb) "
+                    "VALUES (?, ?, ?, ?, ?)"
+                ),
+                (namespace, render_id, path, datetime.now().isoformat(), bytes_written),
+            )
+
+            db_cursor = self._conn.cursor()
+
+            db_cursor.execute("SELECT SUM(file_size_kb) FROM graph")
+            total_db_size = db_cursor.fetchone()[0]
+
+            while total_db_size > self.max_size_gb * 1024 * 1024:
+                db_cursor.execute("SELECT * FROM graph ORDER BY cached_at ASC LIMIT 1")
+                oldest = db_cursor.fetchone()
+                oldest_namespace, oldest_path, oldest_render_id = (
+                    oldest[0],
+                    oldest[1],
+                    oldest[2],
+                )
+                print(f"Found oldest render: {oldest_namespace}, {oldest_path}")
+                print(oldest)
+                total_db_size -= oldest[4]
+                db_cursor.execute(
+                    "DELETE FROM graph WHERE namespace = ? AND path = ?",
+                    (oldest_namespace, oldest_path),
+                )
+
+                print(f"The new db size is", total_db_size)
+                print(f"Now deleting the render file: {oldest_render_id}.gpkg")
+
+                try:
+                    os.remove(self.data_dir / f"{oldest_render_id}.gpkg")
+                except FileNotFoundError:
+                    print(f"Could not find the render file: {oldest_render_id}.gpkg")
+
+        return gpkg_path
+
     def upsert_view_gpkg(
         self, namespace: str, path: str, render_id: str, content: bytes
     ) -> Path:
@@ -121,6 +183,20 @@ class GerryCache:
                 except FileNotFoundError:
                     print(f"Could not find the render file: {oldest_render_id}.gpkg")
 
+        return gpkg_path
+
+    def get_graph_gpkg(self, namespace: str, path: str) -> Optional[Path]:
+        """Returns the path to a graph's cached GeoPackage, if available."""
+        render_id = self._conn.execute(
+            "SELECT render_id FROM graph WHERE namespace = ? AND path = ?",
+            (namespace, path),
+        ).fetchone()
+        if render_id is None:
+            return None
+
+        gpkg_path = self.data_dir / f"{render_id[0]}.gpkg"
+        if not gpkg_path.is_file():
+            return None
         return gpkg_path
 
     def get_view_gpkg(self, namespace: str, path: str) -> Optional[Path]:
@@ -193,12 +269,12 @@ class GerryCache:
         )
         self._conn.execute(
             """CREATE TABLE graph(
-                render_id      TEXT       NOT NULL REFERENCES view(render_id),
-                plans          INTEGER    NOT NULL, 
-                geometry       INTEGER    NOT NULL, 
+                namespace      TEXT       NOT NULL,
+                render_id      TEXT       NOT NULL,
+                path           TEXT       NOT NULL,
                 cached_at      TIMESTAMP  NOT NULL,
                 file_size_kb   BIGINTEGER NOT NULL,
-                UNIQUE(render_id, plans, geometry)
+                UNIQUE(namespace, path)
             )"""
         )
         self._conn.execute(
