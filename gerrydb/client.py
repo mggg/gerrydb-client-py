@@ -72,7 +72,7 @@ class GerryDB:
         namespace: Optional[str] = None,
         offline: bool = False,
         timeout: int = 600,
-        cache_max_size_gb: float = 20,
+        cache_max_size_gb: float = 10,
     ):
         """Creates a GerryDB session.
 

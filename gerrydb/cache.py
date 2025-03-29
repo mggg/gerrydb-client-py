@@ -33,7 +33,7 @@ class GerryCache:
         self,
         database: Union[str, PathLike, sqlite3.Connection],
         data_dir: Path,
-        max_size_gb: float = 20,
+        max_size_gb: float = 10,
     ):
         """Loads or initializes a cache."""
         if isinstance(database, sqlite3.Connection):
@@ -61,6 +61,8 @@ class GerryCache:
         with open(gpkg_path, "wb") as gpkg_fp:
             bytes_written = gpkg_fp.write(content)
 
+        kb_written = bytes_written // 1024 + 1  # always round up to nearest kb
+
         with self._conn:
             prev_render_id = self._conn.execute(
                 "SELECT render_id FROM graph WHERE namespace = ? AND path = ?",
@@ -82,7 +84,7 @@ class GerryCache:
                     "INSERT INTO graph (namespace, render_id, path, cached_at, file_size_kb) "
                     "VALUES (?, ?, ?, ?, ?)"
                 ),
-                (namespace, render_id, path, datetime.now().isoformat(), bytes_written),
+                (namespace, render_id, path, datetime.now().isoformat(), kb_written),
             )
 
             db_cursor = self._conn.cursor()
@@ -91,7 +93,9 @@ class GerryCache:
             total_db_size = db_cursor.fetchone()[0]
 
             while total_db_size > self.max_size_gb * 1024 * 1024:
-                db_cursor.execute("SELECT * FROM graph ORDER BY cached_at ASC LIMIT 1")
+                db_cursor.execute(
+                    "SELECT namespace, path, render_id, cached_at, file_size_kb FROM graph ORDER BY cached_at ASC LIMIT 1"
+                )
                 oldest = db_cursor.fetchone()
                 oldest_namespace, oldest_path, oldest_render_id = (
                     oldest[0],
