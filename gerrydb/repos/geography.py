@@ -258,9 +258,16 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
     @namespaced
     @online
     @err("Failed to load geographies")
-    def all_paths(self, fips: str, layer_name: str) -> list[str]:
+    def all_paths(
+        self, path: str, namespace: Optional[str] = None, *, layer_name: str
+    ) -> list[str]:
+        # FIXME: Check creds for the namespace here
+
+        if namespace is None:
+            namespace = self.session.namespace
+
         response = self.session.client.get(
-            f"/__list_geo/{self.session.namespace}/{fips}/{layer_name}"
+            f"/__list_geo/{namespace}/{path}/{layer_name}"
         )
         response.raise_for_status()
         response_json = response.json()

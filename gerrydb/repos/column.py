@@ -235,6 +235,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             params["transport"] = httpx.AsyncHTTPTransport(retries=1)
             client = httpx.AsyncClient(**params)
 
+        # Peter Note: the geos are generally strings here
         json = [
             ColumnValue(
                 path=(
