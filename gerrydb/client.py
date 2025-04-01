@@ -433,16 +433,20 @@ class WriteContext:
         locality_path = ""
         layer_path = ""
 
-        if isinstance(locality, Locality):
-            locality_path = locality.canonical_path
-        else:
-            locality_path = locality
-        if isinstance(layer, GeoLayer):
-            layer_path = layer.path
-        else:
-            layer_path = layer
+        if not isinstance(locality, Locality):
+            locality = self.db.localities[locality]
 
-        known_paths = set(self.db.geo.all_paths(locality_path, layer_path))
+        if not isinstance(layer, GeoLayer):
+            layer = self.db.geo_layers[layer]
+
+        # Grab all paths for the layer in the namespace
+        known_paths = set(
+            self.db.geo.all_paths(
+                path=locality.canonical_path,
+                namespace=layer.namespace,
+                layer_name=layer.path,
+            )
+        )
         df_paths = set(df.index)
 
         if df_paths - known_paths == df_paths:

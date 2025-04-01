@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from functools import wraps
-from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar, Union
 
 import httpx
 import pydantic
@@ -217,8 +217,26 @@ class NamespacedObjectRepo(Generic[SchemaType]):
         response.raise_for_status()
         return self.schema(**response.json())
 
-    def __getitem__(self, path: str) -> Optional[SchemaType]:
+    def __getitem__(self, key: Union[str, Tuple[str, str]]) -> Optional[SchemaType]:
+        path = key
+        assert isinstance(key, str) or (
+            isinstance(key, tuple)
+            and len(key) == 2
+            and all(isinstance(val, str) for val in key)
+        ), "Key must be a path string or a tuple of two strings (namespace, path)"
+
+        if isinstance(key, str):
+            path = key
+            if path.startswith("/"):
+                namespace, path_in_namespace = parse_path(path)
+                return self.get(path=path_in_namespace, namespace=namespace)
+            return self.get(path=path)
+
+        # Desired namespace for retrieval and namespace of path may differ
+        # FIXME: Make sure you check creds on the namespace you are trying to access here
+        namespace, path = key
+        print(namespace, path)
         if path.startswith("/"):
-            namespace, path_in_namespace = parse_path(path)
+            _, path_in_namespace = parse_path(path)
             return self.get(path=path_in_namespace, namespace=namespace)
-        return self.get(path=path)
+        return self.get(path=path, namespace=namespace)
