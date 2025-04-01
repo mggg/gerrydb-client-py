@@ -44,10 +44,7 @@ from gerrydb.schemas import (
     ViewMeta,
     ViewTemplate,
 )
-
-import logging
-
-logging.getLogger("httpx").setLevel(logging.WARNING)
+from uvicorn.config import log
 
 DEFAULT_GERRYDB_ROOT = Path(os.path.expanduser("~")) / ".gerrydb"
 
@@ -593,6 +590,7 @@ class WriteContext:
             batch_size: Number of rows to import per API request batch.
             max_conns: Maximum number of simultaneous API connections.
         """
+        log.debug("IN THE LOAD FUNCTION")
         namespace = self.db.namespace if namespace is None else namespace
         if namespace is None:
             raise ValueError("No namespace available.")
@@ -610,6 +608,7 @@ class WriteContext:
         if not create_geo:
             self.__validate_geos(df=df, locality=locality, layer=layer)
 
+        log.debug("VALIDATING COLUMNS")
         self.__validate_columns(columns)
 
         # TODO: Check to see if grabbing all of the columns and then filtering
@@ -632,7 +631,7 @@ async def gather_batch(coros, n):
         async with semaphore:
             return await coro
 
-    return await asyncio.gather(*(sem_coro(c) for c in coros))
+    return await asyncio.gather(*(sem_coro(c) for c in coros), return_exceptions=True)
 
 
 async def _load_geos(
@@ -643,8 +642,10 @@ async def _load_geos(
     max_conns: Optional[int],
 ) -> list[Geography]:
     """Asynchronously loads geographies in batches."""
+    log.debug("IN THE LOAD GEOS FUNCTION")
     geo_pairs = list(geos.items())
     tasks = []
+    log.debug("BEFORE ASYNC BULK FOR GEOS %s", geo_pairs[0])
     async with repo.async_bulk(namespace, max_conns) as ctx:
         for idx in range(0, len(geo_pairs), batch_size):
             chunk = dict(geo_pairs[idx : idx + batch_size])

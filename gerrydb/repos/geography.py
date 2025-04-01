@@ -27,12 +27,7 @@ if TYPE_CHECKING:
 GeoValType = Union[None, BaseGeometry, Tuple[Optional[BaseGeometry], Optional[Point]]]
 GeosType = dict[Union[str, Geography], GeoValType]
 
-import logging
-
-logging.basicConfig(
-    level=logging.INFO,
-)
-logger = logging.getLogger(__name__)
+from uvicorn.config import log
 
 
 def _importer_params(ctx: "WriteContext", namespace: str) -> dict[str, Any]:
@@ -209,7 +204,7 @@ class AsyncGeoImporter:
         )
         if response.status_code == 422:
             json_content = json.loads(response.content)
-            logger.info(
+            log.debug(
                 f"422 for Request: {method},\n\tAt: {self.repo.base_url}/{self.namespace}\n\tBody: {json_content}"
             )
 
@@ -239,6 +234,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
     @online
     def bulk(self, namespace: Optional[str] = None) -> GeoImporter:
         """Creates a context for creating and updating geographies."""
+        log.debug("IN CREATE BULK THING")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)
@@ -251,6 +247,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         self, namespace: Optional[str] = None, max_conns: Optional[int] = None
     ) -> AsyncGeoImporter:
         """Creates an asynchronous context for creating and updating geographies."""
+        log.debug("IN ASYNC CREATE BULK THING")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)

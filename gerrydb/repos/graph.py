@@ -116,7 +116,7 @@ class DBGraph:
         self._conn = conn
 
         # Actually load the graph.
-        print("INCLUDE GEOMETRIES", include_geometries)
+        log.debug("INCLUDE GEOMETRIES %s", include_geometries)
         self.graph = self.to_networkx(include_geometries=include_geometries)
 
     @classmethod
@@ -125,7 +125,7 @@ class DBGraph:
         path: Path,
     ) -> "DBGraph":
         """Loads a graph from a GeoPackage."""
-        print("IN GRAPH FROM GPKG")
+        log.debug("IN GRAPH FROM GPKG")
         start = time.perf_counter()
         if isinstance(path, io.BytesIO):
             path.seek(0)
@@ -156,7 +156,7 @@ class DBGraph:
             )
         ret = cls(meta=GraphMeta(**raw_meta), gpkg_path=path, conn=conn)
         end = time.perf_counter()
-        print(f"Time to convert gpkg: {end - start}")
+        log.debug(f"Time to convert gpkg: {end - start}")
         return ret
 
     def to_networkx(
@@ -164,7 +164,7 @@ class DBGraph:
         include_geometries: bool = False,
     ) -> nx.Graph:
         """Loads a graph from a GeoPackage."""
-        print("IN TO NETWORKX")
+        log.debug("IN TO NETWORKX")
         raw_cols = self._conn.execute(
             "SELECT name from pragma_table_info(?)",
             (f"{self.path}__geometry",),
@@ -289,14 +289,14 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
             response.raise_for_status()
         except Exception as e:
             log.error(f"{e}")
-            log.info(
+            log.error(
                 f"Failed to create graph. Details: {response.json().get('detail', 'No details provided.')}"
             )
 
         graph_meta = self.schema(**response.json())
 
         gpkg_path = self._get(path=graph_meta.path, namespace=graph_meta.namespace)
-        print("THE PATH IS", gpkg_path)
+        log.debug("THE GPKG PATH IS %s", gpkg_path)
         return DBGraph.from_gpkg(gpkg_path)
 
     def _get(self, path: str, namespace: str, request_timeout: int = 1200) -> Path:
@@ -307,8 +307,8 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
             f"{self.base_url}/{namespace}/{path}",
             timeout=request_timeout,
         )
-        print("THE GPKG RESPONSE IS", gpkg_response)
-        print(gpkg_response.headers)
+        log.debug("THE GPKG RESPONSE IS %s", gpkg_response)
+        log.debug("THE GPKG RESPONSE HEADERS ARE %s", gpkg_response.headers)
 
         if gpkg_response.status_code >= 400:
             gpkg_response.raise_for_status()
@@ -343,13 +343,11 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
             RequestError: If the graph cannot be retrieved on the server side,
                 if the parameters fail validation, or if no namespace is provided.
         """
-        print("IN GET")
-        print("The namespace is", namespace)
         gpkg_path = self.session.cache.get_graph_gpkg(
             namespace=normalize_path(namespace, path_length=1),
             path=normalize_path(path),
         )
         if gpkg_path is None:
             gpkg_path = self._get(path, namespace, request_timeout)
-        print("THE PATH IS", gpkg_path)
+        log.debug("THE GPKG PATH IS %s", gpkg_path)
         return DBGraph.from_gpkg(gpkg_path)
