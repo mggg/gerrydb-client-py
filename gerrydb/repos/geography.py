@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 GeoValType = Union[None, BaseGeometry, Tuple[Optional[BaseGeometry], Optional[Point]]]
 GeosType = dict[Union[str, Geography], GeoValType]
 
-from uvicorn.config import log
+from uvicorn.config import logger as log
 
 
 def _importer_params(ctx: "WriteContext", namespace: str) -> dict[str, Any]:

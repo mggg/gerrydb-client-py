@@ -44,7 +44,7 @@ from gerrydb.schemas import (
     ViewMeta,
     ViewTemplate,
 )
-from uvicorn.config import log
+from uvicorn.config import logger as log
 
 DEFAULT_GERRYDB_ROOT = Path(os.path.expanduser("~")) / ".gerrydb"
 
@@ -399,6 +399,58 @@ class WriteContext:
                 geographies=[f"/{namespace}/{key}" for key in df.index],
             )
 
+    def __update_geos(
+        self,
+        df: Union[pd.DataFrame, gpd.GeoDataFrame],
+        *,
+        namespace: str,
+        locality: Union[str, Locality],
+        layer: Union[str, GeoLayer],
+        batch_size: int,
+        max_conns: int,
+    ) -> None:
+        """
+        Private method called by the `load_dataframe` method to load geometries
+        into the database.
+
+        Adds the geometries in the 'geometry' column of the dataframe to the database.
+
+        Args:
+            df: The dataframe containing the geometries to be added.
+            namespace: The namespace to which the geometries belong.
+            locality: The locality to which the geometries belong. (e.g. 'pennsylvania')
+            layer: The layer to which the geometries belong. (e.g. 'vtd')
+            batch_size: The number of rows to import per batch.
+            max_conns: The maximum number of simultaneous connections to the API.
+
+        """
+        if "geometry" in df.columns:
+            df = df.to_crs("epsg:4269")  # import as lat/long
+            geos = dict(df.geometry)
+        else:
+            geos = {key: None for key in df.index}
+
+        # Augment geographies with internal points if available.
+        if "internal_point" in df.columns:
+            internal_points = dict(df.internal_point)
+            geos = {path: (geo, internal_points[path]) for path, geo in geos.items()}
+
+        try:
+            asyncio.run(_update_geos(self.geo, geos, namespace, batch_size, max_conns))
+
+        except Exception as e:
+            if str(e) == "Cannot create geographies that already exist.":
+                # TODO: Make this error more specific maybe?
+                raise e
+            raise e
+
+        if locality is not None and layer is not None:
+            self.geo_layers.map_locality(
+                layer=layer,
+                locality=locality,
+                geographies=[f"/{namespace}/{key}" for key in df.index],
+            )
+
     def __validate_geos(
         self,
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
@@ -430,14 +482,14 @@ class WriteContext:
                 "Locality and layer must be provided if create_geo is False."
             )
 
-        locality_path = ""
-        layer_path = ""
-
         if not isinstance(locality, Locality):
             locality = self.db.localities[locality]
 
         if not isinstance(layer, GeoLayer):
             layer = self.db.geo_layers[layer]
+
+        locality_path = locality.canonical_path
+        layer_path = layer.path
 
         # Grab all paths for the layer in the namespace
         known_paths = set(
@@ -470,7 +522,8 @@ class WriteContext:
                 f"'{layer_path}' and locality '{locality_path}', but the passed dataframe "
                 f"does not contain the following geographies: "
                 f"{known_paths - df_paths}. "
-                f"Please provide values for these geographies in the dataframe."
+                f"Please provide values for these geographies in the dataframe "
+                f"or create a new locality with only the relevant geographies."
             )
 
     def __validate_columns(self, columns):
@@ -553,6 +606,8 @@ class WriteContext:
         columns: Union[pdIndex, list[str], dict[str, Column]],
         *,
         create_geo: bool = False,
+        patch_geos: bool = False,
+        upsert_geos: bool = False,
         namespace: Optional[str] = None,
         locality: Optional[Union[str, Locality]] = None,
         layer: Optional[Union[str, GeoLayer]] = None,
@@ -588,6 +643,9 @@ class WriteContext:
             columns: Mapping between column names in `df` and GerryDB column metadata.
                 Only columns included in the mapping will be imported.
             create_geo: Determines whether to create geographies from the DataFrame.
+            patch_geos: Determines whether to update existing geographies from the DataFrame.
+            upsert_geos: Combination of create and patch. If the geographies exist, they will be
+                updated. If they do not exist, they will be created.
             namespace: Namespace to load geographies into.
             locality: `Locality` to associate a new `GeoSet` with.
             layer: `GeoLayer` to associate a new `GeoSet` with.
@@ -599,6 +657,24 @@ class WriteContext:
         if namespace is None:
             raise ValueError("No namespace available.")
 
+        assert (
+            isinstance(create_geo, bool)
+            and isinstance(patch_geos, bool)
+            and isinstance(upsert_geos, bool)
+        )
+
+        if not (create_geo ^ patch_geos ^ upsert_geos) and (
+            create_geo | patch_geos | upsert_geos
+        ):
+            raise ValueError(
+                "Exactly one of `create_geo`, `patch_geos`, or `upsert_geos` must be True, or"
+                " all must be False."
+            )
+
+        if patch_geos or not (create_geo | upsert_geos | patch_geos):
+            log.debug("VALIDATING GEOS")
+            self.__validate_geos(df=df, locality=locality, layer=layer)
+
         if create_geo:
             self.__create_geos(
                 df=df,
@@ -609,8 +685,24 @@ class WriteContext:
                 max_conns=max_conns,
             )
 
-        if not create_geo:
-            self.__validate_geos(df=df, locality=locality, layer=layer)
+        if patch_geos:
+            self.__update_geos(
+                df=df,
+                namespace=namespace,
+                locality=locality,
+                layer=layer,
+                batch_size=batch_size,
+                max_conns=max_conns,
+            )
+        if upsert_geos:
+            self.__upsert_geos(
+                df=df,
+                namespace=namespace,
+                locality=locality,
+                layer=layer,
+                batch_size=batch_size,
+                max_conns=max_conns,
+            )
 
         log.debug("VALIDATING COLUMNS")
         self.__validate_columns(columns)
@@ -654,6 +746,31 @@ async def _load_geos(
         for idx in range(0, len(geo_pairs), batch_size):
             chunk = dict(geo_pairs[idx : idx + batch_size])
             tasks.append(ctx.create(chunk))
+        results = await gather_batch(tasks, max_conns)
+
+    # TODO: more sophisticated error handling -- which batches were successful?
+    # what can be retried? etc.
+    for result in results:
+        if isinstance(result, Exception):
+            raise result
+
+
+async def _update_geos(
+    repo: GeographyRepo,
+    geos: dict[str, GeoValType],
+    namespace: str,
+    batch_size: int,
+    max_conns: Optional[int],
+) -> list[Geography]:
+    """Asynchronously loads geographies in batches."""
+    log.debug("IN THE LOAD GEOS FUNCTION")
+    geo_pairs = list(geos.items())
+    tasks = []
+    log.debug("BEFORE ASYNC BULK FOR GEOS %s", geo_pairs[0])
+    async with repo.async_bulk(namespace, max_conns) as ctx:
+        for idx in range(0, len(geo_pairs), batch_size):
+            chunk = dict(geo_pairs[idx : idx + batch_size])
+            tasks.append(ctx.update(chunk))
         results = await gather_batch(tasks, max_conns)
 
     # TODO: more sophisticated error handling -- which batches were successful?
