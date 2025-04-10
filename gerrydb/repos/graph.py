@@ -31,8 +31,7 @@ from pathlib import Path
 import json
 import networkx as nx
 import shapely
-
-log = logging.getLogger()
+from gerrydb.logging import log
 
 try:
     import gerrychain
@@ -261,6 +260,7 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
             The new districting plan in the form of a gerrydb `Graph` schema
             object.
         """
+        log.debug("IN GRAPH REPO CREATE")
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
             json=GraphCreate(
@@ -295,6 +295,8 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
 
         graph_meta = self.schema(**response.json())
 
+        log.debug("THE GRAPH PATH IS %s", graph_meta.path)
+        log.debug("THE GRAPH NAMESPACE IS %s", graph_meta.namespace)
         gpkg_path = self._get(path=graph_meta.path, namespace=graph_meta.namespace)
         log.debug("THE GPKG PATH IS %s", gpkg_path)
         return DBGraph.from_gpkg(gpkg_path)

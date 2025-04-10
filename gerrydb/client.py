@@ -44,7 +44,7 @@ from gerrydb.schemas import (
     ViewMeta,
     ViewTemplate,
 )
-from uvicorn.config import logger as log
+from gerrydb.logging import log
 
 DEFAULT_GERRYDB_ROOT = Path(os.path.expanduser("~")) / ".gerrydb"
 
@@ -491,6 +491,13 @@ class WriteContext:
         locality_path = locality.canonical_path
         layer_path = layer.path
 
+        log.debug(
+            "Checking known paths for locality '%s' in layer '%s' belonging to namespace '%s'",
+            locality_path,
+            layer_path,
+            layer.namespace,
+        )
+
         # Grab all paths for the layer in the namespace
         known_paths = set(
             self.db.geo.all_paths(
@@ -500,6 +507,8 @@ class WriteContext:
             )
         )
         df_paths = set(df.index)
+
+        log.debug("Known paths: %s", known_paths)
 
         if df_paths - known_paths == df_paths:
             raise ValueError(
@@ -716,6 +725,8 @@ class WriteContext:
         asyncio.run(
             _load_column_values(self.columns, df, columns, batch_size, max_conns)
         )
+
+        log.debug("FINISHED LOADING DATAFRAME")
 
 
 # based on https://stackoverflow.com/a/61478547

@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional, Tuple, Union
 
 import httpx
+from http import HTTPStatus
 import msgpack
 import shapely.wkb
 from shapely import Point
@@ -27,7 +28,7 @@ if TYPE_CHECKING:
 GeoValType = Union[None, BaseGeometry, Tuple[Optional[BaseGeometry], Optional[Point]]]
 GeosType = dict[Union[str, Geography], GeoValType]
 
-from uvicorn.config import logger as log
+from gerrydb.logging import log
 
 
 def _importer_params(ctx: "WriteContext", namespace: str) -> dict[str, Any]:
@@ -234,7 +235,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
     @online
     def bulk(self, namespace: Optional[str] = None) -> GeoImporter:
         """Creates a context for creating and updating geographies."""
-        log.debug("IN CREATE BULK THING")
+        log.debug("IN CREATE BULK GEOGRAPHY REPO")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)
@@ -247,7 +248,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         self, namespace: Optional[str] = None, max_conns: Optional[int] = None
     ) -> AsyncGeoImporter:
         """Creates an asynchronous context for creating and updating geographies."""
-        log.debug("IN ASYNC CREATE BULK THING")
+        log.debug("IN ASYNC CREATE BULK GEOGRAPHY REPO")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)
