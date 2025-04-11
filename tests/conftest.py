@@ -125,7 +125,7 @@ def client_with_ia_layer_loc(ia_dataframe, ia_column_meta):
         ctx.load_dataframe(
             df=ia_dataframe,
             columns=columns,
-            create_geo=True,
+            create_goes=True,
             namespace=client.namespace,
             layer=layer,
             locality=locality,

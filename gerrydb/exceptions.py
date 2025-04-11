@@ -51,3 +51,7 @@ class GraphLoadError(GerryDBError):
 
 class GerryPathError(GerryDBError):
     """Raised when an invalid path is provided. Generally, this means invalid characters are present"""
+
+
+class ForkingError(GerryDBError):
+    """Raised when a migration cannot be performed."""
