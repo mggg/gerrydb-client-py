@@ -15,6 +15,7 @@ from gerrydb.exceptions import (
     GerryPathError,
 )
 from gerrydb.schemas import BaseModel
+from uvicorn.config import logger as log
 
 if TYPE_CHECKING:
     from gerrydb.client import GerryDB, WriteContext

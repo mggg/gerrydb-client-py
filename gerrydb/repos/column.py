@@ -23,9 +23,7 @@ from gerrydb.schemas import (
     Geography,
 )
 
-import logging
-
-log = logging.getLogger()
+from gerrydb.logging import log
 
 
 class ColumnRepo(NamespacedObjectRepo[Column]):
@@ -247,6 +245,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             ).dict()
             for geo, value in values.items()
         ]
+        log.debug("PUT request to %s", clean_path)
         response = await client.put(
             clean_path,
             json=json,

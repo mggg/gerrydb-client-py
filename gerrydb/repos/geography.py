@@ -297,20 +297,23 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         layer_name: str,
         source_namespace: Optional[str] = None,
         source_layer_name: str,
-        allow_empty_target: bool = False,
+        allow_extra_source_geos: bool = False,
         allow_empty_polys: bool = False,
     ) -> list[Tuple[str, str]]:
         """Checks whether or not data can be forkd from one namesspace to another."""
         try:
             log.debug("Getting forkability")
             response = self.session.client.get(
-                f"/__geography_fork/{namespace}/{path}/{layer_name}?mode=compare&source_namespace={source_namespace}&source_layer={source_layer_name}&allow_empty_target={allow_empty_target}&allow_empty_polys={allow_empty_polys}"
+                f"/__geography_fork/{namespace}/{path}/{layer_name}?mode=compare&source_namespace={source_namespace}&source_layer={source_layer_name}&allow_extra_source_geos={allow_extra_source_geos}&allow_empty_polys={allow_empty_polys}"
             )
             log.debug(response)
             response.raise_for_status()
 
         except Exception as e:
-            if response.status_code == HTTPStatus.CONFLICT:
+            if (
+                response.status_code == HTTPStatus.CONFLICT
+                or response.status_code == HTTPStatus.FORBIDDEN
+            ):
                 raise ForkingError(
                     f"Forking failed for the following reason: "
                     f"{e.response.json().get('detail', 'No details provided.')}",
@@ -328,7 +331,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         layer_name: str,
         source_namespace: Optional[str] = None,
         source_layer_name: str,
-        allow_empty_target: bool = False,
+        allow_extra_source_geos: bool = False,
         allow_empty_polys: bool = False,
     ) -> bool:
         """Fork the geographies from one namespace into another"""
@@ -338,18 +341,21 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
             layer_name=layer_name,
             source_namespace=source_namespace,
             source_layer_name=source_layer_name,
-            allow_empty_target=allow_empty_target,
+            allow_extra_source_geos=allow_extra_source_geos,
             allow_empty_polys=allow_empty_polys,
         )
 
         try:
             response = self.session.client.post(
-                f"/__geography_fork/{namespace}/{path}/{layer_name}?mode=compare&source_namespace={source_namespace}&source_layer={source_layer_name}&allow_empty_target={allow_empty_target}&allow_empty_polys={allow_empty_polys}"
+                f"/__geography_fork/{namespace}/{path}/{layer_name}?mode=compare&source_namespace={source_namespace}&source_layer={source_layer_name}&allow_extra_source_geos={allow_extra_source_geos}&allow_empty_polys={allow_empty_polys}"
             )
             response.raise_for_status()
 
         except Exception as e:
-            if response.status_code == HTTPStatus.CONFLICT:
+            if (
+                response.status_code == HTTPStatus.CONFLICT
+                or response.status_code == HTTPStatus.FORBIDDEN
+            ):
                 raise ForkingError(
                     f"Forking failed for the following reason: "
                     f"{e.response.json().get('detail', 'No details provided.')}",

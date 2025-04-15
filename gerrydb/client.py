@@ -203,6 +203,7 @@ class GerryDB:
         Returns:
             A context manager for GerryDB writes.
         """
+        log.info("Creating a write context with notes: %s", notes)
         return WriteContext(db=self, notes=notes)
 
     @property
@@ -394,21 +395,25 @@ class WriteContext:
                 layer_name=layer.path,
                 source_namespace=layer.namespace,
                 source_layer_name=layer.path,
-                allow_empty_target=True,
+                allow_extra_source_geos=True,
                 allow_empty_polys=allow_empty_polys,
             )
-            return
+        else:
+            try:
+                asyncio.run(
+                    _load_geos(self.geo, geos, namespace, batch_size, max_conns)
+                )
 
-        try:
-            asyncio.run(_load_geos(self.geo, geos, namespace, batch_size, max_conns))
-
-        except Exception as e:
-            if str(e) == "Cannot create geographies that already exist.":
-                # TODO: Make this error more specific maybe?
+            except Exception as e:
+                if str(e) == "Cannot create geographies that already exist.":
+                    # TODO: Make this error more specific maybe?
+                    raise e
                 raise e
-            raise e
+
+        # Update the layer to be in the correct namespace before you map it
+        ns_layer = self.db.geo_layers[layer.path]
         self.geo_layers.map_locality(
-            layer=layer,
+            layer=ns_layer,
             locality=locality,
             geographies=[f"/{namespace}/{key}" for key in df.index],
         )
@@ -456,48 +461,55 @@ class WriteContext:
                 layer_name=layer.path,
                 source_namespace=layer.namespace,
                 source_layer_name=layer.path,
-                allow_empty_target=True,
             )
-            return
-
-        try:
-            asyncio.run(
-                _update_geos(
-                    repo=self.geo,
-                    geos=geos,
-                    namespace=namespace,
-                    batch_size=batch_size,
-                    max_conns=max_conns,
-                    allow_empty_polys=allow_empty_polys,
+        else:
+            try:
+                asyncio.run(
+                    _update_geos(
+                        repo=self.geo,
+                        geos=geos,
+                        namespace=namespace,
+                        batch_size=batch_size,
+                        max_conns=max_conns,
+                        allow_empty_polys=allow_empty_polys,
+                    )
                 )
-            )
 
-        except Exception as e:
-            if str(e) == "Cannot create geographies that already exist.":
-                # TODO: Make this error more specific maybe?
+            except Exception as e:
+                if str(e) == "Cannot create geographies that already exist.":
+                    # TODO: Make this error more specific maybe?
+                    raise e
                 raise e
-            raise e
 
         if locality is not None and layer is not None:
+            # Update the layer to be in the correct namespace before you map it
+            ns_layer = self.db.geo_layers[layer.path]
             self.geo_layers.map_locality(
-                layer=layer,
+                layer=ns_layer,
                 locality=locality,
                 geographies=[f"/{namespace}/{key}" for key in df.index],
             )
 
     # TODO: this is not finished yet
-    def __validate_geos(
+    def __upsert_geos(
         self,
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
+        *,
+        namespace: str,
         locality: Union[str, Locality],
         layer: Union[str, GeoLayer],
+        batch_size: int,
+        max_conns: int,
+    ) -> None:
+        raise NotImplementedError("This method is not finished yet.")
+
     def __validate_geos_compatabilty(
         self,
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
         locality: Locality,
         layer: GeoLayer,
         namespace: str,
-        allow_empty_target: bool = False,
+        allow_extra_source_geos: bool = False,
         allow_empty_polys: bool = False,
     ):
         """
@@ -567,7 +579,8 @@ class WriteContext:
                     layer_name=layer_path,
                     source_namespace=layer.namespace,
                     source_layer_name=layer.path,
-                    allow_empty_target=allow_empty_target,
+                    allow_extra_source_geos=allow_extra_source_geos,
+                    allow_empty_polys=allow_empty_polys,
                 )
             )
 
@@ -784,7 +797,7 @@ class WriteContext:
                 namespace=namespace,
                 locality=locality,
                 layer=layer,
-                allow_empty_target=True,
+                allow_extra_source_geos=True,
                 allow_empty_polys=allow_empty_polys,
             )
 
@@ -870,6 +883,7 @@ class WriteContext:
                 layer=layer,
                 batch_size=batch_size,
                 max_conns=max_conns,
+                allow_empty_polys=allow_empty_polys,
             )
 
         if patch_geos:

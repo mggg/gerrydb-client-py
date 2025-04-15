@@ -11,6 +11,7 @@ from gerrydb.repos.base import (
     write_context,
 )
 from gerrydb.schemas import Column, ColumnSet, ViewTemplate, ViewTemplateCreate
+from gerrydb.logging import log
 
 
 def _normalize_columns(
@@ -36,8 +37,12 @@ def _normalize_columns(
             split_path = item.split("/")
             if len(split_path) == 1:
                 return_list.append(f"/columns/{namespace}/{split_path[0]}")
+            elif len(split_path) == 2:
+                return_list.append(f"columns/{split_path[0]}/{split_path[1]}")
             elif len(split_path) == 3:
-                return_list.append(f"columns/{namespace}/{split_path[-1]}")
+                if split_path[0] != "columns":
+                    raise ValueError(f"Invalid column path: {item}")
+                return_list.append(f"{split_path[0]}/{split_path[1]}/{split_path[2]}")
             else:
                 raise ValueError(
                     f"Column path must be in the form of either "
@@ -70,14 +75,19 @@ def _normalize_column_sets(
             split_path = item.split("/")
             if len(split_path) == 1:
                 return_list.append(f"/column-sets/{namespace}/{split_path[0]}")
+            elif len(split_path) == 2:
+                return_list.append(f"/column-sets/{split_path[0]}/{split_path[1]}")
             elif len(split_path) == 3:
-                return_list.append(f"/column-sets/{namespace}/{split_path[-1]}")
+                if split_path[0] != "column-sets":
+                    raise ValueError(f"Invalid column set path: {item}")
+                return_list.append(f"/{split_path[0]}/{namespace}/{split_path[-1]}")
             else:
                 raise ValueError(
                     f"Column_set path must be in the form of either "
                     "/column-sets/namespace/column_set_name or just column_set_name"
                 )
 
+    log.debug("COLUMN SETS: %s", return_list)
     return return_list
 
 
