@@ -3,7 +3,7 @@
 import json
 import io
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Generator, Optional, Union
 
@@ -73,6 +73,10 @@ def _load_gpkg_geometry(geom: bytes) -> BaseGeometry:
     # header format: https://www.geopackage.org/spec/#gpb_format
     if geom == None:
         raise ValueError("Invalid GeoPackage geometry: empty geometry.")
+
+    if not geom.startswith(b"GP"):
+        # pure WKB → hand it straight to Shapely
+        return shapely.wkb.loads(geom)
 
     envelope_flag = (geom[3] & 0b00001110) >> 1
     try:
@@ -378,23 +382,28 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         """
         start = time.perf_counter()
         log.debug("TOP OF CREATE VIEW")
+        if valid_at is None:
+            valid_at = datetime.now(timezone.utc)
+
+        payload = ViewCreate(
+            path=path,
+            template=template if isinstance(template, str) else template.full_path,
+            locality=(
+                locality if isinstance(locality, str) else locality.canonical_path
+            ),
+            layer=layer if isinstance(layer, str) else layer.full_path,
+            graph=(
+                None
+                if graph is None
+                else (graph if isinstance(graph, str) else graph.full_path)
+            ),
+            valid_at=valid_at,
+            proj=proj,
+        )
+
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
-            json=ViewCreate(
-                path=path,
-                template=template if isinstance(template, str) else template.full_path,
-                locality=(
-                    locality if isinstance(locality, str) else locality.canonical_path
-                ),
-                layer=layer if isinstance(layer, str) else layer.full_path,
-                graph=(
-                    None
-                    if graph is None
-                    else (graph if isinstance(graph, str) else graph.full_path)
-                ),
-                valid_at=valid_at,
-                proj=proj,
-            ).dict(),
+            json=payload.dict(),
             timeout=10000,
         )
         try:

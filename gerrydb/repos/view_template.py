@@ -68,7 +68,7 @@ def _normalize_column_sets(
     return_list = []
 
     for item in column_sets:
-        if isinstance(item, Column):
+        if isinstance(item, ColumnSet):
             return_list.append(item.path_with_resource)
         else:
             item = normalize_path(item)

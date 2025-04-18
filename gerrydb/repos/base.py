@@ -167,18 +167,6 @@ def normalize_path(
     return "/".join(path_list)
 
 
-def parse_path(path: str) -> Tuple[str, str]:
-    """Breaks a namespaced path (`/<namespace>/<path>`) into two parts."""
-    parts = path.split("/")
-    try:
-        return parts[1], "/".join(parts[2:])
-    except IndexError:
-        raise KeyError(
-            "Namespaced paths must contain a namespace and a "
-            "namespace-relative path, i.e. /<namespace>/<path>"
-        )
-
-
 class ObjectRepo:
     """Base class for object repositories."""
 
@@ -227,17 +215,14 @@ class NamespacedObjectRepo(Generic[SchemaType]):
         ), "Key must be a path string or a tuple of two strings (namespace, path)"
 
         if isinstance(key, str):
-            path = key
-            if path.startswith("/"):
-                namespace, path_in_namespace = parse_path(path)
-                return self.get(path=path_in_namespace, namespace=namespace)
+            path = key.strip("/")
+            if len(path.split("/")) != 1:
+                raise GerryPathError(
+                    f"Error parsing '{path}'. Path cannot contain slashes. Please either "
+                    f"pass the name of the path or a (namespace, path) tuple."
+                )
             return self.get(path=path)
 
         # Desired namespace for retrieval and namespace of path may differ
-        # FIXME: Make sure you check creds on the namespace you are trying to access here
         namespace, path = key
-        print(namespace, path)
-        if path.startswith("/"):
-            _, path_in_namespace = parse_path(path)
-            return self.get(path=path_in_namespace, namespace=namespace)
         return self.get(path=path, namespace=namespace)

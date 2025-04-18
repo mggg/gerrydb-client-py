@@ -18,13 +18,13 @@ def test_column_set_repo_create_get(client_ns, pop_column_meta, vap_column_meta)
         col_set = ctx.column_sets.create(
             path="totals",
             description="Total population columns",
-            columns=[pop_col, "total_vap", f"/{client_ns.namespace}/total_cvap"],
+            columns=[pop_col, "total_vap", f"{client_ns.namespace}/total_cvap"],
         )
 
     col_paths = set(col.canonical_path for col in col_set.columns)
     assert col_paths == {"total_pop", "total_vap", "total_cvap"}
     assert client_ns.column_sets["totals"] == col_set
-    assert client_ns.column_sets[f"/{client_ns.namespace}/totals"] == col_set
+    assert client_ns.column_sets[(f"{client_ns.namespace}", "totals")] == col_set
 
 
 @pytest.mark.vcr

@@ -213,6 +213,12 @@ class DBGraph:
                 )
             graph.add_node(path, **node_attrs)
 
+        edge_query = self._conn.execute(
+            "SELECT path_1, path_2, weights FROM gerrydb_graph_edge"
+        )
+        for edge in edge_query:
+            graph.add_edge(edge[0], edge[1], attr=edge[2])
+
         return graph
 
     def __repr__(self):

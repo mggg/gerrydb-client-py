@@ -203,7 +203,7 @@ class GerryDB:
         Returns:
             A context manager for GerryDB writes.
         """
-        log.info("Creating a write context with notes: %s", notes)
+        log.debug("Creating a write context with notes: %s", notes)
         return WriteContext(db=self, notes=notes)
 
     @property

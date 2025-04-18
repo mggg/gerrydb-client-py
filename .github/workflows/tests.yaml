@@ -25,7 +25,7 @@ jobs:
           --health-retries 10
     strategy:
       matrix:
-        python-version: ['3.10', '3.12']
+        python-version: ['3.12']
     env:
       OS: ${{ matrix.os }}
       PYTHON: ${{ matrix.python-version }}
@@ -66,8 +66,10 @@ jobs:
         pip install --upgrade pip
         pip install poetry
         pip install black isort
+        pip install colorlog
         pip install ./gerrydb-client-py/
         pip install ./gerrydb-meta/
+        pip install --upgrade geopandas
 
     - name: Set up GerryDB and get API key
       run: |
