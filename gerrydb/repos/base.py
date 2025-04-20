@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from functools import wraps
-from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar, Union
 
 import httpx
 import pydantic
@@ -15,6 +15,7 @@ from gerrydb.exceptions import (
     GerryPathError,
 )
 from gerrydb.schemas import BaseModel
+from uvicorn.config import logger as log
 
 if TYPE_CHECKING:
     from gerrydb.client import GerryDB, WriteContext
@@ -166,18 +167,6 @@ def normalize_path(
     return "/".join(path_list)
 
 
-def parse_path(path: str) -> Tuple[str, str]:
-    """Breaks a namespaced path (`/<namespace>/<path>`) into two parts."""
-    parts = path.split("/")
-    try:
-        return parts[1], "/".join(parts[2:])
-    except IndexError:
-        raise KeyError(
-            "Namespaced paths must contain a namespace and a "
-            "namespace-relative path, i.e. /<namespace>/<path>"
-        )
-
-
 class ObjectRepo:
     """Base class for object repositories."""
 
@@ -217,8 +206,23 @@ class NamespacedObjectRepo(Generic[SchemaType]):
         response.raise_for_status()
         return self.schema(**response.json())
 
-    def __getitem__(self, path: str) -> Optional[SchemaType]:
-        if path.startswith("/"):
-            namespace, path_in_namespace = parse_path(path)
-            return self.get(path=path_in_namespace, namespace=namespace)
-        return self.get(path=path)
+    def __getitem__(self, key: Union[str, Tuple[str, str]]) -> Optional[SchemaType]:
+        path = key
+        assert isinstance(key, str) or (
+            isinstance(key, tuple)
+            and len(key) == 2
+            and all(isinstance(val, str) for val in key)
+        ), "Key must be a path string or a tuple of two strings (namespace, path)"
+
+        if isinstance(key, str):
+            path = key.strip("/")
+            if len(path.split("/")) != 1:
+                raise GerryPathError(
+                    f"Error parsing '{path}'. Path cannot contain slashes. Please either "
+                    f"pass the name of the path or a (namespace, path) tuple."
+                )
+            return self.get(path=path)
+
+        # Desired namespace for retrieval and namespace of path may differ
+        namespace, path = key
+        return self.get(path=path, namespace=namespace)

@@ -13,6 +13,9 @@ import pandas as pd
 from pandas.core.indexes.base import Index as pdIndex
 import tomlkit
 from rapidfuzz import process, fuzz
+from geoalchemy2.elements import WKBElement
+from shapely.geometry import Polygon
+import hashlib
 
 from gerrydb.cache import GerryCache
 from gerrydb.exceptions import ConfigError
@@ -44,10 +47,7 @@ from gerrydb.schemas import (
     ViewMeta,
     ViewTemplate,
 )
-
-import logging
-
-logging.getLogger("httpx").setLevel(logging.WARNING)
+from gerrydb.logging import log
 
 DEFAULT_GERRYDB_ROOT = Path(os.path.expanduser("~")) / ".gerrydb"
 
@@ -72,7 +72,7 @@ class GerryDB:
         namespace: Optional[str] = None,
         offline: bool = False,
         timeout: int = 600,
-        cache_max_size_gb: float = 20,
+        cache_max_size_gb: float = 10,
     ):
         """Creates a GerryDB session.
 
@@ -203,6 +203,7 @@ class GerryDB:
         Returns:
             A context manager for GerryDB writes.
         """
+        log.debug("Creating a write context with notes: %s", notes)
         return WriteContext(db=self, notes=notes)
 
     @property
@@ -355,16 +356,83 @@ class WriteContext:
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
         *,
         namespace: str,
-        locality: Union[str, Locality],
-        layer: Union[str, GeoLayer],
+        locality: Locality,
+        layer: GeoLayer,
         batch_size: int,
         max_conns: int,
+        allow_empty_polys: bool = False,
     ) -> None:
         """
         Private method called by the `load_dataframe` method to load geometries
         into the database.
 
         Adds the geometries in the 'geometry' column of the dataframe to the database.
+
+        Args:
+            df: The dataframe containing the geometries to be added.
+            namespace: The namespace to which the geometries belong.
+            locality: The locality to which the geometries belong. (e.g. 'pennsylvania')
+            layer: The layer to which the geometries belong. (e.g. 'vtd')
+            batch_size: The number of rows to import per batch.
+            max_conns: The maximum number of simultaneous connections to the API.
+
+        """
+        if "geometry" in df.columns:
+            df = df.to_crs("epsg:4269")  # import as lat/long
+            geos = dict(df.geometry)
+        else:
+            geos = {key: Polygon() for key in df.index}
+
+        # Augment geographies with internal points if available.
+        if "internal_point" in df.columns:
+            internal_points = dict(df.internal_point)
+            geos = {path: (geo, internal_points[path]) for path, geo in geos.items()}
+
+        if layer.namespace != namespace:
+            self.db.geo.fork_geos(
+                path=locality.canonical_path,
+                namespace=namespace,
+                layer_name=layer.path,
+                source_namespace=layer.namespace,
+                source_layer_name=layer.path,
+                allow_extra_source_geos=True,
+                allow_empty_polys=allow_empty_polys,
+            )
+        else:
+            try:
+                asyncio.run(
+                    _load_geos(self.geo, geos, namespace, batch_size, max_conns)
+                )
+
+            except Exception as e:
+                if str(e) == "Cannot create geographies that already exist.":
+                    # TODO: Make this error more specific maybe?
+                    raise e
+                raise e
+
+        # Update the layer to be in the correct namespace before you map it
+        ns_layer = self.db.geo_layers[layer.path]
+        self.geo_layers.map_locality(
+            layer=ns_layer,
+            locality=locality,
+            geographies=[f"/{namespace}/{key}" for key in df.index],
+        )
+
+    def __update_geos(
+        self,
+        df: Union[pd.DataFrame, gpd.GeoDataFrame],
+        *,
+        namespace: str,
+        locality: Union[str, Locality],
+        layer: Union[str, GeoLayer],
+        batch_size: int,
+        max_conns: int,
+        allow_empty_polys: bool,
+    ) -> None:
+        """
+        Private method called by the `load_dataframe` method to update geos
+        that are already present in the database. If some geos are not present
+        in the database, this will raise an error.
 
         Args:
             df: The dataframe containing the geometries to be added.
@@ -386,34 +454,77 @@ class WriteContext:
             internal_points = dict(df.internal_point)
             geos = {path: (geo, internal_points[path]) for path, geo in geos.items()}
 
-        try:
-            asyncio.run(_load_geos(self.geo, geos, namespace, batch_size, max_conns))
+        if layer.namespace != namespace:
+            self.db.geo.fork_geos(
+                path=locality.canonical_path,
+                namespace=namespace,
+                layer_name=layer.path,
+                source_namespace=layer.namespace,
+                source_layer_name=layer.path,
+            )
+        else:
+            try:
+                asyncio.run(
+                    _update_geos(
+                        repo=self.geo,
+                        geos=geos,
+                        namespace=namespace,
+                        batch_size=batch_size,
+                        max_conns=max_conns,
+                        allow_empty_polys=allow_empty_polys,
+                    )
+                )
 
-        except Exception as e:
-            if str(e) == "Cannot create geographies that already exist.":
-                # TODO: Make this error more specific maybe?
+            except Exception as e:
+                if str(e) == "Cannot create geographies that already exist.":
+                    # TODO: Make this error more specific maybe?
+                    raise e
                 raise e
-            raise e
 
         if locality is not None and layer is not None:
+            # Update the layer to be in the correct namespace before you map it
+            ns_layer = self.db.geo_layers[layer.path]
             self.geo_layers.map_locality(
-                layer=layer,
+                layer=ns_layer,
                 locality=locality,
                 geographies=[f"/{namespace}/{key}" for key in df.index],
             )
 
-    def __validate_geos(
+    # TODO: this is not finished yet
+    def __upsert_geos(
         self,
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
+        *,
+        namespace: str,
         locality: Union[str, Locality],
         layer: Union[str, GeoLayer],
+        batch_size: int,
+        max_conns: int,
+    ) -> None:
+        raise NotImplementedError("This method is not finished yet.")
+
+    def __validate_geos_compatabilty(
+        self,
+        df: Union[pd.DataFrame, gpd.GeoDataFrame],
+        locality: Locality,
+        layer: GeoLayer,
+        namespace: str,
+        allow_extra_source_geos: bool = False,
+        allow_empty_polys: bool = False,
     ):
         """
         A private method called by the `load_dataframe` method to validate that the passed
-        geometry paths exist in the database.
+        geometry paths exist in the database. This method also checks to make sure that empty
+        geometries are not uploaded unless explicitly allowed.
 
         All of the geometry paths in the dataframe must exist in a single locality and in a
         single layer. If they do not, this method will raise an error.
+
+        The geometries themselves will be created before this is called and this will
+        then be called in the same transaction to validate that we can create the corresponding
+        geo version for the geography. If the paths do not line up, that means that WKBs cannot
+        be loaded since the Geographies (paths) that they should bind to are not present in the
+        layer or namespace.
 
         Args:
             df: The dataframe containing the geometries to be added.
@@ -422,36 +533,118 @@ class WriteContext:
 
         Raises:
             ValueError: If the locality or layer is not provided.
-            ValueError: If the paths in the index of the dataframe do not match any of the paths in
+            IndexError: If the paths in the index of the dataframe do not match any of the paths in
                 the database.
             ValueError: If there are paths missing from the dataframe compared to the paths for
                 the given locality and layer in the database. All geometries must be updated
                 at the same time to avoid unintentional null values.
         """
-        if locality is None or layer is None:
-            raise ValueError(
-                "Locality and layer must be provided if create_geo is False."
+
+        locality_path = locality.canonical_path
+        layer_path = layer.path
+
+        log.debug(
+            "Checking known paths for locality '%s' in layer '%s' belonging to namespace '%s'",
+            locality_path,
+            layer_path,
+            layer.namespace,
+        )
+
+        # Grab all paths for the layer in the namespace
+        known_paths = set(
+            self.db.geo.all_paths(
+                path=locality_path,
+                layer_name=layer_path,
+                namespace=layer.namespace,
+            )
+        )
+
+        df_paths = set(df.index)
+        empty_polygon_wkb = Polygon().wkb
+        empty_hash = hashlib.md5(empty_polygon_wkb).hexdigest()
+
+        if "geometry" in df.columns:
+            df_path_hash_dict = df.geometry.apply(
+                lambda x: hashlib.md5(WKBElement(x.wkb, srid=4269).data).hexdigest()
+            ).to_dict()
+        else:
+            df_path_hash_dict = {idx: empty_hash for idx in df.index}
+
+        layer_path_hash_dict = df_path_hash_dict.copy()
+        if layer.namespace != namespace:
+            layer_path_hash_dict = dict(
+                self.db.geo.check_forkability(
+                    path=locality_path,
+                    namespace=namespace,
+                    layer_name=layer_path,
+                    source_namespace=layer.namespace,
+                    source_layer_name=layer.path,
+                    allow_extra_source_geos=allow_extra_source_geos,
+                    allow_empty_polys=allow_empty_polys,
+                )
             )
 
-        locality_path = ""
-        layer_path = ""
-
-        if isinstance(locality, Locality):
-            locality_path = locality.canonical_path
+        if df_path_hash_dict != layer_path_hash_dict:
+            if "geometry" in df.columns:
+                conflicting_paths = list(
+                    path
+                    for path in df_path_hash_dict
+                    if layer_path_hash_dict[path] != df_path_hash_dict[path]
+                )
+                raise ValueError(
+                    "Conflicting geometries found in dataframe and passed layer. "
+                    "The following paths have conflicting geometries in the dataframe's "
+                    f"geometry column and the layer {layer.path} in the namespace "
+                    f"{layer.namespace}: "
+                    f"{conflicting_paths}"
+                )
         else:
-            locality_path = locality
-        if isinstance(layer, GeoLayer):
-            layer_path = layer.path
-        else:
-            layer_path = layer
+            if (
+                layer.namespace == namespace
+                and any([val == empty_hash for val in df_path_hash_dict.values()])
+                and not allow_empty_polys
+            ):
+                if "geometry" in df.columns:
+                    raise ValueError(
+                        "The 'geometry' column in the dataframe contains empty polygons "
+                        "but empty polygons have not been allowed explicitly. If you would like "
+                        "to allow for the creation of empty polygons, please pass the value "
+                        "`allow_empty_polys=True` to the `load_dataframe` method."
+                    )
 
-        known_paths = set(self.db.geo.all_paths(locality_path, layer_path))
-        df_paths = set(df.index)
+                raise ValueError(
+                    "No 'geometry' column found in dataframe and empty polygons "
+                    "have not been allowed explicitly. If you would like to allow"
+                    "for the creation of empty polygons, please pass the value "
+                    "`allow_empty_polys=True` to the `load_dataframe` method."
+                )
+
+            if (
+                layer.namespace != namespace
+                and any([val == empty_hash for val in layer_path_hash_dict.values()])
+                and not allow_empty_polys
+            ):
+                raise ValueError(
+                    f"Attempted to fork geometries from layer {layer.path} in namespace "
+                    f"{layer.namespace} to layer {layer.path} in namespace {namespace}. "
+                    f"However, some of the source geometries in '{layer.namespace}/{layer.path}' "
+                    f"are empty polygons and empty polygons have not been allowed explicitly. "
+                    "If you would like to allow for the creation of empty polygons, please pass "
+                    "the value `allow_empty_polys=True` to the `load_dataframe` method."
+                )
+
+        log.debug("Known paths: %s", known_paths)
 
         if df_paths - known_paths == df_paths:
-            raise ValueError(
+            example_found_path = (
+                list(known_paths)[0]
+                if len(known_paths) > 0
+                else "NO GEOGRAPHIES FOUND IN NAMESPACE MATCHING GIVEN LOCALITY AND LAYER"
+            )
+
+            raise IndexError(
                 f"The index of the dataframe does not appear to match any geographies in the namespace "
-                f"which have the following geoid format: '{list(known_paths)[0] if len(known_paths) > 0 else None}'. "
+                f"which have the following geoid format: '{example_found_path}'. "
                 f"Please ensure that the index of the dataframe matches the format of the geoid."
             )
 
@@ -469,7 +662,8 @@ class WriteContext:
                 f"'{layer_path}' and locality '{locality_path}', but the passed dataframe "
                 f"does not contain the following geographies: "
                 f"{known_paths - df_paths}. "
-                f"Please provide values for these geographies in the dataframe."
+                f"Please provide values for these geographies in the dataframe "
+                f"or create a new locality with only the relevant geographies."
             )
 
     def __validate_columns(self, columns):
@@ -546,12 +740,76 @@ class WriteContext:
                 f"Please create the missing columns first using the `db.columns.create` method."
             )
 
+    def __validate_load_types(
+        self,
+        df: Union[pd.DataFrame, gpd.GeoDataFrame],
+        *,
+        namespace: Optional[str],
+        locality: Optional[Union[str, Locality]],
+        layer: Optional[Union[str, GeoLayer]],
+        create_geos: bool,
+        patch_geos: bool,
+        upsert_geos: bool,
+        allow_empty_polys: bool,
+    ):
+        if namespace is None:
+            raise ValueError("No Namespace provided.")
+
+        if create_geos or upsert_geos:
+            if locality is None:
+                raise ValueError(
+                    "Locality must be provided when creating or upserting Geos"
+                )
+
+            if layer is None:
+                raise ValueError(
+                    "GeoLayer must be provided when creating or upserting Geos"
+                )
+
+        assert (
+            isinstance(create_geos, bool)
+            and isinstance(patch_geos, bool)
+            and isinstance(upsert_geos, bool)
+        )
+
+        if not ([create_geos, patch_geos, upsert_geos].count(True) <= 1):
+            raise ValueError(
+                "Exactly one of `create_geo`, `patch_geos`, or `upsert_geos` must be True, or"
+                " all must be False."
+            )
+
+        if patch_geos or not (create_geos | upsert_geos | patch_geos):
+            # This checks that the geos are good in the locality
+            # If we plan to fork the geos, we need to check that the source and target
+            # namespaces are compatible.
+            log.debug("VALIDATING GEOS BETWEEN SOURCE AND TARGET NAMESPACES")
+            self.__validate_geos_compatabilty(
+                df=df,
+                namespace=namespace,
+                locality=locality,
+                layer=layer,
+                allow_empty_polys=allow_empty_polys,
+            )
+
+        if create_geos and (layer.namespace != namespace):
+            self.__validate_geos_compatabilty(
+                df=df,
+                namespace=namespace,
+                locality=locality,
+                layer=layer,
+                allow_extra_source_geos=True,
+                allow_empty_polys=allow_empty_polys,
+            )
+
     def load_dataframe(
         self,
         df: Union[pd.DataFrame, gpd.GeoDataFrame],
         columns: Union[pdIndex, list[str], dict[str, Column]],
         *,
-        create_geo: bool = False,
+        create_geos: bool = False,
+        patch_geos: bool = False,
+        upsert_geos: bool = False,
+        allow_empty_polys: bool = False,
         namespace: Optional[str] = None,
         locality: Optional[Union[str, Locality]] = None,
         layer: Optional[Union[str, GeoLayer]] = None,
@@ -587,18 +845,59 @@ class WriteContext:
             columns: Mapping between column names in `df` and GerryDB column metadata.
                 Only columns included in the mapping will be imported.
             create_geo: Determines whether to create geographies from the DataFrame.
+            patch_geos: Determines whether to update existing geographies from the DataFrame.
+            upsert_geos: Combination of create and patch. If the geographies exist, they will be
+                updated. If they do not exist, they will be created.
             namespace: Namespace to load geographies into.
             locality: `Locality` to associate a new `GeoSet` with.
             layer: `GeoLayer` to associate a new `GeoSet` with.
             batch_size: Number of rows to import per API request batch.
             max_conns: Maximum number of simultaneous API connections.
         """
+        log.debug("IN THE LOAD FUNCTION")
         namespace = self.db.namespace if namespace is None else namespace
-        if namespace is None:
-            raise ValueError("No namespace available.")
 
-        if create_geo:
+        self.__validate_load_types(
+            df=df,
+            namespace=namespace,
+            locality=locality,
+            layer=layer,
+            create_geos=create_geos,
+            patch_geos=patch_geos,
+            upsert_geos=upsert_geos,
+            allow_empty_polys=allow_empty_polys,
+        )
+
+        if create_geos or upsert_geos:
+            if not isinstance(locality, Locality):
+                locality = self.db.localities[locality]
+
+            if not isinstance(layer, GeoLayer):
+                layer = self.db.geo_layers[layer]
+
+        if create_geos:
             self.__create_geos(
+                df=df,
+                namespace=namespace,
+                locality=locality,
+                layer=layer,
+                batch_size=batch_size,
+                max_conns=max_conns,
+                allow_empty_polys=allow_empty_polys,
+            )
+
+        if patch_geos:
+            self.__update_geos(
+                df=df,
+                namespace=namespace,
+                locality=locality,
+                layer=layer,
+                batch_size=batch_size,
+                max_conns=max_conns,
+                allow_empty_polys=allow_empty_polys,
+            )
+        if upsert_geos:
+            self.__upsert_geos(
                 df=df,
                 namespace=namespace,
                 locality=locality,
@@ -607,9 +906,7 @@ class WriteContext:
                 max_conns=max_conns,
             )
 
-        if not create_geo:
-            self.__validate_geos(df=df, locality=locality, layer=layer)
-
+        log.debug("VALIDATING COLUMNS")
         self.__validate_columns(columns)
 
         # TODO: Check to see if grabbing all of the columns and then filtering
@@ -622,6 +919,8 @@ class WriteContext:
             _load_column_values(self.columns, df, columns, batch_size, max_conns)
         )
 
+        log.debug("FINISHED LOADING DATAFRAME")
+
 
 # based on https://stackoverflow.com/a/61478547
 async def gather_batch(coros, n):
@@ -632,7 +931,7 @@ async def gather_batch(coros, n):
         async with semaphore:
             return await coro
 
-    return await asyncio.gather(*(sem_coro(c) for c in coros))
+    return await asyncio.gather(*(sem_coro(c) for c in coros), return_exceptions=True)
 
 
 async def _load_geos(
@@ -643,12 +942,41 @@ async def _load_geos(
     max_conns: Optional[int],
 ) -> list[Geography]:
     """Asynchronously loads geographies in batches."""
+    log.debug("IN THE LOAD GEOS FUNCTION")
     geo_pairs = list(geos.items())
     tasks = []
+    log.debug("BEFORE ASYNC BULK FOR GEOS %s", geo_pairs[0])
     async with repo.async_bulk(namespace, max_conns) as ctx:
         for idx in range(0, len(geo_pairs), batch_size):
             chunk = dict(geo_pairs[idx : idx + batch_size])
             tasks.append(ctx.create(chunk))
+        results = await gather_batch(tasks, max_conns)
+
+    # TODO: more sophisticated error handling -- which batches were successful?
+    # what can be retried? etc.
+    for result in results:
+        if isinstance(result, Exception):
+            raise result
+
+
+async def _update_geos(
+    *,
+    repo: GeographyRepo,
+    geos: dict[str, GeoValType],
+    namespace: str,
+    batch_size: int,
+    max_conns: Optional[int],
+    allow_empty_polys: bool,
+) -> list[Geography]:
+    """Asynchronously loads geographies in batches."""
+    log.debug("IN THE LOAD GEOS FUNCTION")
+    geo_pairs = list(geos.items())
+    tasks = []
+    log.debug("BEFORE ASYNC BULK FOR GEOS %s", geo_pairs[0])
+    async with repo.async_bulk(namespace, max_conns) as ctx:
+        for idx in range(0, len(geo_pairs), batch_size):
+            chunk = dict(geo_pairs[idx : idx + batch_size])
+            tasks.append(ctx.update(chunk, allow_empty_polys=allow_empty_polys))
         results = await gather_batch(tasks, max_conns)
 
     # TODO: more sophisticated error handling -- which batches were successful?

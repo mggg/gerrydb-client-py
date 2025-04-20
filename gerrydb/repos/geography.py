@@ -4,13 +4,14 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional, Tuple, Union
 
 import httpx
+from http import HTTPStatus
 import msgpack
 import shapely.wkb
 from shapely import Point
 from shapely.geometry.base import BaseGeometry
 import json
 
-from gerrydb.exceptions import RequestError
+from gerrydb.exceptions import RequestError, ForkingError
 from gerrydb.repos.base import (
     NAMESPACE_ERR,
     NamespacedObjectRepo,
@@ -27,12 +28,7 @@ if TYPE_CHECKING:
 GeoValType = Union[None, BaseGeometry, Tuple[Optional[BaseGeometry], Optional[Point]]]
 GeosType = dict[Union[str, Geography], GeoValType]
 
-import logging
-
-logging.basicConfig(
-    level=logging.INFO,
-)
-logger = logging.getLogger(__name__)
+from gerrydb.logging import log
 
 
 def _importer_params(ctx: "WriteContext", namespace: str) -> dict[str, Any]:
@@ -177,7 +173,12 @@ class AsyncGeoImporter:
         return await self._send(geographies, method="POST")
 
     @err("Failed to update geographies")
-    async def update(self, geographies: GeosType) -> list[Geography]:
+    async def update(
+        self,
+        geographies: GeosType,
+        *,
+        allow_empty_polys: bool,
+    ) -> list[Geography]:
         """Updates the shapes of one or more geographies.
 
         Args:
@@ -190,9 +191,18 @@ class AsyncGeoImporter:
         Returns:
             A list of updated geographies.
         """
-        return await self._send(geographies, method="PATCH")
+        return await self._send(
+            geographies,
+            method="PATCH",
+            queries={"allow_empty_polys": allow_empty_polys},
+        )
 
-    async def _send(self, geographies: GeosType, method: str) -> list[Geography]:
+    async def _send(
+        self,
+        geographies: GeosType,
+        method: str,
+        queries: Optional[dict[str, str]] = None,
+    ) -> list[Geography]:
         """Creates or updates one or more geographies."""
 
         geos = _serialize_geos(geographies)
@@ -206,10 +216,11 @@ class AsyncGeoImporter:
                 "accept": "application/msgpack",
                 "content-type": "application/msgpack",
             },
+            params=queries or {},
         )
         if response.status_code == 422:
             json_content = json.loads(response.content)
-            logger.info(
+            log.debug(
                 f"422 for Request: {method},\n\tAt: {self.repo.base_url}/{self.namespace}\n\tBody: {json_content}"
             )
 
@@ -239,6 +250,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
     @online
     def bulk(self, namespace: Optional[str] = None) -> GeoImporter:
         """Creates a context for creating and updating geographies."""
+        log.debug("IN CREATE BULK GEOGRAPHY REPO")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)
@@ -251,21 +263,101 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         self, namespace: Optional[str] = None, max_conns: Optional[int] = None
     ) -> AsyncGeoImporter:
         """Creates an asynchronous context for creating and updating geographies."""
+        log.debug("IN ASYNC CREATE BULK GEOGRAPHY REPO")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)
 
         return AsyncGeoImporter(repo=self, namespace=namespace, max_conns=max_conns)
 
-    # TODO: get()
     @namespaced
     @online
     @err("Failed to load geographies")
-    def all_paths(self, fips: str, layer_name: str) -> list[str]:
+    def all_paths(
+        self, path: str, namespace: Optional[str] = None, *, layer_name: str
+    ) -> list[str]:
+        if namespace is None:
+            namespace = self.session.namespace
+
         response = self.session.client.get(
-            f"/__list_geo/{self.session.namespace}/{fips}/{layer_name}"
+            f"/__geography_list/{namespace}/{path}/{layer_name}"
         )
         response.raise_for_status()
         response_json = response.json()
 
         return response_json
+
+    @namespaced
+    @online
+    def check_forkability(
+        self,
+        path: str,
+        namespace: Optional[str] = None,
+        *,
+        layer_name: str,
+        source_namespace: Optional[str] = None,
+        source_layer_name: str,
+        allow_extra_source_geos: bool = False,
+        allow_empty_polys: bool = False,
+    ) -> list[Tuple[str, str]]:
+        """Checks whether or not data can be forkd from one namesspace to another."""
+        try:
+            log.debug("Getting forkability")
+            response = self.session.client.get(
+                f"/__geography_fork/{namespace}/{path}/{layer_name}?mode=compare&source_namespace={source_namespace}&source_layer={source_layer_name}&allow_extra_source_geos={allow_extra_source_geos}&allow_empty_polys={allow_empty_polys}"
+            )
+            log.debug(response)
+            response.raise_for_status()
+
+        except Exception as e:
+            if (
+                response.status_code == HTTPStatus.CONFLICT
+                or response.status_code == HTTPStatus.FORBIDDEN
+            ):
+                raise ForkingError(
+                    f"Forking failed for the following reason: "
+                    f"{e.response.json().get('detail', 'No details provided.')}",
+                )
+            raise e
+        return [(item[0], item[1]) for item in response.json()]
+
+    @namespaced
+    @online
+    def fork_geos(
+        self,
+        path: str,
+        namespace: Optional[str] = None,
+        *,
+        layer_name: str,
+        source_namespace: Optional[str] = None,
+        source_layer_name: str,
+        allow_extra_source_geos: bool = False,
+        allow_empty_polys: bool = False,
+    ) -> bool:
+        """Fork the geographies from one namespace into another"""
+        self.check_forkability(
+            path=path,
+            namespace=namespace,
+            layer_name=layer_name,
+            source_namespace=source_namespace,
+            source_layer_name=source_layer_name,
+            allow_extra_source_geos=allow_extra_source_geos,
+            allow_empty_polys=allow_empty_polys,
+        )
+
+        try:
+            response = self.session.client.post(
+                f"/__geography_fork/{namespace}/{path}/{layer_name}?mode=compare&source_namespace={source_namespace}&source_layer={source_layer_name}&allow_extra_source_geos={allow_extra_source_geos}&allow_empty_polys={allow_empty_polys}"
+            )
+            response.raise_for_status()
+
+        except Exception as e:
+            if (
+                response.status_code == HTTPStatus.CONFLICT
+                or response.status_code == HTTPStatus.FORBIDDEN
+            ):
+                raise ForkingError(
+                    f"Forking failed for the following reason: "
+                    f"{e.response.json().get('detail', 'No details provided.')}",
+                )
+            raise e

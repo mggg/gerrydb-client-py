@@ -8,7 +8,6 @@ from gerrydb.repos.base import (
     err,
     namespaced,
     online,
-    parse_path,
     write_context,
 )
 from gerrydb.schemas import Column, ColumnSet, ColumnSetCreate
@@ -48,15 +47,24 @@ class ColumnSetRepo(NamespacedObjectRepo[ColumnSet]):
             if isinstance(column, Column):
                 col_namespace = column.namespace
                 col_rel_path = column.canonical_path
-            elif column.startswith("/"):
-                col_namespace, col_rel_path = parse_path(column)
             else:
-                col_namespace = namespace
-                col_rel_path = column
+                col_list = column.split("/")
+                if len(col_list) == 1:
+                    col_namespace = namespace
+                    col_rel_path = col_list[0]
+                elif len(col_list) == 2:
+                    col_namespace, col_rel_path = col_list[0], col_list[1]
+                else:
+                    raise RequestError(
+                        "Column paths must be in the form of either "
+                        "namespace/column_name or just column_name"
+                    )
 
             if col_namespace != namespace:
                 raise RequestError(
-                    "All columns in a column set must have the same namespace."
+                    f"All columns in a column set must come the same namespace "
+                    f"as the database context. "
+                    f"Expected: {namespace}, got: {col_namespace}"
                 )
             column_paths.append(col_rel_path)
 

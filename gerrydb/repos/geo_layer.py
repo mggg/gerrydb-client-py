@@ -10,6 +10,7 @@ from gerrydb.repos.base import (
     write_context,
 )
 from gerrydb.schemas import Geography, GeoLayer, GeoLayerCreate, GeoSetCreate, Locality
+from gerrydb.logging import log
 
 
 class GeoLayerRepo(NamespacedObjectRepo[GeoLayer]):
@@ -67,6 +68,10 @@ class GeoLayerRepo(NamespacedObjectRepo[GeoLayer]):
             RequestError: If the mapping cannot be created on the server side,
                 or if the parameters fail validation.
         """
+        log.debug("TOP OF MAP LOCALITY")
+        log.debug(
+            f"MAKING PUT REQUEST TO {self.base_url}/{layer.namespace}/{layer.path}"
+        )
         response = self.ctx.client.put(
             f"{self.base_url}/{layer.namespace}/{layer.path}",
             params={
