@@ -432,6 +432,19 @@ class ViewCreate(ViewBase):
     valid_at: Optional[datetime] = None
     proj: Optional[str] = None
 
+    class Config:
+        # Whenever you call model.json(), turn datetimes into ISO strings
+        json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")}
+
+    def dict(self, *args, **kwargs):
+        data = super().dict(*args, **kwargs)
+
+        # now post‑process valid_at if it's still a datetime
+        va = data.get("valid_at")
+        if isinstance(va, datetime):
+            data["valid_at"] = va.strftime("%Y-%m-%d %H:%M:%S.%fZ")
+        return data
+
 
 class ViewMeta(ViewBase):
     """View metadata."""

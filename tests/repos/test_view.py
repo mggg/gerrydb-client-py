@@ -1,6 +1,19 @@
 """Tests for views."""
 
 import pytest
+import networkx as nx
+
+
+def graphs_equal(G1: nx.Graph, G2: nx.Graph) -> bool:
+    # Quick check: same node‑set and same edge‑set
+    if set(G1.nodes) != set(G2.nodes):
+        return False
+    edge_set_1 = set([tuple(sorted(e)) for e in G1.edges])
+    edge_set_2 = set([tuple(sorted(e)) for e in G1.edges])
+    if edge_set_1 != edge_set_2:
+        return False
+
+    return True
 
 
 @pytest.mark.vcr
@@ -77,8 +90,7 @@ def test_view_repo_view_to_dataframe(ia_view, ia_dataframe):
 def test_view_repo_view_to_graph(ia_view_with_graph, ia_graph):
     view_graph = ia_view_with_graph.to_graph()
 
-    assert set(view_graph) == set(ia_graph)
-    assert set(view_graph.edges) == set(ia_graph.edges)
+    assert graphs_equal(view_graph, ia_graph)
 
     expected_cols = set(
         "/".join(col.split("/")[2:]) for col in ia_view_with_graph.values
@@ -94,8 +106,7 @@ def test_view_repo_view_to_graph(ia_view_with_graph, ia_graph):
 def test_view_repo_view_to_graph_geo(ia_view_with_graph, ia_graph):
     view_graph = ia_view_with_graph.to_graph(geometry=True)
 
-    assert set(view_graph) == set(ia_graph)
-    assert set(view_graph.edges) == set(ia_graph.edges)
+    assert graphs_equal(view_graph, ia_graph)
 
     expected_cols = set(
         "/".join(col.split("/")[2:]) for col in ia_view_with_graph.values

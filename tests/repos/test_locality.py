@@ -1,7 +1,6 @@
 """Integration/VCR tests for localities."""
 
 import pytest
-
 from gerrydb.schemas import LocalityCreate
 
 
@@ -9,11 +8,11 @@ from gerrydb.schemas import LocalityCreate
 def testlocality_repo_create_get(client):
     name = "Commonwealth of Massachusetts"
     with client.context(notes="adding a locality") as ctx:
-        loc = ctx.localities.create(name=name, canonical_path="ma")
+        loc = ctx.localities.create(name=name, canonical_path="ma2")
     assert loc.name == name
-    assert loc.canonical_path == "ma"
+    assert loc.canonical_path == "ma2"
 
-    assert client.localities["ma"] == loc
+    assert client.localities["ma2"] == loc
 
 
 @pytest.mark.vcr
@@ -34,6 +33,6 @@ def test_locality_repo_create_bulk(client):
 def test_locality_repo_create_all(client):
     name = "State of Vermont"
     with client.context(notes="adding a locality") as ctx:
-        ctx.localities.create(name=name, canonical_path="vt")
+        ctx.localities.create(name=name, canonical_path="vt2")
 
     assert name in [loc.name for loc in client.localities.all()]

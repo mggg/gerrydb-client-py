@@ -9,7 +9,7 @@ import pytest
 
 from gerrydb.client import GerryDB, WriteContext
 from gerrydb.exceptions import OnlineError, ResultError, WriteContextError
-from gerrydb.repos.base import err, online, parse_path, write_context
+from gerrydb.repos.base import err, online, write_context
 
 
 @dataclass
@@ -66,14 +66,3 @@ def test_repos_write_context_decorator__no_write_context(dummy_repo_offline):
 
     with pytest.raises(WriteContextError):
         fn(dummy_repo_offline)
-
-
-def test_repos_parse_path__valid():
-    namespace, path_in_namespace = parse_path("/a/b")
-    assert namespace == "a"
-    assert path_in_namespace == "b"
-
-
-def test_repos_parse_path__invalid():
-    with pytest.raises(KeyError, match="must contain"):
-        parse_path("a")

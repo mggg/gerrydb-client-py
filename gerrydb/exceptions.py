@@ -45,5 +45,13 @@ class ViewLoadError(GerryDBError):
     """Raised when a view cannot be loaded (e.g. from a GeoPackage)."""
 
 
+class GraphLoadError(GerryDBError):
+    """Raised when a graph cannot be loaded (e.g. from a GeoPackage)."""
+
+
 class GerryPathError(GerryDBError):
     """Raised when an invalid path is provided. Generally, this means invalid characters are present"""
+
+
+class ForkingError(GerryDBError):
+    """Raised when a migration cannot be performed."""

@@ -21,7 +21,7 @@ def test_column_repo_create_get(client_ns, column):
     assert col.type == ColumnType.INT
     assert client_ns.columns["total_pop"] == col
     assert client_ns.columns["totpop"] == col
-    assert client_ns.columns[f"/{client_ns.namespace}/total_pop"] == col
+    assert client_ns.columns[(f"{client_ns.namespace}", "total_pop")] == col
 
 
 @pytest.mark.vcr

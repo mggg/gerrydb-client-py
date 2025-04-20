@@ -17,7 +17,7 @@ def test_load_dataframe__with_geo__ia_counties(client_ns, ia_dataframe, ia_colum
         ctx.load_dataframe(
             df=ia_dataframe,
             columns=columns,
-            create_geo=True,
+            create_geos=True,
             namespace=client_ns.namespace,
             layer=layer,
             locality=locality,
