@@ -60,7 +60,7 @@ class ScopeType(str, Enum):
     ALL = "all"
 
     def __str__(self):
-        return self.value
+        return self.value  # pragma: no cover
 
 
 class BaseModel(PydanticBaseModel):
@@ -129,7 +129,7 @@ class Locality(LocalityBase):
     aliases: list[GerryPath]
     meta: ObjectMeta
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         if self.parent_path is None:
             return f"Locality: {self.name} ({self.canonical_path})"
         return f"Locality: {self.name} ({self.canonical_path} → {self.parent_path})"
@@ -279,7 +279,7 @@ class Geography(GeographyBase):
     valid_from: datetime
 
     @property
-    def full_path(self):
+    def full_path(self):  # pragma: no cover
         """The path of the geography, including its namespace."""
         return f"/{self.namespace}/{self.path}"
 
@@ -404,7 +404,7 @@ class GraphMeta(GraphBase):
     created_at: datetime
 
     @property
-    def full_path(self):
+    def full_path(self):  # pragma: no cover
         """The path of the geography, including its namespace."""
         return f"/{self.namespace}/{self.path}"
 

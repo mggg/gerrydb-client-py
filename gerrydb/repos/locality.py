@@ -6,9 +6,10 @@ from typing import TYPE_CHECKING, Optional
 from gerrydb.repos.base import ObjectRepo, err, normalize_path, online, write_context
 from gerrydb.schemas import Locality, LocalityCreate, LocalityPatch
 from gerrydb.exceptions import ResultError
+from gerrydb.logging import log
 
 if TYPE_CHECKING:
-    from gerrydb.client import GerryDB, WriteContext
+    from gerrydb.client import GerryDB, WriteContext  # pragma: no cover
 
 
 @dataclass(frozen=True)
@@ -121,29 +122,11 @@ class LocalityRepo(ObjectRepo):
                 loc_list[i] = loc_object
             except ResultError as e:
                 if "Failed to create canonical path to new location(s)." in e.args[0]:
-                    print(f"Failed to create {loc.name}, path already exists")
+                    log.error(f"Failed to create {loc.name}, path already exists")
                 else:
                     raise e
 
         return loc_list
-
-        # loc_list = [-1]*len(locs)
-        # for i, loc in enumerate(locs):
-        #     response = self.ctx.client.post(
-        #     "/localities/",
-        #     json=[loc.dict()],
-        # )
-        #     response.raise_for_status()
-        #     loc_list[i] = Locality(**response.json()[0])
-        # return(loc_list[i])
-
-        # response = self.ctx.client.post(
-        #     "/localities/",
-        #     json=[loc.dict() for loc in locs],
-        # )
-        # response.raise_for_status()
-
-        # return [Locality(**loc) for loc in response.json()]
 
     @err("Failed to update locality")
     @write_context

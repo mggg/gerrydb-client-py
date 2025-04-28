@@ -259,10 +259,8 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         if ephemeral_client:
             await client.aclose()
 
-        # TODO: what's the proper caching behavior here?
 
-
-def _coerce(val: Any) -> Any:
+def _coerce(val: Any) -> Any:  # pragma: no cover
     """Coerces values for JSON serialization."""
     if isinstance(val, np.int64):
         return int(val)

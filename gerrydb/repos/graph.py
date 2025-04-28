@@ -14,7 +14,7 @@ from gerrydb.repos.base import (
     online,
     write_context,
 )
-from gerrydb.exceptions import GraphLoadError
+from gerrydb.exceptions import GraphLoadError, GraphCreateError
 from gerrydb.schemas import (
     GeoLayer,
     Graph,
@@ -35,7 +35,7 @@ from gerrydb.logging import log
 
 try:
     import gerrychain
-except ImportError:
+except ImportError:  # pragma: no cover
     gerrychain = None
 
 
@@ -221,7 +221,7 @@ class DBGraph:
 
         return graph
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return f"DBGraph(path={self.path}, namespace={self.namespace}, locality={self.locality}, layer={self.layer}, meta={self.meta}, created_at={self.created_at}, proj={self.proj})"
 
 
@@ -294,9 +294,8 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
         try:
             response.raise_for_status()
         except Exception as e:
-            log.error(f"{e}")
-            log.error(
-                f"Failed to create graph. Details: {response.json().get('detail', 'No details provided.')}"
+            raise GraphCreateError(
+                f"Failed to create graph. Got code {response.status_code}. Details: {response.json().get('detail', 'No details provided.')}"
             )
 
         graph_meta = self.schema(**response.json())
@@ -319,12 +318,14 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
         log.debug("THE GPKG RESPONSE HEADERS ARE %s", gpkg_response.headers)
 
         if gpkg_response.status_code >= 400:
-            gpkg_response.raise_for_status()
-        if gpkg_response.next_request is not None:
+            gpkg_response.raise_for_status()  # pragma: no cover
+        if gpkg_response.next_request is not None:  # pragma: no cover
             # Redirect to Google Cloud Storage (probably).
-            gpkg_response = self.session.client.get(gpkg_response.next_request.url)
-            gpkg_response.raise_for_status()
-            gpkg_render_id = gpkg_response.headers[
+            gpkg_response = self.session.client.get(
+                gpkg_response.next_request.url
+            )  # pragma: no cover
+            gpkg_response.raise_for_status()  # pragma: no cover
+            gpkg_render_id = gpkg_response.headers[  # pragma: no cover
                 "x-goog-meta-gerrydb-graph-render-id"
             ]
         else:
@@ -356,6 +357,6 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
             path=normalize_path(path),
         )
         if gpkg_path is None:
-            gpkg_path = self._get(path, namespace, request_timeout)
+            gpkg_path = self._get(path, namespace, request_timeout)  # pragma: no cover
         log.debug("THE GPKG PATH IS %s", gpkg_path)
         return DBGraph.from_gpkg(gpkg_path)

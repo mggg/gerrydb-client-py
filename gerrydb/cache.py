@@ -9,7 +9,8 @@ from os import PathLike
 from pathlib import Path
 from typing import Optional, TypeVar, Union
 
-from gerrydb.schemas import BaseModel, ViewMeta
+from gerrydb.schemas import BaseModel
+from gerrydb.logging import log
 
 from .exceptions import CacheInitError
 
@@ -43,7 +44,7 @@ class GerryCache:
                 self._conn = sqlite3.connect(database)
             except sqlite3.OperationalError as ex:
                 raise CacheInitError(
-                    "Failed to load to initialize GerryDB cache ({database})."
+                    "Failed to load/initialize GerryDB cache ({database})."
                 ) from ex
 
         if not self._tables():
@@ -73,7 +74,7 @@ class GerryCache:
                     "DELETE FROM graph WHERE namespace = ? AND path = ?",
                     (namespace, path),
                 )
-                print("The previous render id is", prev_render_id)
+                log.debug(f"The previous render id is {prev_render_id}")
                 for ext in CACHE_EXTENSIONS:
                     Path(self.data_dir / f"{prev_render_id[0]}.{ext}").unlink(
                         missing_ok=True
@@ -102,21 +103,24 @@ class GerryCache:
                     oldest[1],
                     oldest[2],
                 )
-                print(f"Found oldest render: {oldest_namespace}, {oldest_path}")
-                print(oldest)
+                log.debug(f"Found oldest render: {oldest_namespace}, {oldest_path}")
+                log.debug(oldest)
                 total_db_size -= oldest[4]
                 db_cursor.execute(
                     "DELETE FROM graph WHERE namespace = ? AND path = ?",
                     (oldest_namespace, oldest_path),
                 )
 
-                print(f"The new db size is", total_db_size)
-                print(f"Now deleting the render file: {oldest_render_id}.gpkg")
+                log.debug(f"The new db size is {total_db_size}")
+                log.debug(f"Now deleting the render file: {oldest_render_id}.gpkg")
 
                 try:
                     os.remove(self.data_dir / f"{oldest_render_id}.gpkg")
                 except FileNotFoundError:
-                    print(f"Could not find the render file: {oldest_render_id}.gpkg")
+                    log.debug(
+                        f"Could not find the render file: {oldest_render_id}.gpkg to delete"
+                        " from cache. Skipping."
+                    )
 
         return gpkg_path
 
@@ -171,21 +175,24 @@ class GerryCache:
                     oldest[1],
                     oldest[2],
                 )
-                print(f"Found oldest render: {oldest_namespace}, {oldest_path}")
-                print(oldest)
+                log.debug(f"Found oldest render: {oldest_namespace}, {oldest_path}")
+                log.debug(oldest)
                 total_db_size -= oldest[4]
                 db_cursor.execute(
                     "DELETE FROM view WHERE namespace = ? AND path = ?",
                     (oldest_namespace, oldest_path),
                 )
 
-                print(f"The new db size is", total_db_size)
-                print(f"Now deleting the render file: {oldest_render_id}.gpkg")
+                log.debug(f"The new db size is {total_db_size}")
+                log.debug(f"Now deleting the render file: {oldest_render_id}.gpkg")
 
                 try:
                     os.remove(self.data_dir / f"{oldest_render_id}.gpkg")
                 except FileNotFoundError:
-                    print(f"Could not find the render file: {oldest_render_id}.gpkg")
+                    log.debug(
+                        f"Could not find the render file: {oldest_render_id}.gpkg to delete"
+                        " from cache. Skipping."
+                    )
 
         return gpkg_path
 

@@ -7,7 +7,7 @@ log = logging.getLogger("gerrydb")
 
 def setup_logging(level=logging.INFO):
     if log.hasHandlers():
-        return
+        return  # pragma: no cover
 
     handler = colorlog.StreamHandler()
     handler.setFormatter(
@@ -30,6 +30,6 @@ def setup_logging(level=logging.INFO):
 
 
 if os.getenv("GERRYDB_DEBUG"):
-    setup_logging(level=logging.DEBUG)
+    setup_logging(level=logging.DEBUG)  # pragma: no cover
 else:
     setup_logging(level=logging.INFO)

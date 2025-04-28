@@ -44,7 +44,6 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-
     - name: Install PostgreSQL client tools
       run: |
         sudo apt-get update
@@ -58,6 +57,10 @@ jobs:
       run: |
         git clone --branch dev https://github.com/mggg/gerrydb-meta.git ../gerrydb-meta
     
+    - name: Clone etl repo
+      run: |
+        git clone --branch dev https://github.com/mggg/gerrydb-etl.git ../gerrydb-etl
+
     - name: Install dependencies
       run: |
         cd ..
@@ -67,8 +70,14 @@ jobs:
         pip install poetry
         pip install black isort
         pip install colorlog
+        pip install pytest-asyncio
+        pip install pytest-cov
+        pip install pytest-httpx
+        pip install gerrychain
+        pip install pyarrow
         pip install ./gerrydb-client-py/
         pip install ./gerrydb-meta/
+        pip install ./gerrydb-etl/
         pip install --upgrade geopandas
 
     - name: Set up GerryDB and get API key
@@ -76,7 +85,7 @@ jobs:
         cd ..
         source .venv/bin/activate
         cd ./gerrydb-meta
-        echo "export GERRYDB_TEST_API_KEY=$(python init.py --name test --email test --reset)" > ../.env
+        echo "export GERRYDB_TEST_API_KEY=$(python init.py --name test --email test --reset --use-test-key <<< 'y' | tail -n 1)" > ../.env
         echo "export GERRYDB_TEST_SERVER=localhost:8000" >> ../.env
 
     - name: Wait for PostgreSQL to be ready

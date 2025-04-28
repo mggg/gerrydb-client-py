@@ -18,7 +18,7 @@ from gerrydb.schemas import BaseModel
 from uvicorn.config import logger as log
 
 if TYPE_CHECKING:
-    from gerrydb.client import GerryDB, WriteContext
+    from gerrydb.client import GerryDB, WriteContext  # pragma: no cover
 
 
 SchemaType = TypeVar("SchemaType", bound=BaseModel)

@@ -52,6 +52,32 @@ from gerrydb.logging import log
 DEFAULT_GERRYDB_ROOT = Path(os.path.expanduser("~")) / ".gerrydb"
 
 
+def _run(coro):  # pragma: no cover
+    """
+    Run any coroutine from synchronous code.
+    If there's no running loop, use asyncio.run().
+    If there _is_ a loop (e.g. in Jupyter), auto-apply nest_asyncio
+    and drive it to completion.
+    """
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        # no loop running so safe to start a fresh one
+        return asyncio.run(coro)
+    else:
+        # loop already running
+        try:
+            import nest_asyncio
+        except ImportError:
+            raise RuntimeError(
+                "Detected an existing asyncio loop, "
+                "but `nest_asyncio` is not installed. "
+                "Please add it to your dependencies."
+            )
+        nest_asyncio.apply(loop)
+        return loop.run_until_complete(coro)
+
+
 class GerryDB:
     """GerryDB session."""
 
@@ -268,13 +294,14 @@ class WriteContext:
     meta: Optional[ObjectMeta] = None
     client: Optional[httpx.Client] = None
     client_params: Optional[dict[str, Any]] = None
-    geo_import: Optional[GeoImport] = None
 
     def __enter__(self) -> "WriteContext":
         """Creates a write context with metadata."""
+        log.debug("Posting to db.meta")
         response = self.db.client.post(
             "/meta/", json=ObjectMetaCreate(notes=self.notes).dict()
         )
+        log.debug("Got response from db.meta %s", response.status_code)
         response.raise_for_status()  # TODO: refine?
 
         self.meta = ObjectMeta(**response.json())
@@ -383,6 +410,7 @@ class WriteContext:
         else:
             geos = {key: Polygon() for key in df.index}
 
+        log.debug("Geometries: %s", geos)
         # Augment geographies with internal points if available.
         if "internal_point" in df.columns:
             internal_points = dict(df.internal_point)
@@ -400,14 +428,9 @@ class WriteContext:
             )
         else:
             try:
-                asyncio.run(
-                    _load_geos(self.geo, geos, namespace, batch_size, max_conns)
-                )
+                _run(_load_geos(self.geo, geos, namespace, batch_size, max_conns))
 
             except Exception as e:
-                if str(e) == "Cannot create geographies that already exist.":
-                    # TODO: Make this error more specific maybe?
-                    raise e
                 raise e
 
         # Update the layer to be in the correct namespace before you map it
@@ -454,32 +477,21 @@ class WriteContext:
             internal_points = dict(df.internal_point)
             geos = {path: (geo, internal_points[path]) for path, geo in geos.items()}
 
-        if layer.namespace != namespace:
-            self.db.geo.fork_geos(
-                path=locality.canonical_path,
-                namespace=namespace,
-                layer_name=layer.path,
-                source_namespace=layer.namespace,
-                source_layer_name=layer.path,
-            )
-        else:
-            try:
-                asyncio.run(
-                    _update_geos(
-                        repo=self.geo,
-                        geos=geos,
-                        namespace=namespace,
-                        batch_size=batch_size,
-                        max_conns=max_conns,
-                        allow_empty_polys=allow_empty_polys,
-                    )
+        try:
+            _run(
+                _update_geos(
+                    repo=self.geo,
+                    geos=geos,
+                    namespace=namespace,
+                    batch_size=batch_size,
+                    max_conns=max_conns,
+                    allow_empty_polys=allow_empty_polys,
                 )
+            )
 
-            except Exception as e:
-                if str(e) == "Cannot create geographies that already exist.":
-                    # TODO: Make this error more specific maybe?
-                    raise e
-                raise e
+        # TODO: Get better errors on the backend for this
+        except Exception as e:
+            raise e  # pragma: no cover
 
         if locality is not None and layer is not None:
             # Update the layer to be in the correct namespace before you map it
@@ -500,7 +512,7 @@ class WriteContext:
         layer: Union[str, GeoLayer],
         batch_size: int,
         max_conns: int,
-    ) -> None:
+    ) -> None:  # pragma: no cover
         raise NotImplementedError("This method is not finished yet.")
 
     def __validate_geos_compatabilty(
@@ -511,6 +523,9 @@ class WriteContext:
         namespace: str,
         allow_extra_source_geos: bool = False,
         allow_empty_polys: bool = False,
+        create_geos: bool = False,
+        patch_geos: bool = False,
+        upsert_geos: bool = False,
     ):
         """
         A private method called by the `load_dataframe` method to validate that the passed
@@ -539,7 +554,6 @@ class WriteContext:
                 the given locality and layer in the database. All geometries must be updated
                 at the same time to avoid unintentional null values.
         """
-
         locality_path = locality.canonical_path
         layer_path = layer.path
 
@@ -583,6 +597,14 @@ class WriteContext:
                     allow_empty_polys=allow_empty_polys,
                 )
             )
+        elif not (create_geos or patch_geos or upsert_geos):
+            layer_path_hash_dict = dict(
+                self.db.geo.get_layer_hashes(
+                    path=locality_path,
+                    namespace=namespace,
+                    layer_name=layer_path,
+                )
+            )
 
         if df_path_hash_dict != layer_path_hash_dict:
             if "geometry" in df.columns:
@@ -592,11 +614,23 @@ class WriteContext:
                     if layer_path_hash_dict[path] != df_path_hash_dict[path]
                 )
                 raise ValueError(
-                    "Conflicting geometries found in dataframe and passed layer. "
-                    "The following paths have conflicting geometries in the dataframe's "
-                    f"geometry column and the layer {layer.path} in the namespace "
-                    f"{layer.namespace}: "
-                    f"{conflicting_paths}"
+                    "\n".join(
+                        [
+                            "Conflicting geometries found in dataframe and passed layer.",
+                            "If you are certain that both the dataframe and the layer contain",
+                            "the same geometries, the conflict might be due to a floating-point",
+                            "precision discrepancy introduced during reprojection, and you can",
+                            "bypass this error by setting `include_geos=False` in the",
+                            "`load_dataframe` call. Otherwise, if the dataframe contains the",
+                            "correct geometries, please set `path_geos=True` in the",
+                            "`load_dataframe` call to update the geometries in the layer.",
+                            "",
+                            "The following paths have conflicting geometries in the dataframe's",
+                            f"geometry column and the layer '{layer.path}' in the namespace ",
+                            f"'{layer.namespace}':",
+                            f"{conflicting_paths}",
+                        ]
+                    )
                 )
         else:
             if (
@@ -625,8 +659,8 @@ class WriteContext:
                 and not allow_empty_polys
             ):
                 raise ValueError(
-                    f"Attempted to fork geometries from layer {layer.path} in namespace "
-                    f"{layer.namespace} to layer {layer.path} in namespace {namespace}. "
+                    f"Attempted to fork geometries from layer '{layer.path}' in namespace "
+                    f"'{layer.namespace}' to layer '{layer.path}' in namespace {namespace}. "
                     f"However, some of the source geometries in '{layer.namespace}/{layer.path}' "
                     f"are empty polygons and empty polygons have not been allowed explicitly. "
                     "If you would like to allow for the creation of empty polygons, please pass "
@@ -634,6 +668,9 @@ class WriteContext:
                 )
 
         log.debug("Known paths: %s", known_paths)
+
+        if len(known_paths) == 0 and create_geos:
+            return
 
         if df_paths - known_paths == df_paths:
             example_found_path = (
@@ -687,14 +724,15 @@ class WriteContext:
                 and prints them out for the user.
         """
 
+        log.debug(columns)
         if not (
             isinstance(columns, list)
             or isinstance(columns, pdIndex)
             or isinstance(columns, dict)
         ):
-            raise ValueError(
-                f"The columns parameter must be a list of paths, a pandas.core.indexes.base.Index, "
-                f"or a dictionary of paths to Column objects. "
+            raise TypeError(
+                f"The 'columns' parameter must be a list of paths, a "
+                f"pandas.core.indexes.base.Index, or a dictionary of paths to Column objects. "
                 f"Received type {type(columns)}."
             )
 
@@ -726,12 +764,14 @@ class WriteContext:
             column_paths = {col.canonical_path for col in self.db.columns.all()}
             cur_columns = set([v.canonical_path for v in columns.values()])
 
+        log.debug("COLUMN PATHS: %s", column_paths)
         missing_cols = cur_columns - column_paths
+        missing_cols -= {"geometry", "internal_point"}
 
         if missing_cols != set():
             for path in missing_cols:
                 best_matches = process.extract(path, column_paths, limit=5)
-                print(
+                log.error(
                     f"Could not find column corresponding to '{path}', the best matches "
                     f"are: {[match[0] for match in best_matches]}"
                 )
@@ -752,6 +792,15 @@ class WriteContext:
         upsert_geos: bool,
         allow_empty_polys: bool,
     ):
+
+        if not isinstance(df, gpd.GeoDataFrame) and (
+            create_geos or patch_geos or upsert_geos
+        ):
+            raise TypeError(
+                "Cannot create or update geographies from a non-geodataframe. "
+                "Please convert the dataframe to a geodataframe before calling this method."
+            )
+
         if namespace is None:
             raise ValueError("No Namespace provided.")
 
@@ -789,15 +838,26 @@ class WriteContext:
                 locality=locality,
                 layer=layer,
                 allow_empty_polys=allow_empty_polys,
+                patch_geos=patch_geos,
             )
 
-        if create_geos and (layer.namespace != namespace):
+        if create_geos:
             self.__validate_geos_compatabilty(
                 df=df,
                 namespace=namespace,
                 locality=locality,
                 layer=layer,
                 allow_extra_source_geos=True,
+                allow_empty_polys=allow_empty_polys,
+                create_geos=create_geos,
+            )
+
+        if "geometry" in df.columns and not (create_geos or patch_geos or upsert_geos):
+            self.__validate_geos_compatabilty(
+                df=df,
+                namespace=namespace,
+                locality=locality,
+                layer=layer,
                 allow_empty_polys=allow_empty_polys,
             )
 
@@ -809,6 +869,7 @@ class WriteContext:
         create_geos: bool = False,
         patch_geos: bool = False,
         upsert_geos: bool = False,
+        include_geos: bool = True,
         allow_empty_polys: bool = False,
         namespace: Optional[str] = None,
         locality: Optional[Union[str, Locality]] = None,
@@ -857,6 +918,39 @@ class WriteContext:
         log.debug("IN THE LOAD FUNCTION")
         namespace = self.db.namespace if namespace is None else namespace
 
+        if include_geos and not ("geometry" in df.columns):
+            raise ValueError(
+                "`include_geos` is True, but no 'geometry' column found in dataframe."
+            )
+
+        if not include_geos:
+            if "geometry" in df.columns:
+                df = df.drop(columns=["geometry"])
+            if "internal_point" in df.columns:
+                df = df.drop(columns=["internal_point"])
+
+        try:
+            df = gpd.GeoDataFrame(df)
+        except Exception:  # pragma: no cover
+            pass  # pragma: no cover
+
+        # All geographies will be uploaded to the db as lat/long
+        # to make WKB comparisons better.
+        if hasattr(df, "crs") and df.crs.to_epsg() != 4269:
+            current_proj = df.crs
+            if "geometry" in df.columns:
+                df.to_crs(epsg=4269, inplace=True)
+            if "internal_point" in df.columns:
+                df["internal_point"] = gpd.GeoSeries(
+                    df["internal_point"], crs=current_proj
+                ).to_crs(epsg=4269)
+
+        if not isinstance(locality, Locality):
+            locality = self.db.localities[locality]
+
+        if not isinstance(layer, GeoLayer):
+            layer = self.db.geo_layers[layer]
+
         self.__validate_load_types(
             df=df,
             namespace=namespace,
@@ -867,13 +961,6 @@ class WriteContext:
             upsert_geos=upsert_geos,
             allow_empty_polys=allow_empty_polys,
         )
-
-        if create_geos or upsert_geos:
-            if not isinstance(locality, Locality):
-                locality = self.db.localities[locality]
-
-            if not isinstance(layer, GeoLayer):
-                layer = self.db.geo_layers[layer]
 
         if create_geos:
             self.__create_geos(
@@ -897,7 +984,7 @@ class WriteContext:
                 allow_empty_polys=allow_empty_polys,
             )
         if upsert_geos:
-            self.__upsert_geos(
+            self.__upsert_geos(  # pragma: no cover
                 df=df,
                 namespace=namespace,
                 locality=locality,
@@ -913,11 +1000,14 @@ class WriteContext:
         # is significantly different from a data transfer perspective in the
         # average case.
         if not isinstance(columns, dict):
-            columns = {c: self.columns.get(c) for c in df.columns}
+            columns = {
+                c: self.columns.get(c)
+                for c in df.columns
+                if c not in ["geometry", "internal_point"]
+            }
 
-        asyncio.run(
-            _load_column_values(self.columns, df, columns, batch_size, max_conns)
-        )
+        log.debug("LOADING COLUMN VALUES")
+        _run(_load_column_values(self.columns, df, columns, batch_size, max_conns))
 
         log.debug("FINISHED LOADING DATAFRAME")
 
@@ -956,7 +1046,7 @@ async def _load_geos(
     # what can be retried? etc.
     for result in results:
         if isinstance(result, Exception):
-            raise result
+            raise result  # pragma: no cover
 
 
 async def _update_geos(
@@ -983,7 +1073,7 @@ async def _update_geos(
     # what can be retried? etc.
     for result in results:
         if isinstance(result, Exception):
-            raise result
+            raise result  # pragma: no cover
 
 
 async def _load_column_values(
@@ -1021,4 +1111,4 @@ async def _load_column_values(
     # what can be retried? etc.
     for result in results:
         if isinstance(result, Exception):
-            raise result
+            raise result  # pragma: no cover

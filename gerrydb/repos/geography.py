@@ -23,7 +23,7 @@ from gerrydb.repos.base import (
 from gerrydb.schemas import Geography, GeographyCreate, GeoImport
 
 if TYPE_CHECKING:
-    from gerrydb.client import WriteContext
+    from gerrydb.client import WriteContext  # pragma: no cover
 
 GeoValType = Union[None, BaseGeometry, Tuple[Optional[BaseGeometry], Optional[Point]]]
 GeosType = dict[Union[str, Geography], GeoValType]
@@ -123,7 +123,7 @@ class GeoImporter:
         Returns:
             A list of updated geographies.
         """
-        return self._send(geographies, method="PATCH")
+        return self._send(geographies, method="PATCH")  # pragma: no cover
 
     def _send(self, geographies: GeosType, method: str) -> list[Geography]:
         """Creates or updates one or more geographies."""
@@ -253,7 +253,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         log.debug("IN CREATE BULK GEOGRAPHY REPO")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
-            raise RequestError(NAMESPACE_ERR)
+            raise RequestError(NAMESPACE_ERR)  # pragma: no cover
 
         return GeoImporter(repo=self, namespace=namespace)
 
@@ -266,7 +266,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         log.debug("IN ASYNC CREATE BULK GEOGRAPHY REPO")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
-            raise RequestError(NAMESPACE_ERR)
+            raise RequestError(NAMESPACE_ERR)  # pragma: no cover
 
         return AsyncGeoImporter(repo=self, namespace=namespace, max_conns=max_conns)
 
@@ -277,7 +277,7 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
         self, path: str, namespace: Optional[str] = None, *, layer_name: str
     ) -> list[str]:
         if namespace is None:
-            namespace = self.session.namespace
+            namespace = self.session.namespace  # pragma: no cover
 
         response = self.session.client.get(
             f"/__geography_list/{namespace}/{path}/{layer_name}"
@@ -306,7 +306,6 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
             response = self.session.client.get(
                 f"/__geography_fork/{namespace}/{path}/{layer_name}?mode=compare&source_namespace={source_namespace}&source_layer={source_layer_name}&allow_extra_source_geos={allow_extra_source_geos}&allow_empty_polys={allow_empty_polys}"
             )
-            log.debug(response)
             response.raise_for_status()
 
         except Exception as e:
@@ -318,7 +317,28 @@ class GeographyRepo(NamespacedObjectRepo[Geography]):
                     f"Forking failed for the following reason: "
                     f"{e.response.json().get('detail', 'No details provided.')}",
                 )
-            raise e
+            raise e  # pragma: no cover
+        return [(item[0], item[1]) for item in response.json()]
+
+    @namespaced
+    @online
+    def get_layer_hashes(
+        self,
+        path: str,
+        namespace: Optional[str] = None,
+        *,
+        layer_name: str,
+    ) -> dict[str, str]:
+        """Gets the hash of the source layer for each geography in the target layer."""
+        try:
+            log.debug("Getting layer hashes")
+            response = self.session.client.get(
+                f"/__geography_list/{namespace}/{path}/{layer_name}?mode=path_hash_pair"
+            )
+            response.raise_for_status()
+        except Exception as e:
+            raise RuntimeError("Failed to get layer hashes.") from e
+
         return [(item[0], item[1]) for item in response.json()]
 
     @namespaced

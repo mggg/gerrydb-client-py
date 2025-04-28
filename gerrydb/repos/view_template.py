@@ -15,7 +15,7 @@ from gerrydb.logging import log
 
 
 def _normalize_columns(
-    namespace: str, columns: Collection[Union[Column, str]]
+    namespace: str, columns: Collection[Union[Column, str, tuple[str, str]]]
 ) -> list[str]:
     """
     Constructs normalized paths of the columns objects that are passed in.
@@ -29,31 +29,41 @@ def _normalize_columns(
     """
     return_list = []
 
-    for item in columns:
-        if isinstance(item, Column):
-            return_list.append(item.path_with_resource)
-        else:
-            item = normalize_path(item)
+    for col in columns:
+        if isinstance(col, Column):
+            return_list.append(col.path_with_resource)
+        elif isinstance(col, str):
+            item = normalize_path(col)
             split_path = item.split("/")
             if len(split_path) == 1:
                 return_list.append(f"/columns/{namespace}/{split_path[0]}")
             elif len(split_path) == 2:
-                return_list.append(f"columns/{split_path[0]}/{split_path[1]}")
+                return_list.append(f"/columns/{split_path[0]}/{split_path[1]}")
             elif len(split_path) == 3:
                 if split_path[0] != "columns":
-                    raise ValueError(f"Invalid column path: {item}")
-                return_list.append(f"{split_path[0]}/{split_path[1]}/{split_path[2]}")
+                    raise ValueError(f"Invalid column path: {col}")
+                return_list.append(f"/{split_path[0]}/{split_path[1]}/{split_path[2]}")
             else:
                 raise ValueError(
                     f"Column path must be in the form of either "
                     "/columns/namespace/column_name or just column_name"
                 )
+        elif isinstance(col, tuple):
+            if len(col) != 2:
+                raise ValueError(
+                    f"When passing a tuple, it must be of the form (namespace, column_name)"
+                )
+            return_list.append(f"/columns/{col[0]}/{col[1]}")
+        else:
+            raise ValueError(
+                f"Invalid column type: {type(col)}. Must be a Column, str, or tuple."
+            )
 
     return return_list
 
 
 def _normalize_column_sets(
-    namespace: str, column_sets: Collection[Union[ColumnSet, str]]
+    namespace: str, column_sets: Collection[Union[ColumnSet, str, tuple[str, str]]]
 ) -> list[str]:
     """
     Constructs normalized paths of the column sets objects that are passed in.
@@ -67,11 +77,11 @@ def _normalize_column_sets(
     """
     return_list = []
 
-    for item in column_sets:
-        if isinstance(item, ColumnSet):
-            return_list.append(item.path_with_resource)
-        else:
-            item = normalize_path(item)
+    for col in column_sets:
+        if isinstance(col, ColumnSet):
+            return_list.append(col.path_with_resource)
+        elif isinstance(col, str):
+            item = normalize_path(col)
             split_path = item.split("/")
             if len(split_path) == 1:
                 return_list.append(f"/column-sets/{namespace}/{split_path[0]}")
@@ -79,13 +89,23 @@ def _normalize_column_sets(
                 return_list.append(f"/column-sets/{split_path[0]}/{split_path[1]}")
             elif len(split_path) == 3:
                 if split_path[0] != "column-sets":
-                    raise ValueError(f"Invalid column set path: {item}")
-                return_list.append(f"/{split_path[0]}/{namespace}/{split_path[-1]}")
+                    raise ValueError(f"Invalid column set path: {col}")
+                return_list.append(f"/{split_path[0]}/{split_path[1]}/{split_path[2]}")
             else:
                 raise ValueError(
                     f"Column_set path must be in the form of either "
                     "/column-sets/namespace/column_set_name or just column_set_name"
                 )
+        elif isinstance(col, tuple):
+            if len(col) != 2:
+                raise ValueError(
+                    f"When passing a tuple, it must be of the form (namespace, column_set_name)"
+                )
+            return_list.append(f"/column-sets/{col[0]}/{col[1]}")
+        else:
+            raise ValueError(
+                f"Invalid column set type: {type(col)}. Must be a ColumnSet, str, or tuple."
+            )
 
     log.debug("COLUMN SETS: %s", return_list)
     return return_list
@@ -103,8 +123,10 @@ class ViewTemplateRepo(NamespacedObjectRepo[ViewTemplate]):
         path: str,
         namespace: Optional[str] = None,
         *,
-        columns: Optional[Collection[Union[Column, str]]] = list(),
-        column_sets: Optional[Collection[Union[ColumnSet, str]]] = list(),
+        columns: Optional[Collection[Union[Column, str, tuple[str, str]]]] = list(),
+        column_sets: Optional[
+            Collection[Union[ColumnSet, str, tuple[str, str]]]
+        ] = list(),
         description: str,
     ) -> ViewTemplate:
         """Creates a view template.

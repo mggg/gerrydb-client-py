@@ -15,7 +15,7 @@ from gerrydb.schemas import Namespace, NamespaceCreate
 
 
 if TYPE_CHECKING:
-    from gerrydb.client import GerryDB, WriteContext
+    from gerrydb.client import GerryDB, WriteContext  # pragma: no cover
 
 
 @dataclass(frozen=True)

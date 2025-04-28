@@ -55,3 +55,7 @@ class GerryPathError(GerryDBError):
 
 class ForkingError(GerryDBError):
     """Raised when a migration cannot be performed."""
+
+
+class GraphCreateError(GerryDBError):
+    """Raised when a graph cannot be created."""

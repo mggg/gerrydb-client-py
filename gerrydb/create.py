@@ -11,6 +11,7 @@ from gerrydb.exceptions import ResultError
 @click.group()
 def cli():
     """Creates GerryDB resources."""
+    pass
 
 
 @cli.command()
@@ -51,4 +52,4 @@ def geo_layer(path: str, description: str, namespace: str, source_url: Optional[
 
 
 if __name__ == "__main__":
-    cli()
+    cli()  # pragma: no cover
