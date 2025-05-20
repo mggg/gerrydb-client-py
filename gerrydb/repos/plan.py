@@ -1,4 +1,5 @@
 """Repository for districting plans."""
+
 from typing import Optional, Union
 
 from gerrydb.repos.base import (

@@ -1,4 +1,5 @@
 """Repository for namespaces."""
+
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
@@ -8,11 +9,13 @@ from gerrydb.repos.base import (
     normalize_path,
     online,
     write_context,
+    normalize_path,
 )
 from gerrydb.schemas import Namespace, NamespaceCreate
 
+
 if TYPE_CHECKING:
-    from gerrydb.client import GerryDB, WriteContext
+    from gerrydb.client import GerryDB, WriteContext  # pragma: no cover
 
 
 @dataclass(frozen=True)
@@ -77,12 +80,14 @@ class NamespaceRepo(NamespacedObjectRepo):
         Returns:
             The new namespace.
         """
+        path = normalize_path(path, path_length=1)
         response = self.ctx.client.post(
             "/namespaces/",
             json=NamespaceCreate(
                 path=path, public=public, description=description
             ).dict(),
         )
+
         response.raise_for_status()
 
         return Namespace(**response.json())

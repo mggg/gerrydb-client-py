@@ -2,6 +2,7 @@
 
 This file should be kept in sync with the server-side version.
 """
+
 from datetime import datetime
 from enum import Enum
 from typing import Any, Optional, Union
@@ -15,7 +16,10 @@ from shapely.geometry.base import BaseGeometry
 
 UserEmail = constr(max_length=254)
 
-GerryPath = constr(regex=r"[a-z0-9][a-z0-9-_/]*")
+# constr is a constrained string, so this is some path that needs to satisfy this regex
+GerryPath = constr(
+    regex=r"[a-z0-9][a-z0-9-_/]*"
+)  # must start with lowercase or digit, then followed by any lowercase, digit, hyphen, underscore, slash
 NamespacedGerryPath = constr(regex=r"[a-z0-9/][a-z0-9-_/]*")
 
 NATIVE_PROJ = pyproj.CRS("EPSG:4269")
@@ -56,7 +60,7 @@ class ScopeType(str, Enum):
     ALL = "all"
 
     def __str__(self):
-        return self.value
+        return self.value  # pragma: no cover
 
 
 class BaseModel(PydanticBaseModel):
@@ -125,7 +129,7 @@ class Locality(LocalityBase):
     aliases: list[GerryPath]
     meta: ObjectMeta
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         if self.parent_path is None:
             return f"Locality: {self.name} ({self.canonical_path})"
         return f"Locality: {self.name} ({self.canonical_path} → {self.parent_path})"
@@ -275,7 +279,7 @@ class Geography(GeographyBase):
     valid_from: datetime
 
     @property
-    def full_path(self):
+    def full_path(self):  # pragma: no cover
         """The path of the geography, including its namespace."""
         return f"/{self.namespace}/{self.path}"
 
@@ -400,7 +404,7 @@ class GraphMeta(GraphBase):
     created_at: datetime
 
     @property
-    def full_path(self):
+    def full_path(self):  # pragma: no cover
         """The path of the geography, including its namespace."""
         return f"/{self.namespace}/{self.path}"
 
@@ -427,6 +431,19 @@ class ViewCreate(ViewBase):
 
     valid_at: Optional[datetime] = None
     proj: Optional[str] = None
+
+    class Config:
+        # Whenever you call model.json(), turn datetimes into ISO strings
+        json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")}
+
+    def dict(self, *args, **kwargs):
+        data = super().dict(*args, **kwargs)
+
+        # now post‑process valid_at if it's still a datetime
+        va = data.get("valid_at")
+        if isinstance(va, datetime):
+            data["valid_at"] = va.strftime("%Y-%m-%d %H:%M:%S.%fZ")
+        return data
 
 
 class ViewMeta(ViewBase):

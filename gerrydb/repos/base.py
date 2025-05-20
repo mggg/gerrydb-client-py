@@ -1,16 +1,24 @@
 """Base objects and utilities for GerryDB API object repositories."""
+
 from dataclasses import dataclass
 from functools import wraps
-from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar
+from typing import TYPE_CHECKING, Callable, Generic, Optional, Tuple, TypeVar, Union
 
 import httpx
 import pydantic
 
-from gerrydb.exceptions import OnlineError, RequestError, ResultError, WriteContextError
+from gerrydb.exceptions import (
+    OnlineError,
+    RequestError,
+    ResultError,
+    WriteContextError,
+    GerryPathError,
+)
 from gerrydb.schemas import BaseModel
+from gerrydb.logging import log
 
 if TYPE_CHECKING:
-    from gerrydb.client import GerryDB, WriteContext
+    from gerrydb.client import GerryDB, WriteContext  # pragma: no cover
 
 
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
@@ -103,21 +111,60 @@ def write_context(func: Callable) -> Callable:
     return write_context_wrapper
 
 
-def normalize_path(path: str) -> str:
-    """Normalizes a path (removes leading, trailing, and duplicate slashes)."""
-    return "/".join(seg for seg in path.lower().split("/") if seg)
+# These characters are most likely to appear in the resource_id part of
+# a path (typically the last segment). Exclusion of these characters
+# prevents ogr2ogr fails and helps protect against malicious code injection.
+INVALID_PATH_SUBSTRINGS = set(
+    {
+        "..",
+        " ",
+        ";",
+    }
+)
 
 
-def parse_path(path: str) -> Tuple[str, str]:
-    """Breaks a namespaced path (`/<namespace>/<path>`) into two parts."""
-    parts = path.split("/")
-    try:
-        return parts[1], "/".join(parts[2:])
-    except IndexError:
-        raise KeyError(
-            "Namespaced paths must contain a namespace and a "
-            "namespace-relative path, i.e. /<namespace>/<path>"
+def normalize_path(
+    path: str, case_sensitive_uid: bool = False, path_length: Optional[int] = None
+) -> str:
+    """Normalizes a path (removes leading, trailing, and duplicate slashes, and
+    lowercases the path if `case_sensitive` is `False`).
+
+    Some paths, such as paths containing GEOIDs, are case-sensitive in the last
+    segment. In these cases, `case_sensitive` should be set to `True`.
+    """
+    for item in INVALID_PATH_SUBSTRINGS:
+        if item in path:
+            raise GerryPathError(
+                f"Invalid path: '{path}'. Please remove or replace the following substring "
+                f"wherever it occurs: '{item}'"
+            )
+
+    if case_sensitive_uid:
+        # Don't make a list with empty things. So substrings like "///" don't
+        # cause issues
+        path_list = [seg for seg in path.strip().split("/") if seg]
+
+        if path_length is not None and len(path_list) != path_length:
+            raise GerryPathError(
+                f"Invalid path: '{path}'. This path has {len(path_list)} segment(s), but "
+                f"should have {path_length}"
+            )
+
+        return "/".join(
+            seg.lower() if i < len(path_list) - 1 else seg
+            for i, seg in enumerate(path_list)
+            if seg
         )
+
+    path_list = [seg for seg in path.strip().lower().split("/") if seg]
+
+    if path_length is not None and len(path_list) != path_length:
+        raise GerryPathError(
+            f"Invalid path: '{path}'. This path has {len(path_list)} segment(s), but "
+            f"should have {path_length}."
+        )
+
+    return "/".join(path_list)
 
 
 class ObjectRepo:
@@ -136,6 +183,7 @@ class NamespacedObjectRepo(Generic[SchemaType]):
     @err("Failed to load objects")
     def all(self, namespace: Optional[str] = None) -> list[SchemaType]:
         """Gets all objects in a namespace."""
+        log.debug(f"Loading all objects from {self.base_url}/{namespace}")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)
@@ -153,14 +201,29 @@ class NamespacedObjectRepo(Generic[SchemaType]):
             RequestError: If the object cannot be read on the server side,
                 or if no namespace is specified.
         """
-        path = normalize_path(path)
+        path = normalize_path(path, case_sensitive_uid="geometries" in self.base_url)
 
         response = self.session.client.get(f"{self.base_url}/{namespace}/{path}")
         response.raise_for_status()
         return self.schema(**response.json())
 
-    def __getitem__(self, path: str) -> Optional[SchemaType]:
-        if path.startswith("/"):
-            namespace, path_in_namespace = parse_path(path)
-            return self.get(path=path_in_namespace, namespace=namespace)
-        return self.get(path=path)
+    def __getitem__(self, key: Union[str, Tuple[str, str]]) -> Optional[SchemaType]:
+        path = key
+        assert isinstance(key, str) or (
+            isinstance(key, tuple)
+            and len(key) == 2
+            and all(isinstance(val, str) for val in key)
+        ), "Key must be a path string or a tuple of two strings (namespace, path)"
+
+        if isinstance(key, str):
+            path = key.strip("/")
+            if len(path.split("/")) != 1:
+                raise GerryPathError(
+                    f"Error parsing '{path}'. Path cannot contain slashes. Please either "
+                    f"pass the name of the path or a (namespace, path) tuple."
+                )
+            return self.get(path=path)
+
+        # Desired namespace for retrieval and namespace of path may differ
+        namespace, path = key
+        return self.get(path=path, namespace=namespace)

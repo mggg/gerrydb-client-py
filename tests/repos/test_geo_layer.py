@@ -1,4 +1,5 @@
 """Integration/VCR tests for geographic layers."""
+
 import pytest
 
 
@@ -6,14 +7,14 @@ import pytest
 def test_geo_layer_repo_create_get(client_ns):
     with client_ns.context(notes="adding a geographic layer") as ctx:
         layer = ctx.geo_layers.create(
-            "blocks/2020",
+            "blocks-2020",
             description="2020 Census blocks",
             source_url="https://www.census.gov/",
         )
 
     assert layer.description == "2020 Census blocks"
-    assert client_ns.geo_layers["blocks/2020"] == layer
-    assert client_ns.geo_layers[f"/{client_ns.namespace}/blocks/2020"] == layer
+    assert client_ns.geo_layers["blocks-2020"] == layer
+    assert client_ns.geo_layers[(f"{client_ns.namespace}", "blocks-2020")] == layer
 
 
 @pytest.mark.vcr

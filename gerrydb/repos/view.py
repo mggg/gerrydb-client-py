@@ -1,14 +1,18 @@
 """Repository for views."""
+
 import json
+import io
 import sqlite3
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Generator, Optional, Union
+import tempfile
 
 import geopandas as gpd
 import networkx as nx
 import pandas as pd
 import shapely.wkb
+from shapely.geometry import Point
 from shapely.geometry.base import BaseGeometry
 
 from gerrydb.exceptions import ViewLoadError
@@ -32,6 +36,10 @@ from gerrydb.schemas import (
     ViewMeta,
     ViewTemplate,
 )
+from gerrydb.logging import log
+import numpy as np
+import time
+
 
 _EXPECTED_META_KEYS = {
     "namespace",
@@ -56,15 +64,22 @@ _GPKG_ENVELOPE_BYTES = {
     4: 64,
 }
 
-try:
-    import gerrychain
-except ImportError:
-    gerrychain = None
+try:  # pragma: no cover
+    import gerrychain  # pragma: no cover
+except ImportError:  # pragma: no cover
+    gerrychain = None  # pragma: no cover
 
 
 def _load_gpkg_geometry(geom: bytes) -> BaseGeometry:
     """Loads a geometry from a raw GeoPackage WKB blob."""
     # header format: https://www.geopackage.org/spec/#gpb_format
+    if geom == None:
+        raise ValueError("Invalid GeoPackage geometry: empty geometry.")
+
+    if not geom.startswith(b"GP"):
+        # pure WKB → hand it straight to Shapely
+        return shapely.wkb.loads(geom)  # pragma: no cover
+
     envelope_flag = (geom[3] & 0b00001110) >> 1
     try:
         envelope_bytes = _GPKG_ENVELOPE_BYTES[envelope_flag]
@@ -106,10 +121,49 @@ class View:
         self._conn = conn
 
     @classmethod
-    def from_gpkg(cls, path: Path) -> "View":
+    def from_gpkg(cls, path: Path | io.BytesIO) -> "View":
         """Loads a view from a GeoPackage."""
-        conn = sqlite3.connect(path)
+        log.debug("in view.from_gpkg")
+        start = time.perf_counter()
+        if isinstance(path, io.BytesIO):
+            path.seek(0)
+            raw = path.read()
 
+            # Detect whether we got a real gpkg blob or SQL text
+            is_binary = raw.startswith(b"SQLite format 3")
+            if is_binary:
+                # .gpkg bytes
+                tmp = tempfile.NamedTemporaryFile(suffix=".gpkg", delete=False)
+                tmp.write(raw)
+                tmp.flush()
+                tmp.close()
+                path = Path(tmp.name)
+                conn = sqlite3.connect(str(path))
+
+            else:
+                # SQL dump
+                mem = sqlite3.connect(":memory:")
+                sql = raw.decode("utf-8")
+                if sqlite3.sqlite_version_info < (3, 33, 0):
+                    sql = sql.replace(
+                        "sqlite_schema", "sqlite_master"
+                    )  # pragma: no cover
+
+                mem.executescript(sql)
+
+                tmp = tempfile.NamedTemporaryFile(suffix=".gpkg", delete=False)
+                tmp.close()
+                disk = sqlite3.connect(tmp.name)
+                mem.backup(disk)  # fast C-level copy
+                disk.close()
+                mem.close()
+
+                path = Path(tmp.name)
+                conn = sqlite3.connect(str(path))
+        else:
+            conn = sqlite3.connect(path)
+
+        log.debug("Loading view from %s", path)
         tables = conn.execute(
             "SELECT name FROM sqlite_master WHERE "
             "type ='table' AND name NOT LIKE 'sqlite_%'"
@@ -128,22 +182,30 @@ class View:
             raise ViewLoadError(
                 f"Cannot load view metadata. (missing keys: {', '.join(missing_keys)})"
             )
-        return cls(meta=ViewMeta(**raw_meta), gpkg_path=path, conn=conn)
+        ret = cls(meta=ViewMeta(**raw_meta), gpkg_path=path, conn=conn)
+        end = time.perf_counter()
+        log.debug(f"Time to convert gpkg: {end - start}")
+        return ret
 
     def to_df(
         self, plans: bool = False, internal_points: bool = False
     ) -> gpd.GeoDataFrame:
         """Loads the view as a GeoDataFrame."""
+        log.debug("The gpkg path is %s", self._gpkg_path)
+        log.debug("The layer is %s", self.path)
         gdf = gpd.read_file(self._gpkg_path, layer=self.path).set_index("path")
 
         if plans:
-            # TODO: handle missing plans table.
-            plans_df = pd.read_sql_query(
-                "SELECT * FROM gerrydb_plan_assignment",
-                self._conn,
-                index_col="path",
-            )
-            gdf = gdf.join(plans_df)
+            try:
+                plans_df = pd.read_sql_query(
+                    "SELECT * FROM gerrydb_plan_assignment",
+                    self._conn,
+                    index_col="path",
+                )
+                gdf = gdf.join(plans_df)
+            except pd.errors.DatabaseError:
+                log.debug("No plans table found. Skipping plans.")
+                pass
 
         if internal_points:
             internal_points_gdf = (
@@ -151,20 +213,23 @@ class View:
                 .set_index("path")
                 .rename(columns={"geometry": "internal_point"})
             )
+            internal_points_gdf["internal_point"] = internal_points_gdf[
+                "internal_point"
+            ].map(
+                lambda x: (
+                    x if (x is not None) and (x != Point(np.nan, np.nan)) else Point()
+                )
+            )
             gdf = gdf.join(internal_points_gdf)
 
         return gpd.GeoDataFrame(gdf)
 
     def _plan_cols(self) -> list[str]:
         """Gets plan identifiers in the GeoPackage."""
-        try:
-            raw_plan_cols = self._conn.execute(
-                "SELECT name from pragma_table_info('gerrydb_plan_assignment')",
-            ).fetchall()
-            return [row[0] for row in raw_plan_cols]
-        except sqlite3.OperationalError:
-            # No plans table.
-            return []
+        raw_plan_cols = self._conn.execute(
+            "SELECT name from pragma_table_info('gerrydb_plan_assignment')",
+        ).fetchall()
+        return [row[0] for row in raw_plan_cols]
 
     def to_graph(self, plans: bool = True, geometry: bool = False) -> nx.Graph:
         """Loads the view as a NetworkX graph."""
@@ -176,14 +241,7 @@ class View:
         columns = [row[0] for row in raw_cols if row[0] not in excluded_cols]
         prefixed_columns = [f"{self.path}.{col}" for col in columns]
 
-        join_clauses = [
-            # (
-            #    "JOIN gerrydb_graph_node_area ON "
-            #    f"{self.path}.path = gerrydb_graph_node_area.path"
-            # )
-        ]
-        # columns.append("area")
-        # prefixed_columns.append("gerrydb_graph_node_area.area")
+        join_clauses = []
 
         if plans:
             # Join plan assignment columns.
@@ -244,7 +302,7 @@ class View:
 
         return graph
 
-    def to_chain(
+    def to_partition_dict(
         self,
         updaters: Optional[dict[str, Callable]] = None,
         autotally: bool = True,
@@ -252,7 +310,9 @@ class View:
     ) -> dict[str, "gerrychain.Partition"]:
         """Converts a view's complete plans to GerryChain `Partition` objects."""
         if gerrychain is None:
-            raise ImportError("GerryChain must be installed to load partitions.")
+            raise ImportError(
+                "GerryChain must be installed to load partitions."
+            )  # pragma: no cover
 
         graph = self.to_graph(plans=True, geometry=geo_graph)
 
@@ -260,7 +320,9 @@ class View:
         if autotally:
             for member in self.template.members:
                 if isinstance(member, Column) and member.kind == ColumnKind.COUNT:
-                    updaters[member.path] = gerrychain.updaters.Tally(member.path)
+                    updaters[member.path] = gerrychain.updaters.Tally(
+                        member.path
+                    )  # pragma: no cover
 
         plan_columns = self._plan_cols()
         return {
@@ -275,14 +337,14 @@ class View:
         raw_geo_meta = self._conn.execute(
             "SELECT meta_id, value FROM gerrydb_geo_meta"
         ).fetchone()
-        geo_meta = {row[0]: ObjectMeta(**json.loads(row[1])) for row in raw_geo_meta}
+        geo_meta = {raw_geo_meta[0]: ObjectMeta(**json.loads(raw_geo_meta[1]))}
 
         raw_geos = self._conn.execute(
             f"""SELECT {self.path}.path, geography, internal_point, meta_id, valid_from
             FROM {self.path}
             JOIN {self.path}__internal_points
             ON {self.path}.path = {self.path}__internal_points.path
-            JOIN gerrydb_geo_meta
+            JOIN gerrydb_geo_attrs
             ON {self.path}.path = gerrydb_geo_attrs.path
             """
         )
@@ -292,8 +354,20 @@ class View:
                 geography=_load_gpkg_geometry(geo_row[1]),
                 internal_point=_load_gpkg_geometry(geo_row[2]),
                 meta=geo_meta[geo_row[3]],
+                namespace=self.namespace,
                 valid_from=geo_row[4],
             )
+
+    @property
+    def values(self) -> list[str]:
+        raw_paths = self._conn.execute(f"""PRAGMA table_info({self.path})""")
+        raw_paths = self.to_df().columns
+
+        ret = []
+        for item in raw_paths:
+            if item not in ["geometry"]:
+                ret.append(f"/{self.namespace}/{item}")
+        return ret
 
 
 class ViewRepo(NamespacedObjectRepo[ViewMeta]):
@@ -314,6 +388,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         graph: Optional[Union[str, Graph, GraphMeta]] = None,
         valid_at: Optional[datetime] = None,
         proj: Optional[str] = None,
+        use_locality_proj: bool = False,
     ) -> View:
         """Creates a view.
 
@@ -338,27 +413,55 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         Returns:
             The new view.
         """
+        start = time.perf_counter()
+        log.debug("TOP OF CREATE VIEW")
+        if valid_at is None:
+            valid_at = datetime.now(timezone.utc)
+
+        if isinstance(locality, str):
+            locality = self.session.localities[locality]
+        if proj is None and use_locality_proj:
+            proj = locality.default_proj
+        elif proj is None:
+            proj = "epsg:4269"
+
+        payload = ViewCreate(
+            path=path,
+            template=template if isinstance(template, str) else template.full_path,
+            locality=(
+                locality if isinstance(locality, str) else locality.canonical_path
+            ),
+            layer=layer if isinstance(layer, str) else layer.full_path,
+            graph=(
+                None
+                if graph is None
+                else (graph if isinstance(graph, str) else graph.full_path)
+            ),
+            valid_at=valid_at,
+            proj=proj,
+        )
+
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
-            json=ViewCreate(
-                path=path,
-                template=template if isinstance(template, str) else template.full_path,
-                locality=(
-                    locality if isinstance(locality, str) else locality.canonical_path
-                ),
-                layer=layer if isinstance(layer, str) else layer.full_path,
-                graph=(
-                    None
-                    if graph is None
-                    else (graph if isinstance(graph, str) else graph.full_path)
-                ),
-                valid_at=valid_at,
-                proj=proj,
-            ).dict(),
+            json=payload.dict(),
+            timeout=10000,
         )
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            log.error(f"{e}")
+            log.error(
+                f"Failed to create view. Details: {response.json().get('detail', 'No details provided.')}"
+            )
+            raise e
+        end = time.perf_counter()
+        log.debug(f"Time to create view: {end - start}")
+        start = time.perf_counter()
         view_meta = ViewMeta(**response.json())
+        log.debug(f"Time to parse view: {time.perf_counter() - start}")
+        start = time.perf_counter()
         gpkg_path = self._get(path=view_meta.path, namespace=view_meta.namespace)
+        log.debug(f"Time to get gpkg_path: {time.perf_counter() - start}")
         return View.from_gpkg(gpkg_path)
 
     @namespaced
@@ -367,6 +470,7 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
         self,
         path: str,
         namespace: Optional[str] = None,
+        request_timeout: int = 1200,
     ) -> View:
         """Gets a view.
 
@@ -375,30 +479,38 @@ class ViewRepo(NamespacedObjectRepo[ViewMeta]):
                 if the parameters fail validation, or if no namespace is provided.
         """
         gpkg_path = self.session.cache.get_view_gpkg(
-            namespace=normalize_path(namespace), path=normalize_path(path)
+            namespace=normalize_path(namespace, path_length=1),
+            path=normalize_path(path),
         )
         if gpkg_path is None:
-            gpkg_path = self._get(path, namespace)
+            gpkg_path = self._get(path, namespace, request_timeout)
         return View.from_gpkg(gpkg_path)
 
-    def _get(self, path: str, namespace: str) -> Path:
+    def _get(self, path: str, namespace: str, request_timeout: int = 1200) -> Path:
         """Downloads view data as a GeoPackage."""
         # Generate a new render (assuming the view exists).
+        # These can take a long time to render depending on the size of the view.
         gpkg_response = self.session.client.post(
             f"{self.base_url}/{namespace}/{path}",
+            timeout=request_timeout,
         )
+
         if gpkg_response.status_code >= 400:
             gpkg_response.raise_for_status()
-        if gpkg_response.next_request is not None:
+        if gpkg_response.next_request is not None:  # pragma: no cover
             # Redirect to Google Cloud Storage (probably).
-            gpkg_response = self.session.client.get(gpkg_response.next_request.url)
-            gpkg_response.raise_for_status()
-            gpkg_render_id = gpkg_response.headers["x-goog-meta-gerrydb-view-render-id"]
+            gpkg_response = self.session.client.get(
+                gpkg_response.next_request.url
+            )  # pragma: no cover
+            gpkg_response.raise_for_status()  # pragma: no cover
+            gpkg_render_id = gpkg_response.headers[
+                "x-goog-meta-gerrydb-view-render-id"
+            ]  # pragma: no cover
         else:
             gpkg_render_id = gpkg_response.headers["x-gerrydb-view-render-id"]
 
         return self.session.cache.upsert_view_gpkg(
-            namespace=normalize_path(namespace),
+            namespace=normalize_path(namespace, path_length=1),
             path=normalize_path(path),
             render_id=gpkg_render_id,
             content=gpkg_response.content,

@@ -37,5 +37,25 @@ class CacheInitError(CacheError):
     """Raised when a GerryDB cache cannot be initialized."""
 
 
+class CacheObjectError(CacheError):
+    """Raised when the cache cannot load an object."""
+
+
 class ViewLoadError(GerryDBError):
     """Raised when a view cannot be loaded (e.g. from a GeoPackage)."""
+
+
+class GraphLoadError(GerryDBError):
+    """Raised when a graph cannot be loaded (e.g. from a GeoPackage)."""
+
+
+class GerryPathError(GerryDBError):
+    """Raised when an invalid path is provided. Generally, this means invalid characters are present"""
+
+
+class ForkingError(GerryDBError):
+    """Raised when a migration cannot be performed."""
+
+
+class GraphCreateError(GerryDBError):
+    """Raised when a graph cannot be created."""

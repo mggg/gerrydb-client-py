@@ -1,4 +1,5 @@
 """Repository for columns."""
+
 from typing import Any, Optional, Union
 
 import httpx
@@ -10,6 +11,7 @@ from gerrydb.repos.base import (
     namespaced,
     online,
     write_context,
+    normalize_path,
 )
 from gerrydb.schemas import (
     Column,
@@ -20,6 +22,8 @@ from gerrydb.schemas import (
     ColumnValue,
     Geography,
 )
+
+from gerrydb.logging import log
 
 
 class ColumnRepo(NamespacedObjectRepo[Column]):
@@ -63,6 +67,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Returns:
             Metadata for the new column.
         """
+        path = normalize_path(path)
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
             json=ColumnCreate(
@@ -101,12 +106,30 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Returns:
             The updated column.
         """
+        clean_path = normalize_path(f"{self.base_url}/{namespace}/{path}")
         response = self.ctx.client.patch(
-            f"{self.base_url}/{namespace}/{path}",
+            clean_path,
             json=ColumnPatch(aliases=aliases).dict(),
         )
         response.raise_for_status()
 
+        return Column(**response.json())
+
+    @err("Failed to retrieve column names")
+    @online
+    def all(self) -> list[str]:
+        response = self.session.client.get(f"/columns/{self.session.namespace}")
+        response.raise_for_status()
+
+        return [Column(**item) for item in response.json()]
+
+    @err("Failed to retrieve column")
+    @online
+    @namespaced
+    def get(self, path: str, namespace: str = None) -> Column:
+        path = normalize_path(path)
+        response = self.session.client.get(f"/columns/{self.session.namespace}/{path}")
+        response.raise_for_status()
         return Column(**response.json())
 
     @err("Failed to set column values")
@@ -115,15 +138,20 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
     @online
     def set_values(
         self,
-        path_or_col: Union[Column, str],
+        path: Optional[str] = None,
         namespace: Optional[str] = None,
         *,
+        col: Optional[Column] = None,
         values: dict[Union[str, Geography], Any],
     ) -> None:
         """Sets the values of a column on a collection of geographies.
 
         Args:
-            path_or_col: Short identifier for the column or a `Column` metadata object.
+            path: Short identifier for the column. Only this or `col` should be provided.
+                If both are provided, the path attribute of `col` will be used in place
+                of the passed `path` argument.
+            col: `Column` metadata object. If the `path` is not provided, the column's
+                path will be used.
             namespace: Namespace of the column (used when `path_or_col` is a raw path).
             values:
                 A mapping from geography paths or `Geography` metadata objects
@@ -132,10 +160,17 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Raises:
             RequestError: If the values cannot be set on the server side.
         """
-        path = path_or_col.path if isinstance(path_or_col, Column) else path_or_col
+        assert path is None or isinstance(path, str)
+        assert col is None or isinstance(col, Column)
+
+        if path is None and col is None:
+            raise ValueError("Either `path` or `col` must be provided.")
+
+        path = col.path if col is not None else path
+        clean_path = normalize_path(f"{self.base_url}/{namespace}/{path}")
 
         response = self.ctx.client.put(
-            f"{self.base_url}/{namespace}/{path}",
+            clean_path,
             json=[
                 ColumnValue(
                     path=(
@@ -158,16 +193,21 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
     @online
     async def async_set_values(
         self,
-        path_or_col: Union[Column, str],
+        path: Optional[str] = None,
         namespace: Optional[str] = None,
         *,
+        col: Optional[Column] = None,
         values: dict[Union[str, Geography], Any],
         client: Optional[httpx.AsyncClient] = None,
     ) -> None:
         """Asynchronously sets the values of a column on a collection of geographies.
 
         Args:
-            path_or_col: Short identifier for the column or a `Column` metadata object.
+            path: Short identifier for the column. Only this or `col` should be provided.
+                If both are provided, the path attribute of `col` will be used in place
+                of the passed `path` argument.
+            col: `Column` metadata object. If the `path` is not provided, the column's
+                path will be used.
             namespace: Namespace of the column (used when `path_or_col` is a raw path).
             values:
                 A mapping from geography paths or `Geography` metadata objects
@@ -178,7 +218,14 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         Raises:
             RequestError: If the values cannot be set on the server side.
         """
-        path = path_or_col.path if isinstance(path_or_col, Column) else path_or_col
+        assert path is None or isinstance(path, str)
+        assert col is None or isinstance(col, Column)
+
+        if path is None and col is None:
+            raise ValueError("Either `path` or `col` must be provided.")
+
+        path = col.path if col is not None else path
+        clean_path = normalize_path(f"{self.base_url}/{namespace}/{path}")
 
         ephemeral_client = client is None
         if ephemeral_client:
@@ -186,29 +233,34 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             params["transport"] = httpx.AsyncHTTPTransport(retries=1)
             client = httpx.AsyncClient(**params)
 
+        # Peter Note: the geos are generally strings here
+        json = [
+            ColumnValue(
+                path=(
+                    f"/{geo.namespace}/{geo.path}"
+                    if isinstance(geo, Geography)
+                    else geo
+                ),
+                value=_coerce(value),
+            ).dict()
+            for geo, value in values.items()
+        ]
+        log.debug("PUT request to %s", clean_path)
         response = await client.put(
-            f"{self.base_url}/{namespace}/{path}",
-            json=[
-                ColumnValue(
-                    path=(
-                        f"/{geo.namespace}/{geo.path}"
-                        if isinstance(geo, Geography)
-                        else geo
-                    ),
-                    value=_coerce(value),
-                ).dict()
-                for geo, value in values.items()
-            ],
+            clean_path,
+            json=json,
         )
+
+        if response.status_code != 204:
+            log.debug(f"For path = {path} and col = {col} returned {response}")
+
         response.raise_for_status()
 
         if ephemeral_client:
             await client.aclose()
 
-        # TODO: what's the proper caching behavior here?
 
-
-def _coerce(val: Any) -> Any:
+def _coerce(val: Any) -> Any:  # pragma: no cover
     """Coerces values for JSON serialization."""
     if isinstance(val, np.int64):
         return int(val)

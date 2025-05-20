@@ -1,12 +1,15 @@
 """Repository for localities."""
+
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Optional
 
 from gerrydb.repos.base import ObjectRepo, err, normalize_path, online, write_context
 from gerrydb.schemas import Locality, LocalityCreate, LocalityPatch
+from gerrydb.exceptions import ResultError
+from gerrydb.logging import log
 
 if TYPE_CHECKING:
-    from gerrydb.client import GerryDB, WriteContext
+    from gerrydb.client import GerryDB, WriteContext  # pragma: no cover
 
 
 @dataclass(frozen=True)
@@ -35,9 +38,11 @@ class LocalityRepo(ObjectRepo):
         response.raise_for_status()
         return Locality(**response.json())
 
-    @err("Failed to create locality")
-    @write_context
-    @online
+    @err(
+        "Failed to create locality"
+    )  # Decorator for handling HTTP request and Pydantic validation errors
+    @write_context  # Decorator for marking operations that require a write context
+    @online  # Decorator for marking online-only operations
     def create(
         self,
         canonical_path: str,
@@ -66,6 +71,8 @@ class LocalityRepo(ObjectRepo):
         Returns:
             The new locality.
         """
+        # attempts to post the locality (store in webserver)
+        # url, json
         response = self.ctx.client.post(
             "/localities/",
             json=[
@@ -78,8 +85,9 @@ class LocalityRepo(ObjectRepo):
                 ).dict()
             ],
         )
-        response.raise_for_status()
 
+        # checks for errors in the response, if raised, handled by error decorator
+        response.raise_for_status()
         return Locality(**response.json()[0])
 
     @err("Failed to create localities")
@@ -101,13 +109,24 @@ class LocalityRepo(ObjectRepo):
         Returns:
             The new localities.
         """
-        response = self.ctx.client.post(
-            "/localities/",
-            json=[loc.dict() for loc in locs],
-        )
-        response.raise_for_status()
+        loc_list = [-1] * len(locs)
+        for i, loc in enumerate(locs):
+            try:
+                loc_object = self.create(
+                    canonical_path=loc.canonical_path,
+                    name=loc.name,
+                    parent_path=loc.parent_path,
+                    default_proj=loc.default_proj,
+                    aliases=loc.aliases,
+                )
+                loc_list[i] = loc_object
+            except ResultError as e:
+                if "Failed to create canonical path to new location(s)." in e.args[0]:
+                    log.error(f"Failed to create {loc.name}, path already exists")
+                else:
+                    raise e
 
-        return [Locality(**loc) for loc in response.json()]
+        return loc_list
 
     @err("Failed to update locality")
     @write_context
