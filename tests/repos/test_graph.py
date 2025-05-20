@@ -150,7 +150,7 @@ def test_from_gpkg__gpkg_file_loads_graph():
 
 def test_from_gpkg__sql_dump_loads_graph():
     dump_path = FIXTURES / "test_graph_dump.sql"
-    buffer = BytesIO(dump_path.read_bytes())
+    buffer = BytesIO(dump_path.read_text(encoding="utf-8").encode("utf-8"))
 
     graph = DBGraph.from_gpkg(buffer)
     assert isinstance(graph, DBGraph)

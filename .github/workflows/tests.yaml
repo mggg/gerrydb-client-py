@@ -55,11 +55,11 @@ jobs:
 
     - name: Clone backend repo
       run: |
-        git clone --branch dev https://github.com/mggg/gerrydb-meta.git ../gerrydb-meta
+        git clone https://github.com/mggg/gerrydb-meta.git ../gerrydb-meta
     
     - name: Clone etl repo
       run: |
-        git clone --branch dev https://github.com/mggg/gerrydb-etl.git ../gerrydb-etl
+        git clone https://github.com/mggg/gerrydb-etl.git ../gerrydb-etl
 
     - name: Install dependencies
       run: |

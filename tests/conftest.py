@@ -103,14 +103,14 @@ def client_with_ia_layer_loc(ia_dataframe, ia_column_meta):
     ) as ctx:
         try:
             ctx.namespaces.create(
-                path="plan",
+                path="plan_ns",
                 description="gerrydb-client-py plan repository tests",
                 public=True,
             )
         except Exception:
             pass
 
-    client.namespace = "plan"
+    client.namespace = "plan_ns"
 
     with client.context(notes="Importing Iowa counties shapefile") as ctx:
         columns = {

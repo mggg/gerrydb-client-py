@@ -96,7 +96,10 @@ def test_plan_repo_create__unknown_geos(client_with_ia_layer_loc):
         )
 
     with client_ns.context(notes="Uploading a plan for Iowa counties") as ctx:
-        with pytest.raises(ResultError, match="Geographies not in set"):
+        with pytest.raises(
+            ResultError,
+            match="Some geographies in the assigment are not in the set defined by locality",
+        ):
             ctx.plans.create(
                 path="ia_two_county_plan",
                 locality=county_loc,

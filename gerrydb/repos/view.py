@@ -37,7 +37,7 @@ from gerrydb.schemas import (
     ViewTemplate,
 )
 from gerrydb.logging import log
-
+import numpy as np
 import time
 
 
@@ -215,7 +215,11 @@ class View:
             )
             internal_points_gdf["internal_point"] = internal_points_gdf[
                 "internal_point"
-            ].map(lambda x: x if x is not None else Point())
+            ].map(
+                lambda x: (
+                    x if (x is not None) and (x != Point(np.nan, np.nan)) else Point()
+                )
+            )
             gdf = gdf.join(internal_points_gdf)
 
         return gpd.GeoDataFrame(gdf)
