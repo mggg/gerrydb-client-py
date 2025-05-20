@@ -15,7 +15,7 @@ from gerrydb.exceptions import (
     GerryPathError,
 )
 from gerrydb.schemas import BaseModel
-from uvicorn.config import logger as log
+from gerrydb.logging import log
 
 if TYPE_CHECKING:
     from gerrydb.client import GerryDB, WriteContext  # pragma: no cover
@@ -183,6 +183,7 @@ class NamespacedObjectRepo(Generic[SchemaType]):
     @err("Failed to load objects")
     def all(self, namespace: Optional[str] = None) -> list[SchemaType]:
         """Gets all objects in a namespace."""
+        log.debug(f"Loading all objects from {self.base_url}/{namespace}")
         namespace = self.session.namespace if namespace is None else namespace
         if namespace is None:
             raise RequestError(NAMESPACE_ERR)

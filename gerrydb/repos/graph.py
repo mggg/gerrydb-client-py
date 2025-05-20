@@ -9,6 +9,7 @@ from datetime import datetime
 
 from gerrydb.repos.base import (
     NamespacedObjectRepo,
+    err,
     namespaced,
     normalize_path,
     online,
@@ -360,3 +361,15 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
             gpkg_path = self._get(path, namespace, request_timeout)  # pragma: no cover
         log.debug("THE GPKG PATH IS %s", gpkg_path)
         return DBGraph.from_gpkg(gpkg_path)
+
+    @err("Failed to load objects")
+    def all(self, namespace: Optional[str] = None) -> list[GraphMeta]:
+        """Gets all objects in a namespace."""
+        log.debug(f"Loading all objects from {self.base_url}/{namespace}")
+        namespace = self.session.namespace if namespace is None else namespace
+        if namespace is None:
+            raise RequestError(NAMESPACE_ERR)
+
+        response = self.session.client.get(f"{self.base_url}/{namespace}")
+        response.raise_for_status()
+        return [GraphMeta(**obj) for obj in response.json()]
