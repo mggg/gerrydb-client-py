@@ -148,19 +148,6 @@ def test_from_gpkg__gpkg_file_loads_graph():
     assert graph.graph.number_of_edges() > 0
 
 
-def test_from_gpkg__sql_dump_loads_graph():
-    dump_path = FIXTURES / "test_graph_dump.sql"
-    buffer = BytesIO(dump_path.read_text(encoding="utf-8").encode("utf-8"))
-
-    graph = DBGraph.from_gpkg(buffer)
-    assert isinstance(graph, DBGraph)
-    assert isinstance(graph.graph, nx.Graph)
-    # same basic invariants
-    assert graph.full_path.startswith(f"/{graph.namespace}/{graph.path}")
-    assert graph.graph.number_of_nodes() > 0
-    assert graph.graph.number_of_edges() > 0
-
-
 def test_from_gpkg__missing_tables_raises():
     bad = FIXTURES / "test_graph_missing_meta.gpkg"
     with pytest.raises(

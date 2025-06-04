@@ -132,3 +132,95 @@ Other objects, such as localities and geographic layers, can be created through 
 
 ### Importing large datasets (advanced)
 GerryDB's REST API is optimized for data integrity and read performance; bulk data ingestion through this API can be slow and occasionally unreliable due to the inherent properties of large HTTP requests. For loading core datasets in bulk, we use a specialized write context that loads data directly into the PostGIS database in large transactions. For more details, see [gerrydb-etl](https://github.com/mggg/gerrydb-etl).
+
+
+[tool.poetry]
+name = "gerrydb"
+version = "0.2.0"
+description = "Client library for GerryDB."
+authors = ["Parker J. Rule <parker.rule@tufts.edu>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+tomlkit = "^0.13.0"
+msgpack = "^1.1.0"
+httpx = "^0.28.1"
+pydantic = "^1.10.4"
+orjson = "^3.10.0"
+shapely = "^2.0.1"
+python-dateutil = "^2.8.2"
+geopandas = "^1.0.1"
+networkx = "^3.4.2"
+fastapi = "^0.115.12"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.5"
+black = "^24.8.0"
+pytest-vcr = "^1.0.2"
+pytest-cov = "^6.1.0"
+pytest-asyncio = "^0.26.0"
+pytest-httpx = "^0.35.0"
+fiona = ">=1.9,<1.10"
+geopandas = "0.14.4"
+
+[tool.pytest.ini_options]
+markers = [
+    "vcr: mark a test as a vcr test",
+]
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+======================
+
+[tool.poetry]
+name = "gerrydb-meta"
+version = "0.2.0"
+description = ""
+authors = ["Parker J. Rule <parker.rule@tufts.edu>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+SQLAlchemy = {extras = ["postgres"], version = "^2.0.4"}
+pydantic = "^1.10.22"
+GeoAlchemy2 = "^0.17.1"
+psycopg2-binary = "^2.9.3"
+click = "^8.1.3"
+PyYAML = "^6.0"
+utm = "^0.8.1"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.3"
+httpx = "^0.28.1"
+ormsgpack = "^1.2.5"
+gunicorn = "^23.0.0"
+shapely = "^2.0.1"
+orjson = "^3.8.10"
+google-cloud-storage = "^3.1.0"
+google-auth = "^2.17.3"
+networkx = "^3.5.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.1"
+black = "^25.1.0"
+isort = "^6.0.1" 
+alembic = "^1.9.2"
+networkx = "^3.3.0"
+geopandas = "^1.1.0"
+fiona = "^1.10.1"
+pytest-cov = "^6.1.0"
+pytest-asyncio = "^1.0.0"
+pytest-httpx = "^0.35.0"
+sqltap = "^0.3.11"
+msgpack = "^1.1.0"
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+

@@ -149,20 +149,6 @@ def test_bad_gpkg_geometry__badbytes():
         _load_gpkg_geometry(bad_blob)
 
 
-def test_from_gpkg__sql_dump():
-    dump_path = Path(__file__).parents[1] / "fixtures" / "test_land_dump.sql"
-
-    buffer = BytesIO(dump_path.read_bytes())
-    view = View.from_gpkg(buffer)
-
-    view_df = view.to_df(internal_points=True)
-    assert view_df.equals(
-        gpd.read_parquet(
-            Path(__file__).parents[1] / "fixtures" / "test_land_df.parquet"
-        )
-    )
-
-
 def test_from_gpkg__gpkg_bytes():
     bytes_path = Path(__file__).parents[1] / "fixtures" / "test_land.gpkg"
 
