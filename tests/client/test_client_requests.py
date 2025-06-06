@@ -17,7 +17,7 @@ def test_create_write_context(httpx_mock):
         method="POST",
         url="https://example.com/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -36,7 +36,7 @@ def test_create_geos_already_exists_httpx(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -87,7 +87,7 @@ def test_update_geos_already_exists_httpx(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -140,7 +140,7 @@ def test_validate_geo_compatabilty_empty_polys_but_not_explicitly_allowed(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -203,7 +203,7 @@ def test_validate_geo_compatabilty_forking_different_namespaces_errors_emtpy_pol
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -283,7 +283,7 @@ def test_validate_geo_compatabilty_no_known_paths(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -352,7 +352,7 @@ def test_validate_geo_compatabilty_extra_known_paths(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -421,7 +421,7 @@ def test_validate_geo_compatabilty_extra_df_paths(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -487,7 +487,7 @@ def test_validate_columsn_bad_column_type(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -512,7 +512,7 @@ def test_validate_columns_bad_column_formats(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -560,7 +560,7 @@ def test_validate_columns_bad_column_type(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -608,7 +608,7 @@ def test_validate_columns_missing_columns(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",
@@ -659,7 +659,7 @@ def test_validate_load_types_bad_types(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "test-user",

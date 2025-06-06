@@ -8,6 +8,7 @@ from gerrydb.client import gather_batch
 
 
 @pytest.mark.asyncio
+@pytest.mark.slow
 async def test_geo_import__client_creates_on_geo_access(client_ns, ia_dataframe):
     with client_ns.context(notes="fishing for a GeoImport") as ctx:
         layer = ctx.geo_layers.create(
@@ -16,9 +17,9 @@ async def test_geo_import__client_creates_on_geo_access(client_ns, ia_dataframe)
             source_url="https://www.census.gov/",
         )
         locality = ctx.localities.create(
-            canonical_path="iowa",
-            name="State of Iowa",
-            aliases=["ia", "19"],
+            canonical_path="iowa2",
+            name="State of Iowa version 2",
+            aliases=["ia2", "19p2"],
             default_proj="epsg:26915",  # UTM zone 15N
         )
 

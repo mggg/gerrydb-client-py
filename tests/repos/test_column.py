@@ -50,9 +50,9 @@ def test_column_repo_set_values(client_ns, column):
     with client_ns.context(notes="adding a column, geographies, and values") as ctx:
         col = ctx.columns.create(**column)
         with ctx.geo.bulk() as geo_ctx:
-            geo_ctx.create({str(idx): box(0, 0, 1, 1) for idx in range(n)})
+            geo_ctx.create({f"{idx:010d}": box(0, 0, 1, 1) for idx in range(n)})
         ctx.columns.set_values(
-            path=col.path, values={str(idx): idx for idx in range(n)}
+            path=col.path, values={f"{idx:010d}": idx for idx in range(n)}
         )
 
 
@@ -94,7 +94,7 @@ def test_async_set_values_ephemeral_client(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "tester",
@@ -134,7 +134,7 @@ def test_async_set_values_ephemeral_client_is_closed(httpx_mock, monkeypatch):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "tester",
@@ -183,7 +183,7 @@ def test_async_set_values_bad_response(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "tester",
@@ -209,6 +209,6 @@ def test_async_set_values_bad_response(httpx_mock):
                 ctx.columns.async_set_values(
                     path="foo",
                     namespace="test_ns",
-                    values={"a": 1, "b": 2},
+                    values={"aa": 1, "bb": 2},
                 )
             )

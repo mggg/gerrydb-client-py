@@ -16,7 +16,9 @@ from gerrydb import GerryDB
 def test_geography_repo_create(client_ns):
     with client_ns.context(notes="adding a geography") as ctx:
         with ctx.geo.bulk() as bulk_ctx:
-            geos = bulk_ctx.create({str(idx): box(0, 0, 1, 1) for idx in range(10000)})
+            geos = bulk_ctx.create(
+                {f"{idx:010d}": box(0, 0, 1, 1) for idx in range(10000)}
+            )
 
     assert all([geo.geography == box(0, 0, 1, 1) for geo in geos])
 
@@ -124,7 +126,7 @@ def test_fork_geos_errors_500(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "tester",
@@ -170,7 +172,7 @@ def test_fork_geos_errors_409(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
             "created_by": "tester",

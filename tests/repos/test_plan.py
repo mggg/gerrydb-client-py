@@ -89,7 +89,7 @@ def test_plan_repo_create__unknown_geos(client_with_ia_layer_loc):
 
     with client_ns.context(notes="creating a county-level locality in Iowa") as ctx:
         county_loc = ctx.localities.create(
-            canonical_path="iowa/dubuque2", name="Dubuque County version 2, Iowa"
+            canonical_path="iowa.dubuque2", name="Dubuque County version 2, Iowa"
         )
         ctx.geo_layers.map_locality(
             layer=layer, locality=county_loc, geographies=["19061"]

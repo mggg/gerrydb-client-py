@@ -8,3 +8,7 @@ __pycache__/
 .venv/
 
 .pdm_build/
+
+
+# VCR cassettes
+cassettes

@@ -27,7 +27,7 @@ class FakeResponse:
         pass
 
     def json(self):
-        return {"uuid": "fake-uuid"}
+        return {"uuid": "00000000-0000-0000-0000-000000000000"}
 
 
 class DummyHttpxClient:
@@ -106,10 +106,10 @@ def test_writecontext_via_gdb_context():
     with db.context(notes="unit-test-notes") as ctx:
         assert isinstance(ctx, WriteContext)
         assert ctx.db.client.posts == [("/meta/", {"notes": "unit-test-notes"})]
-        assert ctx.meta.uuid == "fake-uuid"
+        assert ctx.meta.uuid == "00000000-0000-0000-0000-000000000000"
         expected_headers = {
             **db._base_headers,
-            "X-GerryDB-Meta-ID": "fake-uuid",
+            "X-GerryDB-Meta-ID": "00000000-0000-0000-0000-000000000000",
         }
         assert ctx.client_params == {
             "base_url": db._base_url,

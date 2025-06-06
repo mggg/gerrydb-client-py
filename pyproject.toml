@@ -33,6 +33,7 @@ pyarrow = "^20.0.0"
 [tool.pytest.ini_options]
 markers = [
     "vcr: mark a test as a vcr test",
+    "slow: mark a test as slow",
 ]
 
 [tool.isort]
