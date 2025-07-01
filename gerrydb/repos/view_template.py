@@ -179,7 +179,7 @@ class ViewTemplateRepo(NamespacedObjectRepo[ViewTemplate]):
                 namespace=namespace,
                 members=members,
                 description=description,
-            ).dict(),
+            ).model_dump(mode="json"),
         )
         response.raise_for_status()
 

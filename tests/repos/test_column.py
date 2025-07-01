@@ -97,7 +97,7 @@ def test_async_set_values_ephemeral_client(httpx_mock):
             "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "tester",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -122,7 +122,7 @@ def test_async_set_values_ephemeral_client(httpx_mock):
             ctx.columns.async_set_values(
                 path="foo",
                 namespace="test_ns",
-                values={"a": 1, "b": 2},
+                values={"aa": 1, "bb": 2},
                 client=None,  # explicit, but same as omitting
             )
         )
@@ -137,7 +137,7 @@ def test_async_set_values_ephemeral_client_is_closed(httpx_mock, monkeypatch):
             "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "tester",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -170,7 +170,7 @@ def test_async_set_values_ephemeral_client_is_closed(httpx_mock, monkeypatch):
             ctx.columns.async_set_values(
                 path="foo",
                 namespace="test_ns",
-                values={"a": 1, "b": 2},
+                values={"aa": 1, "bb": 2},
             )
         )
 
@@ -186,7 +186,7 @@ def test_async_set_values_bad_response(httpx_mock):
             "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "tester",
+            "created_by": "test-user@example.com",
         },
     )
 

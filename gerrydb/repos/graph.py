@@ -288,7 +288,7 @@ class GraphRepo(NamespacedObjectRepo[Graph]):
                     for (geo_path_1, geo_path_2), weights in graph.edges.items()
                 ],
                 proj=proj,
-            ).dict(),
+            ).model_dump(mode="json"),
             timeout=timeout,
         )
 

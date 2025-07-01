@@ -47,7 +47,7 @@ class GeoLayerRepo(NamespacedObjectRepo[GeoLayer]):
             f"{self.base_url}/{namespace}",
             json=GeoLayerCreate(
                 path=path, description=description, source_url=source_url
-            ).dict(),
+            ).model_dump(mode="json"),
         )
         response.raise_for_status()
 
@@ -86,6 +86,6 @@ class GeoLayerRepo(NamespacedObjectRepo[GeoLayer]):
                     geo if isinstance(geo, str) else geo.full_path
                     for geo in geographies
                 ]
-            ).dict(),
+            ).model_dump(mode="json"),
         )
         response.raise_for_status()

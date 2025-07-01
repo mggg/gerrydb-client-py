@@ -4,8 +4,18 @@ import pytest
 from gerrydb.schemas import LocalityCreate
 from gerrydb.repos.locality import LocalityRepo
 from gerrydb.exceptions import ResultError
-from types import SimpleNamespace
+from types import SimpleNamespace as _BaseNS
 import logging
+
+
+class SimpleNamespace(_BaseNS):
+    """
+    A drop-in replacement for types.SimpleNamespace that also
+    implements Pydantic-style .model_dump(mode="json") by returning its own dict.
+    """
+
+    def model_dump(self) -> dict:
+        return self.dict()
 
 
 @pytest.mark.vcr

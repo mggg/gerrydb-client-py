@@ -85,7 +85,7 @@ class NamespaceRepo(NamespacedObjectRepo):
             "/namespaces/",
             json=NamespaceCreate(
                 path=path, public=public, description=description
-            ).dict(),
+            ).model_dump(mode="json"),
         )
 
         response.raise_for_status()

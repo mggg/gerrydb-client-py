@@ -59,7 +59,7 @@ def _serialize_geos(geographies: GeosType) -> list[GeographyCreate]:
                 path=key.full_path if isinstance(key, Geography) else key,
                 geography=None if geo is None else shapely.wkb.dumps(geo),
                 internal_point=None if point is None else shapely.wkb.dumps(point),
-            ).dict()
+            ).model_dump()
         )
 
     return serialized

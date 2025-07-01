@@ -2,12 +2,22 @@ import pytest
 import os
 from unittest import mock
 from pathlib import Path
-from types import SimpleNamespace
+from types import SimpleNamespace as _BaseNS
 import pytest
 import httpx
 
 import gerrydb.client as client_mod
-from gerrydb.client import ConfigError, GerryDB, WriteContext
+from gerrydb.client import GerryDB, WriteContext
+
+
+class SimpleNamespace(_BaseNS):
+    """
+    A drop-in replacement for types.SimpleNamespace that also
+    implements Pydantic-style .model_dump(mode="json") by returning its own dict.
+    """
+
+    def model_dump(self, mode=None) -> dict:
+        return self.dict()
 
 
 class DummyTempDir:
