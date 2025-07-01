@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import geopandas as gpd
-from types import SimpleNamespace
+from types import SimpleNamespace as _BaseNS
 from gerrydb.client import GerryDB, WriteContext
 from shapely.geometry import Polygon
 
@@ -12,15 +12,25 @@ pytestmark = pytest.mark.httpx_mock(
 )
 
 
+class SimpleNamespace(_BaseNS):
+    """
+    A drop-in replacement for types.SimpleNamespace that also
+    implements Pydantic-style .model_dump(mode="json") by returning its own dict.
+    """
+
+    def model_dump(self) -> dict:
+        return self.dict()
+
+
 def test_create_write_context(httpx_mock):
     httpx_mock.add_response(
         method="POST",
         url="https://example.com/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -36,10 +46,10 @@ def test_create_geos_already_exists_httpx(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -87,10 +97,10 @@ def test_update_geos_already_exists_httpx(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -140,10 +150,10 @@ def test_validate_geo_compatabilty_empty_polys_but_not_explicitly_allowed(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -203,10 +213,10 @@ def test_validate_geo_compatabilty_forking_different_namespaces_errors_emtpy_pol
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -283,10 +293,10 @@ def test_validate_geo_compatabilty_no_known_paths(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -352,10 +362,10 @@ def test_validate_geo_compatabilty_extra_known_paths(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -421,10 +431,10 @@ def test_validate_geo_compatabilty_extra_df_paths(
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -487,10 +497,10 @@ def test_validate_columsn_bad_column_type(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -512,10 +522,10 @@ def test_validate_columns_bad_column_formats(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -535,7 +545,7 @@ def test_validate_columns_bad_column_formats(httpx_mock):
                     "notes": "Creating a view template and view for Maine counties",
                     "uuid": "ee79533f-b8c2-41e4-aac9-a2719614f2be",
                     "created_at": "2025-04-26T20:07:43.656305+00:00",
-                    "created_by": "peter.r.rock2@gmail.com",
+                    "created_by": "test-user@example.com",
                 },
             }
         ],
@@ -560,10 +570,10 @@ def test_validate_columns_bad_column_type(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -583,7 +593,7 @@ def test_validate_columns_bad_column_type(httpx_mock):
                     "notes": "Creating a view template and view for Maine counties",
                     "uuid": "ee79533f-b8c2-41e4-aac9-a2719614f2be",
                     "created_at": "2025-04-26T20:07:43.656305+00:00",
-                    "created_by": "peter.r.rock2@gmail.com",
+                    "created_by": "test-user@example.com",
                 },
             }
         ],
@@ -608,10 +618,10 @@ def test_validate_columns_missing_columns(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -659,10 +669,10 @@ def test_validate_load_types_bad_types(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "trigger",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "test-user",
+            "created_by": "test-user@example.com",
         },
     )
     db = GerryDB(

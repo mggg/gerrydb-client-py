@@ -41,6 +41,12 @@ def err(message: str) -> Callable:
                     f" Reason: {ex.response.json()}" if hasattr(ex, "response") else ""
                 )
                 raise ResultError(f"{message}: HTTP request failed.{reason}") from ex
+            except TypeError as e:
+                # only intercept the “line_errors” signature‐mismatch
+                if "line_errors" in str(e):
+                    raise ResultError(f"{message}: cannot parse") from e
+                # otherwise re-raise
+                raise
 
         return err_wrapper
 
@@ -114,13 +120,7 @@ def write_context(func: Callable) -> Callable:
 # These characters are most likely to appear in the resource_id part of
 # a path (typically the last segment). Exclusion of these characters
 # prevents ogr2ogr fails and helps protect against malicious code injection.
-INVALID_PATH_SUBSTRINGS = set(
-    {
-        "..",
-        " ",
-        ";",
-    }
-)
+INVALID_PATH_SUBSTRINGS = set({"..", " ", ";", "\\", "./"})
 
 
 def normalize_path(

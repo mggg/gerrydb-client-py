@@ -82,7 +82,7 @@ class LocalityRepo(ObjectRepo):
                     parent_path=parent_path,
                     default_proj=default_proj,
                     aliases=aliases,
-                ).dict()
+                ).model_dump(mode="json")
             ],
         )
 
@@ -148,7 +148,8 @@ class LocalityRepo(ObjectRepo):
             The updated locality.
         """
         response = self.ctx.client.patch(
-            f"/localities/{path}", json=LocalityPatch(aliases=aliases).dict()
+            f"/localities/{path}",
+            json=LocalityPatch(aliases=aliases).model_dump(mode="json"),
         )
         response.raise_for_status()
 

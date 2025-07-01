@@ -4,7 +4,7 @@ import json
 import pytest
 from shapely import box
 import httpx
-from types import SimpleNamespace
+from types import SimpleNamespace as _BaseNS
 from http import HTTPStatus
 from httpx import HTTPStatusError
 
@@ -13,10 +13,22 @@ from gerrydb.exceptions import RequestError, ForkingError
 from gerrydb import GerryDB
 
 
+class SimpleNamespace(_BaseNS):
+    """
+    A drop-in replacement for types.SimpleNamespace that also
+    implements Pydantic-style .model_dump(mode="json") by returning its own dict.
+    """
+
+    def model_dump(self) -> dict:
+        return self.dict()
+
+
 def test_geography_repo_create(client_ns):
     with client_ns.context(notes="adding a geography") as ctx:
         with ctx.geo.bulk() as bulk_ctx:
-            geos = bulk_ctx.create({str(idx): box(0, 0, 1, 1) for idx in range(10000)})
+            geos = bulk_ctx.create(
+                {f"{idx:010d}": box(0, 0, 1, 1) for idx in range(10000)}
+            )
 
     assert all([geo.geography == box(0, 0, 1, 1) for geo in geos])
 
@@ -87,8 +99,8 @@ async def test_send_422_duplicate_paths(httpx_mock, importer):
     with pytest.raises(RequestError) as exc:
         await importer._send(
             {
-                "a": box(0, 0, 1, 1),
-                "a": box(0, 0, 1, 1),
+                "aa": box(0, 0, 1, 1),
+                "aa": box(0, 0, 1, 1),
             },
             method="PATCH",
         )
@@ -124,10 +136,10 @@ def test_fork_geos_errors_500(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "tester",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -135,8 +147,8 @@ def test_fork_geos_errors_500(httpx_mock):
         method="GET",
         url="http://localhost:8000/api/v1/__geography_fork/test_namespace/bar/foo?mode=compare&source_namespace=test_namespace2&source_layer=foo&allow_extra_source_geos=False&allow_empty_polys=False",
         json=[
-            ("a", "75b6f320f5eb33d79cbcd9cf62be5a83"),
-            ("b", "75b6f320f5eb33d79cbcd9cf62be5a83"),
+            ("aa", "75b6f320f5eb33d79cbcd9cf62be5a83"),
+            ("bb", "75b6f320f5eb33d79cbcd9cf62be5a83"),
         ],
     )
     httpx_mock.add_response(
@@ -170,10 +182,10 @@ def test_fork_geos_errors_409(httpx_mock):
         method="POST",
         url="http://localhost:8000/api/v1/meta/",
         json={
-            "uuid": "fake-meta-uuid",
+            "uuid": "00000000-0000-0000-0000-000000000000",
             "notes": "irrelevant",
             "created_at": "2025-04-26T00:00:00Z",
-            "created_by": "tester",
+            "created_by": "test-user@example.com",
         },
     )
 
@@ -181,8 +193,8 @@ def test_fork_geos_errors_409(httpx_mock):
         method="GET",
         url="http://localhost:8000/api/v1/__geography_fork/test_namespace/bar/foo?mode=compare&source_namespace=test_namespace2&source_layer=foo&allow_extra_source_geos=False&allow_empty_polys=False",
         json=[
-            ("a", "75b6f320f5eb33d79cbcd9cf62be5a83"),
-            ("b", "75b6f320f5eb33d79cbcd9cf62be5a83"),
+            ("aa", "75b6f320f5eb33d79cbcd9cf62be5a83"),
+            ("bb", "75b6f320f5eb33d79cbcd9cf62be5a83"),
         ],
     )
     httpx_mock.add_response(

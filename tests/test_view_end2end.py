@@ -21,6 +21,7 @@ def graphs_equal(G1: nx.Graph, G2: nx.Graph) -> bool:
 # FIXME: All of the tests that actually get views in the end need to have the columns tested!!!
 
 
+@pytest.mark.slow
 def test_basic_view(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -123,6 +124,7 @@ def test_basic_view(
         assert p1.equals_exact(p2, tolerance=8), f"{p1} != {p2}"
 
 
+@pytest.mark.slow
 def test_basic_view_with_graph_no_plan(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -223,6 +225,7 @@ def test_basic_view_with_graph_no_plan(
     assert graphs_equal(graph_out, me_2010_nx_graph)
 
 
+@pytest.mark.slow
 def test_basic_view_with_graph_and_plan(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -377,6 +380,7 @@ def test_basic_view_with_graph_and_plan(
     assert graphs_equal(graph_out, me_2010_nx_graph)
 
 
+@pytest.mark.slow
 def test_view_repo_fork_column_conflict_with_maine(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -494,6 +498,7 @@ def test_view_repo_fork_column_conflict_with_maine(
             )
 
 
+@pytest.mark.slow
 def test_basic_view_no_geos_errors_on_empty_polys(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -557,6 +562,7 @@ def test_basic_view_no_geos_errors_on_empty_polys(
             )
 
 
+@pytest.mark.slow
 def test_basic_view_no_geos_and_allow_empty_polys(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -653,6 +659,7 @@ def test_basic_view_no_geos_and_allow_empty_polys(
     assert all([pt == Point() for pt in land_df["internal_point"]])
 
 
+@pytest.mark.slow
 def test_patch_view_with_new_geos(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -769,6 +776,7 @@ def test_patch_view_with_new_geos(
     assert land_df["geometry"].equals(me_2020_gdf["geometry"])
 
 
+@pytest.mark.slow
 def test_patch_with_empty_polys(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -898,6 +906,7 @@ def test_patch_with_empty_polys(
     assert all([geo == Polygon() for geo in land_df["geometry"]])
 
 
+@pytest.mark.slow
 def test_view_empty_polys_both_namespaces(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -1037,6 +1046,7 @@ def test_view_empty_polys_both_namespaces(
     assert all([geo == Polygon() for geo in land_df["geometry"]])
 
 
+@pytest.mark.slow
 def test_patching_with_incompatible_geos_causes_fork_error(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -1177,6 +1187,7 @@ def test_patching_with_incompatible_geos_causes_fork_error(
             )
 
 
+@pytest.mark.slow
 def test_several_cross_namespace_views(
     client_with_census_namespaces_and_columns,
     me_2010_gdf,
@@ -1352,6 +1363,7 @@ def test_several_cross_namespace_views(
     assert full_df["lsad"].equals(set_df["lsad"])
 
 
+@pytest.mark.slow
 def test_basic_view_update_column(
     client_with_census_namespaces_and_columns, me_2010_gdf, me_2010_column_tabluation
 ):
@@ -1445,6 +1457,7 @@ def test_basic_view_update_column(
     assert land_df["geometry"].equals(me_2010_gdf["geometry"])
 
 
+@pytest.mark.slow
 def test_basic_view_update_column_bad_geos(
     client_with_census_namespaces_and_columns, me_2010_gdf, me_2010_column_tabluation
 ):
@@ -1523,6 +1536,7 @@ def test_basic_view_update_column_bad_geos(
             )
 
 
+@pytest.mark.slow
 def test_basic_view_update_column_no_geos(
     client_with_census_namespaces_and_columns, me_2010_gdf, me_2010_column_tabluation
 ):

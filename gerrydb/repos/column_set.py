@@ -74,7 +74,7 @@ class ColumnSetRepo(NamespacedObjectRepo[ColumnSet]):
                 path=path,
                 columns=column_paths,
                 description=description,
-            ).dict(),
+            ).model_dump(mode="json"),
         )
         response.raise_for_status()
 

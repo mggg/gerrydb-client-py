@@ -5,22 +5,83 @@ This file should be kept in sync with the server-side version.
 
 from datetime import datetime
 from enum import Enum
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, Annotated
+from uuid import UUID
 
 import pyproj
 from pydantic import AnyUrl
 from pydantic import BaseModel as PydanticBaseModel
-from pydantic import constr
+from pydantic import Field
 from shapely.geometry import Point
 from shapely.geometry.base import BaseGeometry
 
-UserEmail = constr(max_length=254)
-
-# constr is a constrained string, so this is some path that needs to satisfy this regex
-GerryPath = constr(
-    regex=r"[a-z0-9][a-z0-9-_/]*"
-)  # must start with lowercase or digit, then followed by any lowercase, digit, hyphen, underscore, slash
-NamespacedGerryPath = constr(regex=r"[a-z0-9/][a-z0-9-_/]*")
+UserEmail = Annotated[
+    str,
+    Field(
+        max_length=255, min_length=3, pattern=r"^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+    ),
+]
+# / allowed at start. 1-2 segments. Used for objects that are not namespaced like
+# localities.
+GerryPath = Annotated[
+    str,
+    Field(
+        pattern=r"^/?[a-z0-9][a-z0-9-_.]+(?:/[a-z0-9][a-z0-9-_.]+){0,1}$",
+        max_length=255,
+        min_length=2,
+    ),
+]
+# / allowed at start. 1-3 segments. Leading character from each segment must be a-z0-9. No
+# uppercase characters allowed. Used for namespaced objects like columns, column sets, etc.
+NamespacedGerryPath = Annotated[
+    str,
+    Field(
+        pattern=r"^/?[a-z0-9][a-z0-9-_.]+(?:/[a-z0-9][a-z0-9-_.]+){0,2}$",
+        max_length=255,
+        min_length=2,
+    ),
+]
+# / allowed at start. 1-3 segments. Leading character from each segment must be a-z0-9 and A-Z
+# allowed in last segment for weird GEOIDs.
+NamespacedGerryGeoPath = Annotated[
+    str,
+    Field(
+        pattern=r"^/?[a-z0-9][a-z0-9-_.]+(?:/[a-z0-9][a-z0-9-_.]+){0,1}"
+        r"(?:/[a-zA-Z0-9][a-zA-Z0-9-_.]+){0,1}$",
+        max_length=255,
+        min_length=2,
+    ),
+]
+# No capital letters allowed
+NameStr = Annotated[
+    str,
+    Field(
+        pattern=r"^[a-z0-9][a-z0-9-_.]+$",
+        max_length=100,
+        min_length=2,
+    ),
+]
+# Capital letters allowed because some vtds suck
+GeoNameStr = Annotated[
+    str,
+    Field(pattern=r"^[a-z0-9][a-zA-Z0-9-_.]+$", max_length=100, min_length=2),
+]
+Description = Optional[
+    Annotated[
+        str,
+        Field(max_length=5000, min_length=1),
+    ]
+]
+ShortStr = Optional[
+    Annotated[
+        str,
+        Field(max_length=100, min_length=1),
+    ]
+]
+UUIDStr = Annotated[
+    str,
+    Field(pattern=r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"),
+]
 
 NATIVE_PROJ = pyproj.CRS("EPSG:4269")
 
@@ -87,7 +148,7 @@ class NamespaceGroup(str, Enum):
 class ObjectMetaBase(BaseModel):
     """Base model for object metadata."""
 
-    notes: Optional[str]
+    notes: Description
 
 
 class ObjectMetaCreate(ObjectMetaBase):
@@ -97,7 +158,7 @@ class ObjectMetaCreate(ObjectMetaBase):
 class ObjectMeta(ObjectMetaBase):
     """Object metadata returned by the database."""
 
-    uuid: str
+    uuid: UUID
     created_at: datetime
     created_by: UserEmail
 
@@ -106,27 +167,27 @@ class LocalityBase(BaseModel):
     """Base model for locality metadata."""
 
     canonical_path: GerryPath
-    parent_path: Optional[GerryPath]
-    default_proj: Optional[str]
-    name: str
+    parent_path: Optional[GerryPath] = None
+    default_proj: ShortStr = "EPSG:4269"  # Default to NAD83
+    name: ShortStr
 
 
 class LocalityCreate(LocalityBase):
     """Locality metadata received on creation."""
 
-    aliases: Optional[list[GerryPath]]
+    aliases: Optional[list[NameStr]] = None
 
 
 class LocalityPatch(BaseModel):
     """Locality metadata received on PATCH."""
 
-    aliases: list[GerryPath]
+    aliases: list[NameStr]
 
 
 class Locality(LocalityBase):
     """A locality returned by the database."""
 
-    aliases: list[GerryPath]
+    aliases: list[NameStr]
     meta: ObjectMeta
 
     def __repr__(self):  # pragma: no cover
@@ -138,8 +199,8 @@ class Locality(LocalityBase):
 class NamespaceBase(BaseModel):
     """Base model for namespace metadata."""
 
-    path: constr(regex=r"[a-zA-Z0-9-]+")
-    description: str
+    path: NameStr
+    description: Description
     public: bool
 
 
@@ -159,10 +220,10 @@ class Namespace(NamespaceBase):
 class ColumnBase(BaseModel):
     """Base model for locality metadata."""
 
-    canonical_path: GerryPath
-    namespace: str
-    description: str
-    source_url: Optional[AnyUrl]
+    canonical_path: NamespacedGerryPath
+    namespace: NameStr
+    description: Description
+    source_url: Optional[AnyUrl] = None
     kind: ColumnKind
     type: ColumnType
 
@@ -170,19 +231,19 @@ class ColumnBase(BaseModel):
 class ColumnCreate(ColumnBase):
     """Column metadata received on creation."""
 
-    aliases: Optional[list[GerryPath]]
+    aliases: Optional[list[NameStr]]
 
 
 class ColumnPatch(BaseModel):
     """Column metadata received on PATCH."""
 
-    aliases: list[GerryPath]
+    aliases: list[NameStr]
 
 
 class Column(ColumnBase):
     """A column returned by the database."""
 
-    aliases: list[GerryPath]
+    aliases: list[NameStr]
     meta: ObjectMeta
 
     @property
@@ -204,15 +265,15 @@ class Column(ColumnBase):
 class ColumnValue(BaseModel):
     """Value of a column for a geography."""
 
-    path: str  # of geography
+    path: NamespacedGerryPath  # of geography
     value: Any
 
 
 class GeoLayerBase(BaseModel):
     """Base model for geographic layer metadata."""
 
-    path: GerryPath
-    description: Optional[str]
+    path: NamespacedGerryPath
+    description: Description
     source_url: Optional[AnyUrl]
 
 
@@ -223,14 +284,14 @@ class GeoLayerCreate(GeoLayerBase):
 class GeoSetCreate(BaseModel):
     """Paths to geographies in a `GeoSet`."""
 
-    paths: list[str]
+    paths: list[NamespacedGerryGeoPath]
 
 
 class GeoLayer(GeoLayerBase):
     """Geographic layer metadata returned by the database."""
 
     meta: ObjectMeta
-    namespace: str
+    namespace: NameStr
 
     @property
     def full_path(self) -> str:
@@ -245,17 +306,17 @@ class GeoImportBase(BaseModel):
 class GeoImport(GeoImportBase):
     """Geographic unit import metadata returned by the database."""
 
-    uuid: str
-    namespace: str
+    uuid: UUIDStr
+    namespace: NameStr
     created_at: datetime
-    created_by: str
+    created_by: UserEmail
     meta: ObjectMeta
 
 
 class GeographyBase(BaseModel):
     """Base model for a geographic unit."""
 
-    path: GerryPath
+    path: GeoNameStr
     geography: Optional[BaseGeometry]
     internal_point: Optional[Point] = None
 
@@ -266,7 +327,7 @@ class GeographyBase(BaseModel):
 class GeographyCreate(BaseModel):
     """Geographic unit data received on creation (geography as raw WKB bytes)."""
 
-    path: GerryPath
+    path: GeoNameStr
     geography: Optional[bytes]
     internal_point: Optional[bytes]
 
@@ -275,7 +336,7 @@ class Geography(GeographyBase):
     """Geographic unit data returned by the database."""
 
     meta: ObjectMeta
-    namespace: str
+    namespace: NameStr
     valid_from: datetime
 
     @property
@@ -287,8 +348,8 @@ class Geography(GeographyBase):
 class ColumnSetBase(BaseModel):
     """Base model for a logical column grouping."""
 
-    path: GerryPath
-    description: str
+    path: NameStr
+    description: Description
 
 
 class ColumnSetCreate(ColumnSetBase):
@@ -301,9 +362,9 @@ class ColumnSet(ColumnSetBase):
     """Logical column grouping returned by the database."""
 
     meta: ObjectMeta
-    namespace: str
+    namespace: NameStr
     columns: list[Column]
-    refs: list[str]
+    refs: list[NameStr]
 
     @property
     def path_with_resource(self) -> str:
@@ -314,26 +375,26 @@ class ColumnSet(ColumnSetBase):
 class ViewTemplateBase(BaseModel):
     """Base model for a view template."""
 
-    path: GerryPath
-    description: str
+    path: NameStr
+    description: Description
 
 
 class ViewTemplateCreate(ViewTemplateBase):
     """View template data received on creation."""
 
-    members: list[str]
+    members: list[NamespacedGerryPath]
 
 
 class ViewTemplatePatch(ViewTemplateBase):
     """View template data received on update."""
 
-    members: list[str]
+    members: list[NamespacedGerryPath]
 
 
 class ViewTemplate(ViewTemplateBase):
     """View template returned by the database."""
 
-    namespace: str
+    namespace: NameStr
     members: list[Union[Column, ColumnSet]]
     meta: ObjectMeta
     valid_from: datetime
@@ -347,17 +408,17 @@ class ViewTemplate(ViewTemplateBase):
 class PlanBase(BaseModel):
     """Base model for a districting plan."""
 
-    path: GerryPath
-    description: str
+    path: NameStr
+    description: Description
     source_url: Optional[AnyUrl] = None
-    districtr_id: Optional[str] = None
-    daves_id: Optional[str] = None
+    districtr_id: ShortStr = None
+    daves_id: ShortStr = None
 
 
 class PlanCreate(PlanBase):
     """Districting plan definition received on creation."""
 
-    locality: NamespacedGerryPath
+    locality: GerryPath
     layer: NamespacedGerryPath
     assignments: dict[NamespacedGerryPath, str]
 
@@ -365,7 +426,7 @@ class PlanCreate(PlanBase):
 class Plan(PlanBase):
     """Rendered districting plan."""
 
-    namespace: str
+    namespace: NameStr
     locality: Locality
     layer: GeoLayer
     meta: ObjectMeta
@@ -378,9 +439,9 @@ class Plan(PlanBase):
 class GraphBase(BaseModel):
     """Base model for a dual graph."""
 
-    path: GerryPath
-    description: str
-    proj: Optional[str] = None
+    path: NameStr
+    description: Description = None
+    proj: ShortStr = None
 
 
 WeightedEdge = tuple[NamespacedGerryPath, NamespacedGerryPath, Optional[dict]]
@@ -389,15 +450,15 @@ WeightedEdge = tuple[NamespacedGerryPath, NamespacedGerryPath, Optional[dict]]
 class GraphCreate(GraphBase):
     """Dual graph definition received on creation."""
 
-    locality: NamespacedGerryPath
+    locality: GerryPath
     layer: NamespacedGerryPath
     edges: list[WeightedEdge]
 
 
 class GraphMeta(GraphBase):
-    """Dual graph metadata."""
+    """Dual graph metadata returned by the database."""
 
-    namespace: str
+    namespace: NameStr
     locality: Locality
     layer: GeoLayer
     meta: ObjectMeta
@@ -418,7 +479,7 @@ class Graph(GraphMeta):
 class ViewBase(BaseModel):
     """Base model for a view."""
 
-    path: GerryPath
+    path: NameStr
 
 
 class ViewCreate(ViewBase):
@@ -430,14 +491,14 @@ class ViewCreate(ViewBase):
     graph: Optional[NamespacedGerryPath] = None
 
     valid_at: Optional[datetime] = None
-    proj: Optional[str] = None
+    proj: ShortStr = None
 
     class Config:
         # Whenever you call model.json(), turn datetimes into ISO strings
         json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")}
 
-    def dict(self, *args, **kwargs):
-        data = super().dict(*args, **kwargs)
+    def model_dump(self, *args, **kwargs):
+        data = super().model_dump(*args, **kwargs)
 
         # now post‑process valid_at if it's still a datetime
         va = data.get("valid_at")
@@ -449,11 +510,11 @@ class ViewCreate(ViewBase):
 class ViewMeta(ViewBase):
     """View metadata."""
 
-    namespace: str
+    namespace: NameStr
     template: ViewTemplate
     locality: Locality
     layer: GeoLayer
     meta: ObjectMeta
     valid_at: datetime
-    proj: Optional[str]
+    proj: ShortStr
     graph: Optional[GraphMeta]

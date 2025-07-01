@@ -299,7 +299,7 @@ class WriteContext:
         """Creates a write context with metadata."""
         log.debug("Posting to db.meta")
         response = self.db.client.post(
-            "/meta/", json=ObjectMetaCreate(notes=self.notes).dict()
+            "/meta/", json=ObjectMetaCreate(notes=self.notes).model_dump(mode="json")
         )
         log.debug("Got response from db.meta %s", response.status_code)
         response.raise_for_status()  # TODO: refine?

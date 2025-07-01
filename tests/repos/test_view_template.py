@@ -16,7 +16,8 @@ def test_normalize_column_column_object():
         meta=ObjectMeta(
             uuid="ee79533f-b8c2-41e4-aac9-a2719614f2be",
             created_at="2025-04-26T20:07:43.656305+00:00",
-            created_by="test@test.com",
+            created_by="test-user@example.com",
+            notes="This is a test column.",
         ),
     )
     assert _normalize_columns("census.2010_test1", [col]) == [
@@ -74,7 +75,8 @@ def test_normalize_column_sets_column_set_object():
                 meta=ObjectMeta(
                     uuid="ee79533f-b8c2-41e4-aac9-a2719614f2be",
                     created_at="2025-04-26T20:07:43.656305+00:00",
-                    created_by="test@test.com",
+                    created_by="test-user@example.com",
+                    notes="This is a test column.",
                 ),
             )
         ],
@@ -82,7 +84,8 @@ def test_normalize_column_sets_column_set_object():
         meta=ObjectMeta(
             uuid="ee79533f-b8c2-41e4-aac9-a2719614f2be",
             created_at="2025-04-26T20:07:43.656305+00:00",
-            created_by="test@test.com",
+            created_by="test-user@example.com",
+            notes="This is a test column set.",
         ),
         description="2010 Census total population",
     )

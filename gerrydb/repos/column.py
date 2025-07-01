@@ -68,6 +68,8 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
             Metadata for the new column.
         """
         path = normalize_path(path)
+        log.debug("Creating column at path: %s in namespace: %s", path, namespace)
+        log.debug("POST request to %s", f"{self.base_url}/{namespace}")
         response = self.ctx.client.post(
             f"{self.base_url}/{namespace}",
             json=ColumnCreate(
@@ -78,7 +80,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
                 type=column_type,
                 source_url=source_url,
                 aliases=aliases,
-            ).dict(),
+            ).model_dump(mode="json"),
         )
         response.raise_for_status()
 
@@ -109,7 +111,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
         clean_path = normalize_path(f"{self.base_url}/{namespace}/{path}")
         response = self.ctx.client.patch(
             clean_path,
-            json=ColumnPatch(aliases=aliases).dict(),
+            json=ColumnPatch(aliases=aliases).model_dump(mode="json"),
         )
         response.raise_for_status()
 
@@ -179,7 +181,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
                         else geo
                     ),
                     value=value,
-                ).dict()
+                ).model_dump(mode="json")
                 for geo, value in values.items()
             ],
         )
@@ -242,7 +244,7 @@ class ColumnRepo(NamespacedObjectRepo[Column]):
                     else geo
                 ),
                 value=_coerce(value),
-            ).dict()
+            ).model_dump(mode="json")
             for geo, value in values.items()
         ]
         log.debug("PUT request to %s", clean_path)

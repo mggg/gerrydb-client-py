@@ -66,10 +66,12 @@ class PlanRepo(NamespacedObjectRepo[Plan]):
                 ),
                 layer=layer.full_path if isinstance(layer, GeoLayer) else layer,
                 assignments={
-                    geo.full_path if isinstance(geo, Geography) else geo: assignment
+                    geo.full_path if isinstance(geo, Geography) else geo: str(
+                        assignment
+                    )
                     for geo, assignment in assignments.items()
                 },
-            ).dict(),
+            ).model_dump(mode="json"),
         )
         response.raise_for_status()
 
